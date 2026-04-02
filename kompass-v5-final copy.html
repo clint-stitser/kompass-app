@@ -1,0 +1,2058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KOMPASS · The Stitser Way v3</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@200;300;400;500&display=swap');
+
+:root {
+  /* ── Soft Summer Palette ── */
+  --ink: #2F353B;
+  --parchment: #F4F1ED;
+  --warm-white: #FAF8F5;
+  --gold: #6A89A7;
+  --gold-light: #8AABC4;
+  --gold-dim: rgba(106,137,167,0.10);
+  --rust: #A68DA3;
+  --sage: #8DA399;
+  --slate: #6A89A7;
+  --muted: #8E9BA6;
+  --border: rgba(181,168,155,0.5);
+  --border-strong: rgba(181,168,155,0.75);
+  --shadow: 0 2px 16px rgba(47,53,59,0.07);
+  --recording: #A68DA3;
+  --sidebar: #3D454B;
+  --card-bg: #EAE7E2;
+  --progress-empty: #D4D8DC;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: var(--parchment); color: var(--ink); font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 14px; overflow: hidden; }
+
+body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:1000; opacity:0.6; }
+
+.app { display:grid; grid-template-columns:220px 1fr; grid-template-rows:52px 1fr; height:100vh; overflow:hidden; }
+
+/* TOPBAR */
+.topbar { grid-column:1/-1; background:var(--sidebar); display:flex; align-items:center; justify-content:space-between; padding:0 24px; border-bottom:1px solid rgba(255,255,255,0.08); }
+.topbar-brand { display:flex; align-items:baseline; gap:12px; }
+.topbar-brand h1 { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:var(--gold-light); letter-spacing:0.12em; text-transform:uppercase; }
+.topbar-brand span { font-family:'JetBrains Mono',monospace; font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.08em; }
+.topbar-right { display:flex; align-items:center; gap:16px; }
+.checkin-indicator { display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:10px; color:rgba(255,255,255,0.5); }
+.checkin-dot { width:7px; height:7px; border-radius:50%; background:var(--gold); animation:breathe 3s ease-in-out infinite; }
+@keyframes breathe { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+.time-display { font-family:'Cormorant Garamond',serif; font-size:16px; color:rgba(255,255,255,0.7); font-weight:300; }
+.proxy-badge { font-family:'JetBrains Mono',monospace; font-size:9px; padding:2px 7px; border-radius:3px; background:rgba(141,163,153,0.2); color:var(--sage); border:1px solid rgba(141,163,153,0.4); }
+
+/* SIDEBAR */
+.sidebar { background:var(--sidebar); border-right:1px solid rgba(255,255,255,0.06); padding:20px 0; overflow-y:auto; display:flex; flex-direction:column; }
+.sidebar-section { margin-bottom:24px; }
+.sidebar-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.2); text-transform:uppercase; letter-spacing:0.14em; padding:0 18px; margin-bottom:6px; }
+.nav-item { display:flex; align-items:center; gap:10px; padding:9px 18px; cursor:pointer; transition:all 0.15s; border-left:2px solid transparent; color:rgba(255,255,255,0.45); font-size:13px; font-weight:300; white-space:nowrap; }
+.nav-item:hover { color:rgba(255,255,255,0.8); background:rgba(255,255,255,0.04); }
+.nav-item.active { color:var(--gold-light); border-left-color:var(--gold); background:rgba(106,137,167,0.12); }
+.nav-icon { font-size:14px; width:18px; text-align:center; flex-shrink:0; }
+.checkin-badge { margin-left:auto; background:var(--gold); color:var(--ink); font-family:'JetBrains Mono',monospace; font-size:8px; font-weight:500; padding:1px 5px; border-radius:3px; text-transform:uppercase; }
+.sidebar-divider { height:1px; background:rgba(255,255,255,0.06); margin:8px 18px 16px; }
+.sidebar-goals { padding:0 14px; margin-top:auto; margin-bottom:8px; }
+.goal-mini { margin-bottom:10px; }
+.goal-mini-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.3); margin-bottom:4px; display:flex; justify-content:space-between; }
+.goal-mini-label span { color:var(--gold-light); }
+.goal-bar { height:3px; background:rgba(255,255,255,0.15); border-radius:2px; overflow:hidden; }
+.goal-bar-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light)); border-radius:2px; transition:width 0.6s ease; }
+.goal-bar-fill.sage { background:linear-gradient(90deg,var(--sage),#6a9a60); }
+
+/* MAIN */
+.main { overflow-y:auto; background:var(--warm-white); position:relative; }
+.panel { display:none; }
+.panel.active { display:block; animation:fadeIn 0.25s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+/* CHAT */
+.chat-container { display:flex; flex-direction:column; height:calc(100vh - 52px); }
+.checkin-header { padding:24px 40px 0; border-bottom:1px solid var(--border); }
+.checkin-mode-label { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--gold); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+.checkin-mode-label::before { content:''; display:block; width:20px; height:1px; background:var(--gold); }
+.checkin-header h2 { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:300; margin-bottom:6px; line-height:1.1; }
+.checkin-header h2 em { font-style:italic; color:var(--gold); }
+.checkin-meta { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); padding-bottom:18px; display:flex; gap:20px; flex-wrap:wrap; }
+.chat-messages { flex:1; overflow-y:auto; padding:20px 40px; display:flex; flex-direction:column; gap:16px; }
+.msg { display:flex; gap:14px; max-width:820px; }
+.msg.user { flex-direction:row-reverse; margin-left:auto; }
+.msg-avatar { width:32px; height:32px; border-radius:50%; background:var(--gold-dim); border:1px solid rgba(106,137,167,0.25); display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; font-family:'Cormorant Garamond',serif; font-weight:600; color:var(--gold); }
+.msg.user .msg-avatar { background:#4A5560; border-color:#4A5560; color:var(--gold-light); }
+.msg-bubble { background:var(--card-bg); border:1px solid var(--border); border-radius:2px 14px 14px 14px; padding:14px 18px; font-size:14px; line-height:1.65; color:var(--ink); box-shadow:var(--shadow); max-width:660px; }
+.msg.user .msg-bubble { background:#4A5560; color:rgba(255,255,255,0.92); border-color:transparent; border-radius:14px 2px 14px 14px; }
+.msg-bubble strong { font-weight:500; }
+.msg-bubble em { font-style:italic; color:var(--gold); }
+.msg-bubble ul,.msg-bubble ol { padding-left:20px; margin:6px 0; }
+.msg-bubble li { margin-bottom:3px; }
+
+.prompt-card { background:var(--warm-white); border:1px solid rgba(106,137,167,0.3); border-left:3px solid var(--gold); border-radius:0 12px 12px 0; padding:14px 18px; margin:8px 0; }
+.prompt-card .prompt-step { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--gold); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px; }
+.prompt-card .prompt-q { font-family:'Cormorant Garamond',serif; font-size:19px; font-weight:400; font-style:italic; color:var(--ink); line-height:1.3; }
+
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.chip { background:transparent; border:1px solid var(--border-strong); color:var(--ink); padding:5px 12px; border-radius:20px; cursor:pointer; font-size:12px; font-family:'Outfit',sans-serif; transition:all 0.15s; }
+.chip:hover { background:var(--ink); color:var(--gold-light); border-color:var(--ink); }
+
+.filed-card { background:linear-gradient(135deg,rgba(141,163,153,0.10),rgba(141,163,153,0.05)); border:1px solid rgba(141,163,153,0.35); border-radius:10px; padding:16px 20px; }
+.filed-card .filed-title { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--sage); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px; }
+.filed-card .filed-row { display:flex; gap:10px; font-size:12px; margin-bottom:6px; }
+.filed-card .filed-key { font-family:'JetBrains Mono',monospace; color:var(--muted); min-width:80px; font-size:10px; }
+
+/* ═══════════════════════════════════
+   RICH TEXT INPUT AREA
+═══════════════════════════════════ */
+.chat-input-area { border-top:1px solid var(--border); background:var(--warm-white); padding:12px 40px 16px; }
+.input-toolbar { display:flex; align-items:center; gap:4px; margin-bottom:8px; padding:6px 10px; background:var(--warm-white); border:1px solid var(--border); border-radius:8px 8px 0 0; border-bottom:none; flex-wrap:wrap; }
+.tb-btn { background:transparent; border:none; cursor:pointer; padding:4px 7px; border-radius:4px; font-size:13px; color:var(--muted); transition:all 0.12s; display:flex; align-items:center; justify-content:center; min-width:28px; height:26px; font-family:'JetBrains Mono',monospace; font-weight:500; }
+.tb-btn:hover { background:var(--gold-dim); color:var(--gold); }
+.tb-btn.active { background:var(--gold-dim); color:var(--gold); }
+.tb-sep { width:1px; height:18px; background:var(--border); margin:0 4px; flex-shrink:0; }
+.tb-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-left:4px; }
+
+.rich-input {
+  width:100%;
+  background:var(--warm-white);
+  border:1px solid var(--border-strong);
+  border-radius:0 0 10px 10px;
+  padding:12px 16px;
+  font-family:'Outfit',sans-serif;
+  font-size:14px;
+  font-weight:300;
+  color:var(--ink);
+  outline:none;
+  min-height:52px;
+  max-height:200px;
+  overflow-y:auto;
+  line-height:1.6;
+  transition:border-color 0.15s;
+}
+.rich-input:focus { border-color:var(--gold); }
+.rich-input:empty::before { content:attr(data-placeholder); color:var(--muted); pointer-events:none; }
+.rich-input ul,.rich-input ol { padding-left:22px; }
+.rich-input li { margin-bottom:2px; }
+.rich-input b,.rich-input strong { font-weight:600; }
+.rich-input i,.rich-input em { font-style:italic; }
+
+.input-row { display:flex; gap:10px; align-items:flex-end; margin-top:8px; }
+.send-btn { width:44px; height:44px; background:var(--gold); border:none; border-radius:10px; cursor:pointer; color:#fff; font-size:17px; display:flex; align-items:center; justify-content:center; transition:all 0.15s; flex-shrink:0; }
+.send-btn:hover { background:var(--gold-light); color:#fff; }
+.send-btn:disabled { opacity:0.4; cursor:not-allowed; }
+
+/* ═══════════════════════════════════
+   VOICE RECORDING
+═══════════════════════════════════ */
+.voice-bar { display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; margin-bottom:8px; }
+.voice-bar.recording { border-color:var(--rust); background:rgba(166,141,163,0.05); }
+.voice-bar.transcribing { border-color:var(--gold); background:var(--gold-dim); }
+
+.voice-btn {
+  width:36px; height:36px; border-radius:50%; border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; flex-shrink:0; transition:all 0.2s;
+  background:var(--ink); color:var(--gold-light);
+}
+.voice-btn.recording { background:var(--recording); color:#fff; animation:recordPulse 1s ease-in-out infinite; }
+.voice-btn:hover { transform:scale(1.08); }
+@keyframes recordPulse { 0%,100%{box-shadow:0 0 0 0 rgba(166,141,163,0.4)} 50%{box-shadow:0 0 0 8px rgba(166,141,163,0)} }
+
+.voice-waveform { flex:1; height:28px; display:flex; align-items:center; gap:2px; overflow:hidden; }
+.wave-bar { width:3px; background:var(--border-strong); border-radius:2px; transition:height 0.1s; min-height:3px; }
+.wave-bar.active { background:var(--recording); }
+
+.voice-time { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); min-width:42px; text-align:right; }
+.voice-status { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); }
+.voice-bar.recording .voice-status { color:var(--recording); }
+.voice-bar.transcribing .voice-status { color:var(--gold); }
+
+.voice-toggle { background:transparent; border:1px solid var(--border); border-radius:6px; padding:5px 12px; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); cursor:pointer; transition:all 0.15s; display:flex; align-items:center; gap:5px; }
+.voice-toggle:hover { border-color:var(--gold); color:var(--gold); }
+.voice-toggle.active { border-color:var(--rust); color:var(--recording); background:rgba(166,141,163,0.05); }
+
+.transcript-preview { font-size:12px; color:var(--muted); font-style:italic; max-width:400px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; }
+
+.tool-row { display:flex; gap:8px; margin-bottom:8px; align-items:center; flex-wrap:wrap; }
+.tool-btn { background:transparent; border:1px solid var(--border); border-radius:6px; padding:5px 12px; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); cursor:pointer; transition:all 0.15s; }
+.tool-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+/* JOURNAL MODE SELECTOR */
+.mode-selector { display:flex; gap:10px; padding:18px 40px 0; }
+.mode-card { flex:1; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:12px 14px; cursor:pointer; transition:all 0.2s; text-align:center; }
+.mode-card:hover { border-color:var(--gold); }
+.mode-card.selected { border-color:var(--gold); background:var(--gold-dim); }
+.mode-card .mode-icon { font-size:20px; margin-bottom:5px; }
+.mode-card .mode-name { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--ink); text-transform:uppercase; letter-spacing:0.06em; }
+.mode-card .mode-desc { font-size:11px; color:var(--muted); margin-top:3px; line-height:1.4; }
+
+/* UPLOAD */
+.upload-zone { border:2px dashed var(--border-strong); border-radius:10px; padding:32px; text-align:center; margin:20px 40px; cursor:pointer; transition:all 0.2s; background:var(--warm-white); }
+.upload-zone:hover,.upload-zone.dragover { border-color:var(--gold); background:var(--gold-dim); }
+.upload-zone .upload-icon { font-size:32px; margin-bottom:10px; }
+.upload-zone p { font-size:13px; color:var(--muted); line-height:1.6; }
+.upload-zone strong { color:var(--ink); font-weight:400; }
+.upload-zone input { display:none; }
+
+/* GOALS */
+.goals-panel { padding:28px 40px; }
+.goals-panel h2 { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; margin-bottom:4px; }
+.goals-panel h2 em { font-style:italic; color:var(--gold); }
+.goals-subtitle { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:24px; }
+.scoreboard { background:var(--sidebar); border-radius:12px; padding:22px; margin-bottom:22px; }
+.scoreboard h3 { font-family:'Cormorant Garamond',serif; font-size:18px; color:var(--gold-light); font-weight:300; margin-bottom:14px; }
+.score-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+.score-item { text-align:center; }
+.score-val { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:300; color:var(--gold-light); line-height:1; margin-bottom:4px; }
+.score-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:0.08em; }
+.score-trend { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--sage); margin-top:3px; }
+.score-trend.warn { color:var(--rust); }
+.goals-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:22px; }
+.goal-card { background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:16px; }
+.goal-category { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--gold); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px; }
+.goal-card-header { display:flex; justify-content:space-between; margin-bottom:10px; }
+.goal-pct { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:300; }
+.goal-title { font-size:13px; font-weight:400; margin-bottom:4px; line-height:1.3; }
+.goal-target { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:8px; }
+.goal-progress { height:4px; background:var(--progress-empty); border-radius:2px; overflow:hidden; margin-bottom:6px; }
+.goal-progress-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--gold),var(--gold-light)); transition:width 0.8s cubic-bezier(0.4,0,0.2,1); }
+.goal-status { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--muted); }
+.goal-status.red { color:#8A6A6A; }
+.goal-status.yellow { color:var(--rust); }
+
+/* HISTORY */
+.history-panel { padding:28px 40px; }
+.history-panel h2 { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; margin-bottom:20px; }
+.history-panel h2 em { font-style:italic; color:var(--gold); }
+.journal-entry { background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:12px; cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden; }
+.journal-entry::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--gold); }
+.journal-entry:hover { box-shadow:var(--shadow); }
+.entry-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:7px; }
+.entry-type-badge { font-family:'JetBrains Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:0.08em; padding:2px 7px; border-radius:4px; background:var(--gold-dim); color:var(--gold); border:1px solid rgba(106,137,167,0.2); }
+.entry-date { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); }
+.entry-title { font-size:13px; font-weight:400; margin-bottom:5px; }
+.entry-preview { font-size:12px; color:var(--muted); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.entry-links { display:flex; gap:7px; margin-top:9px; flex-wrap:wrap; }
+.entry-link-chip { font-family:'JetBrains Mono',monospace; font-size:9px; padding:2px 7px; border:1px solid var(--border); border-radius:4px; color:var(--muted); }
+
+/* UTILS */
+.typing-indicator { display:flex; gap:4px; padding:14px 18px; background:var(--card-bg); border:1px solid var(--border); border-radius:2px 14px 14px 14px; width:fit-content; align-items:center; }
+.typing-dot { width:6px; height:6px; border-radius:50%; background:var(--muted); animation:typingBounce 1.2s ease-in-out infinite; }
+.typing-dot:nth-child(2){animation-delay:0.2s} .typing-dot:nth-child(3){animation-delay:0.4s}
+@keyframes typingBounce { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-6px);opacity:1} }
+@keyframes spin { to{transform:rotate(360deg)} }
+.spinner { display:inline-block; width:13px; height:13px; border:2px solid rgba(106,137,167,0.3); border-top-color:var(--gold); border-radius:50%; animation:spin 0.7s linear infinite; }
+.btn-primary { background:var(--gold); color:#fff; border:none; border-radius:7px; padding:9px 18px; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:all 0.15s; }
+.btn-primary:hover { background:var(--gold-light); color:#fff; }
+.btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border); border-radius:7px; padding:8px 16px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:all 0.15s; }
+.btn-ghost:hover { border-color:var(--gold); color:var(--gold); }
+::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:2px}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-brand">
+      <h1>Kompass</h1>
+      <span>The Stitser Way · v3</span>
+    </div>
+    <div class="topbar-right">
+      <span class="proxy-badge">⚡ Railway Live</span>
+      <div class="checkin-indicator"><div class="checkin-dot"></div><span id="checkin-status">Loading…</span></div>
+      <div class="time-display" id="clock">—</div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Check-ins</div>
+      <div class="nav-item active" onclick="switchPanel('morning')" id="nav-morning"><span class="nav-icon">🌅</span> Morning Brief</div>
+      <div class="nav-item" onclick="switchPanel('midmorning')" id="nav-midmorning"><span class="nav-icon">☀️</span> Mid-Morning</div>
+      <div class="nav-item" onclick="switchPanel('afternoon')" id="nav-afternoon"><span class="nav-icon">🌤</span> Afternoon Refocus</div>
+      <div class="nav-item" onclick="switchPanel('eod')" id="nav-eod"><span class="nav-icon">🌙</span> End of Day</div>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Journal</div>
+      <div class="nav-item" onclick="switchPanel('journal')" id="nav-journal"><span class="nav-icon">📖</span> New Journal</div>
+      <div class="nav-item" onclick="switchPanel('history')" id="nav-history"><span class="nav-icon">📁</span> Filed Journals</div>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">System</div>
+      <div class="nav-item" onclick="switchPanel('goals')" id="nav-goals"><span class="nav-icon">🎯</span> Goals & Scoreboards</div>
+      <div class="nav-item" onclick="switchPanel('assistant')" id="nav-assistant"><span class="nav-icon">⚡</span> PA Assistant</div>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-goals">
+      <div class="sidebar-label" style="padding:0;margin-bottom:10px;">Live Goals</div>
+      <div id="sidebar-goal-bars">
+        <div class="goal-mini"><div class="goal-mini-label">Loading… <span></span></div><div class="goal-bar"><div class="goal-bar-fill" style="width:0%"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main" id="main-content">
+
+    <!-- MORNING -->
+    <div class="panel active" id="panel-morning">
+      <div class="chat-container">
+        <div class="checkin-header">
+          <div class="checkin-mode-label" id="morning-date-label">Loading…</div>
+          <h2>Good morning, <em>Clint.</em></h2>
+          <div class="checkin-meta" id="morning-meta">Initializing Kompass…</div>
+        </div>
+        <div class="chat-messages" id="chat-messages-morning"></div>
+        <div class="chat-input-area">
+          <div class="tool-row">
+            <button class="tool-btn" onclick="startTemplateInPanel('warriors-way','morning')">⚔️ Warrior's Way</button>
+            <button class="tool-btn" onclick="startTemplateInPanel('gratitude-stack','morning')">🙏 Gratitude</button>
+            <button class="tool-btn" onclick="startTemplateInPanel('free','morning')">✍️ Free Write</button>
+          </div>
+          <div id="voice-bar-morning"></div>
+          <div class="input-toolbar" id="tb-morning">
+            <button class="tb-btn" onclick="fmt('bold','morning')" title="Bold"><b>B</b></button>
+            <button class="tb-btn" onclick="fmt('italic','morning')" title="Italic"><i>I</i></button>
+            <div class="tb-sep"></div>
+            <button class="tb-btn" onclick="fmt('insertUnorderedList','morning')" title="Bullet list">•≡</button>
+            <button class="tb-btn" onclick="fmt('insertOrderedList','morning')" title="Numbered list">1≡</button>
+            <button class="tb-btn" onclick="fmt('indent','morning')" title="Indent">→</button>
+            <button class="tb-btn" onclick="fmt('outdent','morning')" title="Outdent">←</button>
+            <div class="tb-sep"></div>
+            <button class="tb-btn" onclick="fmt('formatBlock','morning','h3')" title="Heading">H</button>
+            <button class="tb-btn" onclick="fmt('removeFormat','morning')" title="Clear format">✕</button>
+            <div class="tb-sep"></div>
+            <button class="voice-toggle" id="voice-toggle-morning" onclick="toggleVoice('morning')">🎙 Voice</button>
+          </div>
+          <div class="rich-input" id="input-morning" contenteditable="true" data-placeholder="Respond here… or use voice above" onkeydown="handleRichKey(event,'morning')"></div>
+          <div class="input-row">
+            <button class="send-btn" onclick="sendMessage('morning')">↑</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MID-MORNING -->
+    <div class="panel" id="panel-midmorning">
+      <div class="chat-container">
+        <div class="checkin-header">
+          <div class="checkin-mode-label">Mid-Morning · ~10:30 AM</div>
+          <h2>Planning session <em>debrief.</em></h2>
+          <div class="checkin-meta"><span>☀️ After your SB Block — what moved?</span></div>
+        </div>
+        <div class="chat-messages" id="chat-messages-midmorning">
+          <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">Your SB Block runs 7:45–11 AM. When you're back, tell me what got decided. Quick captures:
+            <div class="chips">
+              <span class="chip" onclick="quickSend('midmorning','Squeeze Inn update from this morning')">🏗 Squeeze Inn</span>
+              <span class="chip" onclick="quickSend('midmorning','Harmony Mesa lot analysis update')">🗺 Harmony Mesa</span>
+              <span class="chip" onclick="quickSend('midmorning','Canyon\'s Edge HUD update')">🏢 Canyon\'s Edge</span>
+              <span class="chip" onclick="quickSend('midmorning','Built to Last Framework progress')">🏠 Built to Last</span>
+            </div>
+          </div></div>
+        </div>
+        <div class="chat-input-area">
+          <div id="voice-bar-midmorning"></div>
+          <div class="input-toolbar">
+            <button class="tb-btn" onclick="fmt('bold','midmorning')"><b>B</b></button>
+            <button class="tb-btn" onclick="fmt('italic','midmorning')"><i>I</i></button>
+            <div class="tb-sep"></div>
+            <button class="tb-btn" onclick="fmt('insertUnorderedList','midmorning')">•≡</button>
+            <button class="tb-btn" onclick="fmt('insertOrderedList','midmorning')">1≡</button>
+            <button class="tb-btn" onclick="fmt('indent','midmorning')">→</button>
+            <div class="tb-sep"></div>
+            <button class="voice-toggle" id="voice-toggle-midmorning" onclick="toggleVoice('midmorning')">🎙 Voice</button>
+          </div>
+          <div class="rich-input" id="input-midmorning" contenteditable="true" data-placeholder="What came out of your planning session?"></div>
+          <div class="input-row"><button class="send-btn" onclick="sendMessage('midmorning')">↑</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFTERNOON -->
+    <div class="panel" id="panel-afternoon">
+      <div class="chat-container">
+        <div class="checkin-header">
+          <div class="checkin-mode-label">Afternoon Refocus · ~1:30 PM</div>
+          <h2>Midday <em>reset.</em></h2>
+          <div class="checkin-meta"><span>🌤 Stay on mission through the PM</span></div>
+        </div>
+        <div class="chat-messages" id="chat-messages-afternoon">
+          <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">Three questions to keep the afternoon on track:
+            <div class="prompt-card" style="margin-top:12px;"><div class="prompt-step">Refocus · 1 of 3</div><div class="prompt-q">What's the single most important thing you still need to accomplish today?</div></div>
+          </div></div>
+        </div>
+        <div class="chat-input-area">
+          <div id="voice-bar-afternoon"></div>
+          <div class="input-toolbar">
+            <button class="tb-btn" onclick="fmt('bold','afternoon')"><b>B</b></button>
+            <button class="tb-btn" onclick="fmt('italic','afternoon')"><i>I</i></button>
+            <div class="tb-sep"></div>
+            <button class="tb-btn" onclick="fmt('insertUnorderedList','afternoon')">•≡</button>
+            <button class="tb-btn" onclick="fmt('insertOrderedList','afternoon')">1≡</button>
+            <div class="tb-sep"></div>
+            <button class="voice-toggle" id="voice-toggle-afternoon" onclick="toggleVoice('afternoon')">🎙 Voice</button>
+          </div>
+          <div class="rich-input" id="input-afternoon" contenteditable="true" data-placeholder="Answer here…"></div>
+          <div class="input-row"><button class="send-btn" onclick="sendMessage('afternoon')">↑</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EOD -->
+    <div class="panel" id="panel-eod">
+      <div class="chat-container">
+        <div class="checkin-header">
+          <div class="checkin-mode-label">End of Day · ~5:30 PM</div>
+          <h2>Recap & <em>tomorrow.</em></h2>
+          <div class="checkin-meta"><span>🌙 Close the loop. Prime tomorrow.</span></div>
+        </div>
+        <div class="chat-messages" id="chat-messages-eod">
+          <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">Day recap. Let's close strong and set tomorrow up right.
+            <div class="prompt-card" style="margin-top:12px;"><div class="prompt-step">EOD · 1 of 4</div><div class="prompt-q">What are your top 3 wins from today?</div></div>
+          </div></div>
+        </div>
+        <div class="chat-input-area">
+          <div id="voice-bar-eod"></div>
+          <div class="input-toolbar">
+            <button class="tb-btn" onclick="fmt('bold','eod')"><b>B</b></button>
+            <button class="tb-btn" onclick="fmt('italic','eod')"><i>I</i></button>
+            <div class="tb-sep"></div>
+            <button class="tb-btn" onclick="fmt('insertUnorderedList','eod')">•≡</button>
+            <button class="tb-btn" onclick="fmt('insertOrderedList','eod')">1≡</button>
+            <div class="tb-sep"></div>
+            <button class="voice-toggle" id="voice-toggle-eod" onclick="toggleVoice('eod')">🎙 Voice</button>
+          </div>
+          <div class="rich-input" id="input-eod" contenteditable="true" data-placeholder="Today's wins…"></div>
+          <div class="input-row"><button class="send-btn" onclick="sendMessage('eod')">↑</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOURNAL -->
+    <div class="panel" id="panel-journal">
+      <div class="mode-selector">
+        <div class="mode-card selected" onclick="selectJournalMode('chat',this)"><div class="mode-icon">💬</div><div class="mode-name">Guided Chat</div><div class="mode-desc">Step-by-step template</div></div>
+        <div class="mode-card" onclick="selectJournalMode('text-upload',this)"><div class="mode-icon">📄</div><div class="mode-name">Text / PDF</div><div class="mode-desc">Upload to parse & file</div></div>
+        <div class="mode-card" onclick="selectJournalMode('handwritten',this)"><div class="mode-icon">✍️</div><div class="mode-name">Handwritten</div><div class="mode-desc">Photo/scan to rasterize</div></div>
+      </div>
+
+      <div id="journal-chat-mode">
+        <div class="chat-container" style="height:calc(100vh - 52px - 108px);">
+          <div class="chat-messages" id="chat-messages-journal">
+            <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">
+              Choose your template:
+              <div class="chips" style="margin-top:10px;">
+                <span class="chip" onclick="startTemplate('warriors-way')">⚔️ Warrior's Way</span>
+                <span class="chip" onclick="startTemplate('strategic-vision')">🏔 Strategic Vision</span>
+                <span class="chip" onclick="startTemplate('project-debrief')">📋 Project Debrief</span>
+                <span class="chip" onclick="startTemplate('weekly-review')">📆 Weekly Review</span>
+                <span class="chip" onclick="startTemplate('free')">✏️ Free Write</span>
+              </div>
+              <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">⚡ The Stack</div>
+                <div class="chips">
+                  <span class="chip" onclick="startTemplate('anger-stack')">😤 Anger Stack</span>
+                  <span class="chip" onclick="startTemplate('irritation-stack')">😒 Irritation Stack</span>
+                  <span class="chip" onclick="startTemplate('rage-stack')">🔥 Rage Stack</span>
+                  <span class="chip" onclick="startTemplate('guilt-stack')">😔 Guilt Stack</span>
+                  <span class="chip" onclick="startTemplate('discovery-stack')">💡 Discovery Stack</span>
+                  <span class="chip" onclick="startTemplate('excitement-stack')">🚀 Excitement Stack</span>
+                  <span class="chip" onclick="startTemplate('gratitude-stack')">🙏 Gratitude Stack</span>
+                </div>
+              </div>
+            </div></div>
+          </div>
+          <div class="chat-input-area">
+            <div id="voice-bar-journal"></div>
+            <div class="input-toolbar">
+              <button class="tb-btn" onclick="fmt('bold','journal')"><b>B</b></button>
+              <button class="tb-btn" onclick="fmt('italic','journal')"><i>I</i></button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="fmt('insertUnorderedList','journal')">•≡</button>
+              <button class="tb-btn" onclick="fmt('insertOrderedList','journal')">1≡</button>
+              <button class="tb-btn" onclick="fmt('indent','journal')">→</button>
+              <div class="tb-sep"></div>
+              <button class="voice-toggle" id="voice-toggle-journal" onclick="toggleVoice('journal')">🎙 Voice</button>
+            </div>
+            <div class="rich-input" id="input-journal" contenteditable="true" data-placeholder="Type your response… or use voice above" onkeydown="handleRichKey(event,'journal')"></div>
+            <div class="input-row"><button class="send-btn" onclick="sendMessage('journal')">↑</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="journal-upload-mode" style="display:none;">
+        <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event)">
+          <div class="upload-icon" id="upload-icon">📄</div>
+          <p><strong>Click to upload or drag & drop</strong></p>
+          <p id="upload-hint-text">PDF, TXT, or image (JPG, PNG) · Max 20MB</p>
+          <input type="file" id="file-input" accept=".pdf,.txt,.jpg,.jpeg,.png" onchange="handleFileSelect(event)">
+        </div>
+        <div id="upload-processing" style="display:none;padding:0 40px;">
+          <div class="chat-messages" id="chat-messages-upload" style="max-height:320px;overflow-y:auto;"></div>
+          <div class="chat-input-area" style="padding:14px 0;">
+            <div class="rich-input" id="input-upload" contenteditable="true" data-placeholder="Add context…" style="border-radius:10px;"></div>
+            <div class="input-row"><button class="send-btn" onclick="sendMessage('upload')">↑</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="panel" id="panel-history">
+      <div class="history-panel">
+        <h2>Filed <em>Journals</em></h2>
+        <div id="history-entries"></div>
+      </div>
+    </div>
+
+    <!-- GOALS -->
+    <div class="panel" id="panel-goals">
+      <div class="goals-panel">
+        <h2>Goals & <em>Scoreboards</em></h2>
+        <div class="goals-subtitle" id="goals-subtitle">Loading from SmartSuite…</div>
+        <div class="scoreboard">
+          <h3>Business Scoreboard · Live from S-BOS</h3>
+          <div class="score-grid">
+            <div class="score-item"><div class="score-val" id="score-rev">—</div><div class="score-label">Built Revenue</div><div class="score-trend warn" id="score-rev-pct">—</div></div>
+            <div class="score-item"><div class="score-val" id="score-formation">—</div><div class="score-label">Formation Homes</div><div class="score-trend" id="score-formation-pct">—</div></div>
+            <div class="score-item"><div class="score-val" id="score-gp">—</div><div class="score-label">Granite Net</div><div class="score-trend" id="score-gp-pct">—</div></div>
+            <div class="score-item"><div class="score-val" id="score-sp">—</div><div class="score-label">SP Net</div><div class="score-trend warn" id="score-sp-status">—</div></div>
+          </div>
+        </div>
+        <div class="goals-grid" id="goals-grid"><div style="padding:20px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;">Loading goals…</div></div>
+        <div style="display:flex;gap:12px;"><button class="btn-primary" onclick="loadGoals()">↻ Refresh</button><button class="btn-ghost" onclick="switchPanel('assistant');setTimeout(()=>quickSend('assistant','Give me a GYR status summary across all goals'),100)">📊 GYR Summary</button></div>
+      </div>
+    </div>
+
+    <!-- ASSISTANT -->
+    <div class="panel" id="panel-assistant">
+      <div class="chat-container">
+        <div class="checkin-header" style="padding-bottom:20px;">
+          <div class="checkin-mode-label">Full System Access</div>
+          <h2>Personal <em>Assistant</em></h2>
+          <div class="checkin-meta"><span>Gmail · Calendar · Drive · SmartSuite · Smartsheet · Railway MCP</span></div>
+        </div>
+        <div class="chat-messages" id="chat-messages-assistant">
+          <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">Ready, Clint. What do you need?
+            <div class="chips" style="margin-top:12px;">
+              <span class="chip" onclick="quickSend('assistant','What should I prep for today based on my calendar?')">📅 Today's prep</span>
+              <span class="chip" onclick="quickSend('assistant','GYR status summary across all SmartSuite goals')">📊 GYR summary</span>
+              <span class="chip" onclick="quickSend('assistant','What are my current priorities in SmartSuite?')">🎯 Priorities</span>
+              <span class="chip" onclick="quickSend('assistant','Squeeze Inn construction schedule status')">🏗 Squeeze Inn</span>
+              <span class="chip" onclick="quickSend('assistant','Canyon\'s Edge HUD situation and next steps')">🏢 Canyon\'s Edge</span>
+              <span class="chip" onclick="quickSend('assistant','Built to Last Framework — where are we and what\'s next?')">🏠 Built to Last</span>
+            </div>
+          </div></div>
+        </div>
+        <div class="chat-input-area">
+          <div id="voice-bar-assistant"></div>
+          <div class="input-toolbar">
+            <button class="tb-btn" onclick="fmt('bold','assistant')"><b>B</b></button>
+            <button class="tb-btn" onclick="fmt('italic','assistant')"><i>I</i></button>
+            <div class="tb-sep"></div>
+            <button class="tb-btn" onclick="fmt('insertUnorderedList','assistant')">•≡</button>
+            <button class="tb-btn" onclick="fmt('insertOrderedList','assistant')">1≡</button>
+            <div class="tb-sep"></div>
+            <button class="voice-toggle" id="voice-toggle-assistant" onclick="toggleVoice('assistant')">🎙 Voice</button>
+          </div>
+          <div class="rich-input" id="input-assistant" contenteditable="true" data-placeholder="Ask anything…"></div>
+          <div class="input-row"><button class="send-btn" onclick="sendMessage('assistant')">↑</button></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+// ═══════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════
+const PROXY_URL = 'https://earnest-vitality-production.up.railway.app/api/chat';
+const SS_PROXY = 'https://earnest-vitality-production.up.railway.app/api/smartsuite';
+const MODEL = 'claude-sonnet-4-20250514';
+const SS_JOURNALS = '68f8f8fe3757414d70d94ae0';
+const SS_GOALS = '6824d4d1885a8769bd2dfc0d';
+const SS_PEOPLE = '698a79cb5448033d905cbe70';
+const SS_PROJECTS = '68216a706900e8eaf75a05a7';
+
+// SmartSuite calls route through Railway proxy to avoid CORS
+async function ssRequest(method, path, body) {
+  try {
+    const res = await fetch(SS_PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ method, path, body: body || null })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  } catch(e) {
+    console.warn('ssRequest failed:', e.message);
+    return { items: [], error: e.message };
+  }
+}
+
+const conversations = { morning:[], midmorning:[], afternoon:[], eod:[], journal:[], upload:[], assistant:[] };
+let currentTemplate = null, templateStep = 0, journalData = {};
+let filingCtx = {}, activePanel = 'morning', liveGoals = [];
+
+// ═══════════════════════════════════════════════════════
+// VOICE RECORDING ENGINE
+// ═══════════════════════════════════════════════════════
+const voiceState = {};  // per panel
+
+function toggleVoice(panelId) {
+  if (!voiceState[panelId]) voiceState[panelId] = { active: false, mediaRecorder: null, chunks: [], timer: null, elapsed: 0, animFrame: null };
+  const vs = voiceState[panelId];
+  if (!vs.active) {
+    startRecording(panelId);
+  } else {
+    stopRecording(panelId);
+  }
+}
+
+async function startRecording(panelId) {
+  const vs = voiceState[panelId];
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    vs.chunks = [];
+    vs.mediaRecorder = new MediaRecorder(stream, { mimeType: MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm' });
+    vs.mediaRecorder.ondataavailable = e => { if (e.data.size > 0) vs.chunks.push(e.data); };
+    vs.mediaRecorder.onstop = () => { processRecording(panelId, new Blob(vs.chunks, { type: vs.mediaRecorder.mimeType })); stream.getTracks().forEach(t => t.stop()); };
+    vs.mediaRecorder.start(100);
+    vs.active = true;
+    vs.elapsed = 0;
+    renderVoiceBar(panelId, 'recording');
+    vs.timer = setInterval(() => { vs.elapsed++; updateVoiceTime(panelId, vs.elapsed); }, 1000);
+    startWaveAnimation(panelId);
+  } catch(e) {
+    renderVoiceBar(panelId, 'error', 'Mic access denied');
+  }
+}
+
+function stopRecording(panelId) {
+  const vs = voiceState[panelId];
+  if (!vs.mediaRecorder) return;
+  vs.active = false;
+  vs.mediaRecorder.stop();
+  clearInterval(vs.timer);
+  cancelAnimationFrame(vs.animFrame);
+  renderVoiceBar(panelId, 'transcribing');
+  const btn = document.getElementById(`voice-toggle-${panelId}`);
+  if (btn) { btn.textContent = '⏳ Transcribing…'; btn.classList.remove('active'); }
+}
+
+async function processRecording(panelId, blob) {
+  // Convert to base64 and send to Claude via Railway for transcription
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const base64Audio = e.target.result.split(',')[1];
+    const mimeType = blob.type || 'audio/webm';
+
+    try {
+      const res = await fetch(PROXY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: MODEL,
+          max_tokens: 500,
+          messages: [{
+            role: 'user',
+            content: [
+              { type: 'text', text: 'Transcribe this audio recording accurately. Return only the transcription text, no preamble or explanation. Preserve natural speech including any pauses indicated by ellipses. Clean up obvious speech disfluencies (um, uh) unless they seem intentional.' },
+              { type: 'document', source: { type: 'base64', media_type: mimeType, data: base64Audio } }
+            ]
+          }]
+        })
+      });
+
+      const data = await res.json();
+
+      // Fallback: Claude doesn't currently process audio directly — use Web Speech API
+      throw new Error('audio_fallback');
+
+    } catch(e) {
+      // Web Speech API fallback (already captured live during recording)
+      // Get the live transcript if available
+      const liveTranscript = vs_liveTranscripts[panelId] || '';
+      if (liveTranscript) {
+        insertTranscript(panelId, liveTranscript);
+        renderVoiceBar(panelId, 'idle');
+      } else {
+        renderVoiceBar(panelId, 'idle', 'Transcript unavailable — type your response');
+      }
+    }
+  };
+  reader.readAsDataURL(blob);
+}
+
+// Web Speech API — live transcript (primary transcription path)
+const vs_liveTranscripts = {};
+const vs_recognition = {};
+
+function startWebSpeech(panelId) {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) return false;
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const rec = new SpeechRecognition();
+  rec.continuous = true;
+  rec.interimResults = true;
+  rec.lang = 'en-US';
+  vs_liveTranscripts[panelId] = '';
+  let interim = '';
+
+  rec.onresult = (e) => {
+    let final = '';
+    interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) final += e.results[i][0].transcript + ' ';
+      else interim += e.results[i][0].transcript;
+    }
+    vs_liveTranscripts[panelId] += final;
+    updateTranscriptPreview(panelId, vs_liveTranscripts[panelId] + interim);
+  };
+  rec.onerror = () => {};
+  rec.start();
+  vs_recognition[panelId] = rec;
+  return true;
+}
+
+function stopWebSpeech(panelId) {
+  if (vs_recognition[panelId]) {
+    vs_recognition[panelId].stop();
+    vs_recognition[panelId] = null;
+  }
+}
+
+// Override startRecording to use Web Speech as primary
+async function startRecording(panelId) {
+  const vs = voiceState[panelId] || (voiceState[panelId] = { active:false, timer:null, elapsed:0, animFrame:null });
+  vs.active = true;
+  vs.elapsed = 0;
+  vs_liveTranscripts[panelId] = '';
+
+  const hasSpeech = startWebSpeech(panelId);
+
+  // Also capture raw audio for future processing
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    vs.stream = stream;
+    vs.analyser = createAnalyser(stream);
+  } catch(e) {}
+
+  renderVoiceBar(panelId, 'recording');
+  const btn = document.getElementById(`voice-toggle-${panelId}`);
+  if (btn) { btn.textContent = '⏹ Stop'; btn.classList.add('active'); }
+  vs.timer = setInterval(() => { vs.elapsed++; updateVoiceTime(panelId, vs.elapsed); }, 1000);
+  startWaveAnimation(panelId);
+}
+
+function stopRecording(panelId) {
+  const vs = voiceState[panelId];
+  if (!vs || !vs.active) return;
+  vs.active = false;
+  clearInterval(vs.timer);
+  cancelAnimationFrame(vs.animFrame);
+  stopWebSpeech(panelId);
+  if (vs.stream) { vs.stream.getTracks().forEach(t => t.stop()); }
+
+  const transcript = vs_liveTranscripts[panelId]?.trim() || '';
+  if (transcript) {
+    insertTranscript(panelId, transcript);
+    renderVoiceBar(panelId, 'done', `✓ Transcribed — ${transcript.split(' ').length} words`);
+  } else {
+    renderVoiceBar(panelId, 'idle');
+  }
+
+  const btn = document.getElementById(`voice-toggle-${panelId}`);
+  if (btn) { btn.textContent = '🎙 Voice'; btn.classList.remove('active'); }
+}
+
+function insertTranscript(panelId, text) {
+  const input = document.getElementById(`input-${panelId}`);
+  if (!input) return;
+  const existing = input.innerText.trim();
+  if (existing) {
+    input.innerHTML += `<br>${text}`;
+  } else {
+    input.innerText = text;
+  }
+  input.focus();
+  // Move cursor to end
+  const range = document.createRange();
+  range.selectNodeContents(input);
+  range.collapse(false);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+}
+
+function createAnalyser(stream) {
+  try {
+    const ctx = new AudioContext();
+    const src = ctx.createMediaStreamSource(stream);
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 32;
+    src.connect(analyser);
+    return analyser;
+  } catch(e) { return null; }
+}
+
+function startWaveAnimation(panelId) {
+  const vs = voiceState[panelId];
+  const bars = document.querySelectorAll(`#voice-bar-${panelId} .wave-bar`);
+  if (!bars.length) return;
+
+  function animate() {
+    if (!vs.active) return;
+    bars.forEach((bar, i) => {
+      let h;
+      if (vs.analyser) {
+        const data = new Uint8Array(vs.analyser.frequencyBinCount);
+        vs.analyser.getByteFrequencyData(data);
+        h = 4 + (data[i] / 255) * 22;
+      } else {
+        h = 4 + Math.random() * 20;
+      }
+      bar.style.height = h + 'px';
+    });
+    vs.animFrame = requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+function updateVoiceTime(panelId, seconds) {
+  const el = document.querySelector(`#voice-bar-${panelId} .voice-time`);
+  if (el) { const m = Math.floor(seconds/60); const s = seconds%60; el.textContent = `${m}:${s.toString().padStart(2,'0')}`; }
+}
+
+function updateTranscriptPreview(panelId, text) {
+  const el = document.querySelector(`#voice-bar-${panelId} .transcript-preview`);
+  if (el) el.textContent = text.slice(-80);
+}
+
+function renderVoiceBar(panelId, state, msg) {
+  const container = document.getElementById(`voice-bar-${panelId}`);
+  if (!container) return;
+
+  if (state === 'idle' || (!state && !msg)) { container.innerHTML = ''; return; }
+
+  const isRecording = state === 'recording';
+  const isTranscribing = state === 'transcribing';
+  const isDone = state === 'done';
+
+  container.innerHTML = `
+    <div class="voice-bar ${isRecording ? 'recording' : ''} ${isTranscribing ? 'transcribing' : ''}">
+      <button class="voice-btn ${isRecording ? 'recording' : ''}" onclick="${isRecording ? `stopRecording('${panelId}')` : `startRecording('${panelId}')`}">
+        ${isRecording ? '⏹' : isTranscribing ? '⏳' : '🎙'}
+      </button>
+      <div class="voice-waveform">
+        ${Array(12).fill(0).map((_,i) => `<div class="wave-bar ${isRecording ? 'active' : ''}" style="height:${isRecording ? 4+Math.random()*16 : 4}px"></div>`).join('')}
+      </div>
+      <div class="transcript-preview">${msg || (isRecording ? 'Listening…' : isTranscribing ? 'Processing…' : '')}</div>
+      <div class="voice-time">${isRecording ? '0:00' : ''}</div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════
+// RICH TEXT FORMATTING
+// ═══════════════════════════════════════════════════════
+function fmt(command, panelId, value) {
+  const input = document.getElementById(`input-${panelId}`);
+  input.focus();
+  document.execCommand(command, false, value || null);
+}
+
+function handleRichKey(e, panelId) {
+  if (e.key === 'Enter' && e.shiftKey) return; // allow shift+enter for newline
+  if (e.key === 'Enter' && !e.shiftKey && !currentTemplate) {
+    // Only send on Enter if not in a list
+    const sel = window.getSelection();
+    if (sel.anchorNode) {
+      const inList = sel.anchorNode.parentElement?.closest('ul,ol');
+      if (!inList) {
+        e.preventDefault();
+        sendMessage(panelId);
+      }
+    }
+  }
+}
+
+function getRichText(panelId) {
+  const el = document.getElementById(`input-${panelId}`);
+  return el ? el.innerHTML : '';
+}
+
+function getPlainText(panelId) {
+  const el = document.getElementById(`input-${panelId}`);
+  return el ? el.innerText.trim() : '';
+}
+
+function clearInput(panelId) {
+  const el = document.getElementById(`input-${panelId}`);
+  if (el) el.innerHTML = '';
+}
+
+// ═══════════════════════════════════════════════════════
+// CLOCK & CHECKIN
+// ═══════════════════════════════════════════════════════
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+  const hour = now.getHours() + now.getMinutes()/60;
+  let label, activeId;
+  if (hour < 10.5)      { label='Morning Brief';     activeId='morning'; }
+  else if (hour < 12.5) { label='Mid-Morning';       activeId='midmorning'; }
+  else if (hour < 15)   { label='Afternoon Refocus'; activeId='afternoon'; }
+  else                  { label='End of Day';         activeId='eod'; }
+  document.getElementById('checkin-status').textContent = label;
+  ['morning','midmorning','afternoon','eod'].forEach(id => {
+    const nav = document.getElementById(`nav-${id}`);
+    const ex = nav?.querySelector('.checkin-badge'); if (ex) ex.remove();
+    if (id === activeId && nav) { const b = document.createElement('span'); b.className='checkin-badge'; b.textContent='Now'; nav.appendChild(b); }
+  });
+}
+setInterval(updateClock, 30000);
+updateClock();
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+function switchPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`panel-${name}`).classList.add('active');
+  document.getElementById(`nav-${name}`)?.classList.add('active');
+  activePanel = name;
+  if (name === 'goals' && liveGoals.length === 0) loadGoals();
+}
+
+// ═══════════════════════════════════════════════════════
+// SYSTEM PROMPT
+// ═══════════════════════════════════════════════════════
+function sysPrompt(mode) {
+  const base = `You are Kompass — the personal executive assistant for Clint Stitser. Sharp, direct, warm, no fluff.
+Entities: Stitser BUILT (GC), CRF/Formation (homebuilder), Stitser Properties Inc. (brokerage/PM), Granite Perfection (countertops).
+Active projects: Squeeze Inn (construction/MEP), Harmony Mesa (18-lot subdivision), Canyon's Edge (HUD 223f/K-1/surplus).
+Key people: Kaylee (SP), Gino (BUILT), Zach (schedules), Bill (coach/Fridays), Alyssa (Formation).
+Strategy: Built to Last Framework — Boomer SFR equity-rich disposition + 1031/DST/TIC.
+Live goals: ${liveGoals.map(g=>`${g.title.split(/[-·]/)[0].trim()}: ${g.pct.toFixed(0)}%`).join(' | ')}`;
+
+  const modes = {
+    morning: base + `\nMODE: Morning Brief. Energizing and grounding. Surface today's key priorities, flag urgent items. Offer Warrior's Way journal.`,
+    midmorning: base + `\nMODE: Mid-Morning debrief post planning block. Capture decisions, update priorities, flag what shifted.`,
+    afternoon: base + `\nMODE: Afternoon Refocus. 3 questions: (1) Most important remaining? (2) What threatens PM? (3) What to drop/defer?`,
+    eod: base + `\nMODE: End of Day. Wins, misses, learnings, tomorrow's top 3. Offer to file a journal.`,
+    journal: base + `\nMODE: Journal guide. Walk through template step by step. Acknowledge warmly, keep momentum. When complete say "That's a complete entry — let's file it."`,
+    upload: base + `\nMODE: Parse uploaded journal. Extract themes, insights, actions, emotional tone. Present clean summary then offer filing.`,
+    assistant: base + `\nMODE: Full PA. High-caliber executive assistant. Direct, specific, anticipate needs.`
+  };
+  return modes[mode] || base;
+}
+
+// ═══════════════════════════════════════════════════════
+// TEMPLATES — WARRIORS WAY + ALL 6 STACKS
+// ═══════════════════════════════════════════════════════
+const TEMPLATES = {
+  'warriors-way': {
+    name:"The Warrior's Way", journalType:"Morning Ritual",
+    steps:[
+      {step:"1 · Centering", q:"Take 5 centering breaths. What's most alive in your body right now?"},
+      {step:"2 · Gratitude × 3", q:"Stay in gain: celebrate & gratitude × 3. What have you handled well, learned, or made progress on?"},
+      {step:"3 · Who to Celebrate", q:"Who can you celebrate or acknowledge today?"},
+      {step:"4 · One Word Intention", q:"What is your one word intention for today?"},
+      {step:"5 · 3 Dominos", q:"What are the 3 major dominos of today — if knocked down — that make everything else easier?"},
+      {step:"6 · Hurdles", q:"What hurdles might trip you up today, and how will you handle them?"},
+      {step:"7 · Action Body", q:"My action body today is — how will you show up physically and energetically?"},
+      {step:"8 · Coach's Voice", q:"What would your high performance coach tell you right now?"},
+    ]
+  },
+  'strategic-vision': {
+    name:"Strategic Vision", journalType:"Discovery/Idea Log",
+    steps:[
+      {step:"1 · Current Reality", q:"Where are the businesses right now — honestly, without spin?"},
+      {step:"2 · 12-Month Target", q:"What does success look like in 12 months across BUILT, CRF, Formation, and SP?"},
+      {step:"3 · Bottleneck", q:"What is the single biggest constraint holding you back right now?"},
+      {step:"4 · Next Moves", q:"What are the 3 highest-leverage moves in the next 30 days?"},
+      {step:"5 · Commitment", q:"What will you start, stop, or double down on?"},
+    ]
+  },
+  'project-debrief': {
+    name:"Project Debrief", journalType:"Discovery/Idea Log",
+    steps:[
+      {step:"1 · Project", q:"Which project are you debriefing?"},
+      {step:"2 · Outcome", q:"What was the outcome? What went well?"},
+      {step:"3 · What Didn't", q:"What went wrong or fell short? Be honest."},
+      {step:"4 · Lessons", q:"What will you do differently next time?"},
+      {step:"5 · Action Items", q:"What specific follow-up actions does this create?"},
+    ]
+  },
+  'weekly-review': {
+    name:"Weekly Review", journalType:"Weekly Ritual",
+    steps:[
+      {step:"1 · Milestones", q:"Review last week's milestones — what did you achieve? Where did you fall short?"},
+      {step:"2 · BODY", q:"How are you tracking on your BODY missions? What's the story you're telling yourself?"},
+      {step:"3 · BEING", q:"How are you tracking on your BEING missions? Are you living your values?"},
+      {step:"4 · BALANCE", q:"How are you tracking on your BALANCE missions? Relationships, family, recovery?"},
+      {step:"5 · BUSINESS", q:"How are you tracking on your BUSINESS missions? Revenue, deals, team?"},
+      {step:"6 · Weekly Dominos", q:"What are the 3 Weekly Dominos for next week?"},
+    ]
+  },
+  'free': {
+    name:"Free Write", journalType:"Morning Ritual",
+    steps:[
+      {step:"1 · Open", q:"What's on your mind? Write freely — no filter."},
+      {step:"2 · Deeper", q:"What's underneath that? What are you not saying?"},
+      {step:"3 · Truth", q:"If you had to be completely honest with yourself right now, what would you say?"},
+    ]
+  },
+  // ═══ 6 STACK TEMPLATES ═══
+  'anger-stack': null, // alias — set below
+  'irritation-stack': {
+    name:"Irritation Stack", journalType:"Irritation Stack",
+    steps:[
+      {step:"Title & Domain", q:"What are you titling this Irritation Stack? Which domain — BODY, BEING, BALANCE, or BUSINESS?"},
+      {step:"The Trigger", q:"Who or what is triggering this irritation?"},
+      {step:"Why Irritated", q:"Why has this triggered irritation in you right now?"},
+      {step:"The Story", q:"What story are you telling yourself about this person or situation?"},
+      {step:"Feelings", q:"Single-word feelings when you tell yourself that story?"},
+      {step:"Thoughts & Actions", q:"What thoughts and actions does that story produce?"},
+      {step:"Evidence", q:"What evidence supports this story as true?"},
+      {step:"Cold Facts", q:"What are the non-emotional facts of the situation?"},
+      {step:"If Ignored", q:"If you ignore this irritation now — how does it escalate toward anger, then rage?"},
+      {step:"Want for You", q:"What do you truly want for yourself in and beyond this situation?"},
+      {step:"Want for Them", q:"What do you want for them?"},
+      {step:"Want for Both", q:"What do you want for both of you?"},
+      {step:"Story Check", q:"Does the original story get you what you want?"},
+      {step:"Desired Story", q:"Letting go of the original story — what is your new DESIRED STORY?"},
+      {step:"Evidence", q:"What evidence proves the desired story is accurate?"},
+      {step:"Positive Reframe", q:"Why has this irritation been extremely positive?"},
+      {step:"Life Lesson", q:"What is the singular lesson on life you're taking from this Stack?"},
+      {step:"Revelation", q:"What is the most significant revelation or insight?"},
+      {step:"Feeling Now", q:"Single word — how do you feel now vs. when you started?"},
+      {step:"Committed Actions", q:"What immediate actions are you committed to taking?"},
+    ]
+  },
+    steps:[
+      {step:"Title & Domain", q:"What are you titling this Anger Stack? Which CORE 4 domain — BODY, BEING, BALANCE, or BUSINESS?"},
+      {step:"The Trigger", q:"Who or what is triggering your anger right now?"},
+      {step:"Why Anger", q:"Why has this triggered anger in you in this moment?"},
+      {step:"The Story", q:"What story are you telling yourself about this person or situation?"},
+      {step:"Feelings", q:"Describe the single-word feelings that arise when you tell yourself that story."},
+      {step:"Thoughts & Actions", q:"What specific thoughts and actions does that story produce in you?"},
+      {step:"Evidence", q:"What evidence do you have to support this story as absolutely true?"},
+      {step:"Cold Facts", q:"What are the non-emotional facts of the situation — just the facts?"},
+      {step:"Escalation", q:"If you ignore this trigger now — how does it escalate? Where does it lead?"},
+      {step:"Want for You", q:"Regardless of the trigger and your story — what do you truly want for yourself in and beyond this situation?"},
+      {step:"Want for Them", q:"What do you want for them in and beyond this situation?"},
+      {step:"Want for Both", q:"What do you want for both of you in and beyond this situation?"},
+      {step:"Story Check", q:"If you keep telling yourself the original story — will it ultimately give you what you want?"},
+      {step:"New Story", q:"Letting go of the original story and knowing what you want — what is your new DESIRED STORY?"},
+      {step:"Evidence for New Story", q:"What evidence proves your desired story is accurate right now?"},
+      {step:"Positive Reframe", q:"Stepping back — why has this anger trigger been extremely positive?"},
+      {step:"Life Lesson", q:"What is the singular lesson on life you're taking from this Stack?"},
+      {step:"Revelation", q:"What is the most significant revelation or insight you're leaving this Stack with?"},
+      {step:"Feeling Now", q:"Compared to when you started — what single word describes how you feel now?"},
+      {step:"Committed Actions", q:"What immediate actions are you committed to taking leaving this Stack?"},
+    ]
+  },
+  'rage-stack': {
+    name:"Rage Stack", journalType:"Rage",
+    steps:[
+      {step:"Title & Domain", q:"What are you titling this Rage Stack? Which domain — BODY, BEING, BALANCE, or BUSINESS?"},
+      {step:"The Trigger", q:"Who or what has triggered this rage?"},
+      {step:"Why Rage", q:"Why has this triggered rage in you right now?"},
+      {step:"If You Could Scream", q:"If you could scream at this person or situation right now — with no filter — what would you say?"},
+      {step:"Force Them", q:"If you could force them to think, say, or do anything — what would it be?"},
+      {step:"No Filter Truth", q:"With no filter or constraints — what do you genuinely think about them right now?"},
+      {step:"Never Again", q:"What is it you never want to experience with them again?"},
+      {step:"The Story", q:"What story are you telling yourself about this person or situation?"},
+      {step:"Feelings", q:"Single-word feelings that arise when you tell yourself that story?"},
+      {step:"Thoughts & Actions", q:"What thoughts and actions does that story produce?"},
+      {step:"Cold Facts", q:"What are the non-emotional facts of the situation?"},
+      {step:"Want for You", q:"What do you truly want for yourself in and beyond this situation?"},
+      {step:"Want for Them", q:"What do you want for them?"},
+      {step:"Want for Both", q:"What do you want for both of you?"},
+      {step:"Story Check", q:"Does your original story get you what you want?"},
+      {step:"ME Version", q:"Letting go of the original story — what is the ME VERSION? (Make it about you, not them.)"},
+      {step:"Evidence ME", q:"What evidence proves the ME story is true?"},
+      {step:"Opposite Version", q:"What is the OPPOSITE VERSION of the original story?"},
+      {step:"Evidence Opposite", q:"What evidence proves the OPPOSITE story is true?"},
+      {step:"Desired Story", q:"Holding all three versions — what is your final DESIRED VERSION of the story?"},
+      {step:"Evidence Desired", q:"What evidence proves your desired story is accurate?"},
+      {step:"Positive Reframe", q:"Why has this rage trigger been extremely positive?"},
+      {step:"Life Lesson", q:"What is the singular lesson on life you're taking from this Stack?"},
+      {step:"BODY Application", q:"How does this lesson apply to your BODY domain?"},
+      {step:"BEING Application", q:"How does this lesson apply to your BEING domain?"},
+      {step:"BALANCE Application", q:"How does this lesson apply to your BALANCE domain?"},
+      {step:"BUSINESS Application", q:"How does this lesson apply to your BUSINESS domain?"},
+      {step:"Revelation", q:"What is the most significant revelation you're leaving this Stack with?"},
+      {step:"Feeling Now", q:"Single word — how do you feel now compared to when you started?"},
+      {step:"Committed Actions", q:"What immediate actions are you committed to taking?"},
+    ]
+  },
+  'guilt-stack': {
+    name:"Guilt Stack", journalType:"Guilt",
+    steps:[
+      {step:"Title & Domain", q:"What are you titling this Guilt Stack? Which domain — BODY, BEING, BALANCE, or BUSINESS?"},
+      {step:"The Trigger", q:"What did you say or do that's triggering this guilt?"},
+      {step:"Why Guilt", q:"Why has this triggered guilt for you in this moment?"},
+      {step:"No Filter", q:"If you could say anything to yourself right now with no filter — what would you say?"},
+      {step:"The Story", q:"What story are you telling yourself about what happened?"},
+      {step:"Feelings", q:"Single-word feelings when you tell yourself that story?"},
+      {step:"Thoughts & Actions", q:"What thoughts and actions does that story produce?"},
+      {step:"Cold Facts", q:"What are the non-emotional facts of what actually happened?"},
+      {step:"Accountability Shift", q:"What might be possible if you stopped beating yourself up and simply took 100% accountability and committed to moving forward?"},
+      {step:"Want for You", q:"What do you truly want for yourself going forward?"},
+      {step:"Want for Them/It", q:"What do you want for the person or situation involved?"},
+      {step:"Want for Both", q:"What do you want for both of you?"},
+      {step:"Story Check", q:"Does the original story get you what you want?"},
+      {step:"Desired Story", q:"Who are you choosing to be? What is your new DESIRED STORY?"},
+      {step:"Evidence", q:"What evidence proves this desired story is already true?"},
+      {step:"Positive Reframe", q:"Why has this guilt been extremely positive?"},
+      {step:"Life Lesson", q:"What is the singular lesson on life you're taking from this Stack?"},
+      {step:"Revelation", q:"What is the most significant revelation you're leaving with?"},
+      {step:"Feeling Now", q:"Single word — how do you feel now vs. when you started?"},
+      {step:"Committed Actions", q:"What immediate actions are you committed to taking?"},
+    ]
+  },
+  'discovery-stack': {
+    name:"Discovery Stack", journalType:"Discovery/Idea Log",
+    steps:[
+      {step:"Title & Domain", q:"What are you titling this Discovery Stack? Which domain — BODY, BEING, BALANCE, or BUSINESS?"},
+      {step:"The Trigger", q:"Who or what has activated this discovery or insight in you?"},
+      {step:"The Discovery", q:"What has this discovery activated in you? Describe the full thought or realization."},
+      {step:"The Story", q:"What story are you telling yourself about this discovery?"},
+      {step:"Feelings", q:"Single-word feelings when you tell yourself that story?"},
+      {step:"Thoughts & Actions", q:"What thoughts and actions arise from that story?"},
+      {step:"If Executed", q:"If this discovery is acted on — what are the positive benefits to your world and those around you?"},
+      {step:"If Ignored", q:"If this discovery is NOT acted on — what are the possible negative consequences?"},
+      {step:"Fact 1", q:"What is the first measurable FACT that makes this real and actionable? Why is it significant? Give it a title."},
+      {step:"Fact 2", q:"What is the second measurable FACT? Why significant? Title it."},
+      {step:"Fact 3", q:"What is the third measurable FACT? Why significant? Title it."},
+      {step:"Positive Reframe", q:"Why has this discovery been extremely positive?"},
+      {step:"Life Lesson", q:"What is the singular lesson on life you're taking from this Stack?"},
+      {step:"Application", q:"How does this lesson apply across BODY, BEING, BALANCE, and BUSINESS?"},
+      {step:"Revelation", q:"What is the most significant revelation or insight you're leaving with?"},
+      {step:"Committed Actions", q:"What immediate actions are you committed to taking?"},
+    ]
+  },
+  'excitement-stack': {
+    name:"Excitement Stack", journalType:"Excitement",
+    steps:[
+      {step:"Title & Domain", q:"What are you titling this Excitement Stack? Which domain — BODY, BEING, BALANCE, or BUSINESS?"},
+      {step:"The Trigger", q:"Who or what has triggered this excitement?"},
+      {step:"Why Excited", q:"Why has this triggered excitement in you right now?"},
+      {step:"The Story", q:"What story are you telling yourself about this?"},
+      {step:"Feelings", q:"Single-word feelings when you tell yourself that story?"},
+      {step:"Thoughts & Actions", q:"What thoughts and actions arise?"},
+      {step:"Evidence", q:"What evidence proves this story is absolutely true?"},
+      {step:"Cold Facts", q:"What are the non-emotional facts that created this excitement?"},
+      {step:"Want for You", q:"What do you truly want for yourself in and beyond this?"},
+      {step:"Want for It/Them", q:"What do you want for it or them in and beyond this?"},
+      {step:"Want for Both", q:"What do you want for both in and beyond this?"},
+      {step:"Positive Reframe", q:"Why has this excitement trigger been extremely positive?"},
+      {step:"Life Lesson", q:"What is the singular lesson on life you're taking from this Stack?"},
+      {step:"Revelation", q:"What is the most significant revelation or insight?"},
+      {step:"Committed Actions", q:"What immediate actions are you committed to taking to keep this momentum?"},
+    ]
+  },
+  'gratitude-stack': {
+    name:"Gratitude Stack", journalType:"Gratitude",
+    steps:[
+      {step:"Title & Domain", q:"What are you titling this Gratitude Stack? Which domain — BODY, BEING, BALANCE, or BUSINESS?"},
+      {step:"The Trigger", q:"Who or what has triggered this gratitude?"},
+      {step:"Why Grateful", q:"Why has this triggered gratitude in you? What specifically happened?"},
+      {step:"The Story", q:"What story are you telling yourself about this?"},
+      {step:"Feelings", q:"Single-word feelings when you tell yourself that story?"},
+      {step:"Thoughts & Actions", q:"What thoughts and actions arise?"},
+      {step:"Cold Facts", q:"What are the objective facts that created this outcome — who did what, what actually happened?"},
+      {step:"Want for You", q:"What do you truly want for yourself in and beyond this?"},
+      {step:"Want for It/Them", q:"What do you want for it or them?"},
+      {step:"Want for Both", q:"What do you want for both?"},
+      {step:"Positive Reframe", q:"Why has this gratitude trigger been extremely positive?"},
+      {step:"Life Lesson", q:"What is the singular lesson on life you're taking from this Stack?"},
+      {step:"Revelation", q:"What is the most significant revelation or insight?"},
+      {step:"Committed Actions", q:"What immediate actions are you committed to taking?"},
+    ]
+  }
+};
+
+// Alias: anger-stack → irritation-stack
+TEMPLATES['anger-stack'] = {...TEMPLATES['irritation-stack'], name:'Anger Stack', journalType:'Anger'};
+
+function startTemplateInPanel(templateId, panelId) {
+  switchPanel('journal');
+  setTimeout(() => startTemplate(templateId), 150);
+}
+
+function startTemplate(templateId) {
+  const tmpl = TEMPLATES[templateId];
+  if (!tmpl) return;
+  currentTemplate = templateId;
+  templateStep = 0;
+  journalData = { template: tmpl.name, journalType: tmpl.journalType, date: new Date().toISOString().split('T')[0], responses: [] };
+
+  const msgs = document.getElementById('chat-messages-journal');
+  while (msgs.lastChild) msgs.removeChild(msgs.lastChild);
+
+  msgs.appendChild(makeMsgEl('assistant', `
+    <strong>${tmpl.name}</strong><br><br>Let's walk through this together. Take your time with each prompt — use rich text or voice to respond.
+    <div class="prompt-card" style="margin-top:14px;">
+      <div class="prompt-step">${tmpl.steps[0].step}</div>
+      <div class="prompt-q">${tmpl.steps[0].q}</div>
+    </div>
+  `));
+  scrollChat('journal');
+  document.getElementById('input-journal').focus();
+}
+
+function advanceTemplate(richText, plainText) {
+  const tmpl = TEMPLATES[currentTemplate];
+  journalData.responses.push({ step: tmpl.steps[templateStep].step, q: tmpl.steps[templateStep].q, response: plainText, responseHtml: richText });
+  templateStep++;
+
+  const msgs = document.getElementById('chat-messages-journal');
+  if (templateStep < tmpl.steps.length) {
+    const next = tmpl.steps[templateStep];
+    msgs.appendChild(makeMsgEl('assistant', `
+      <div class="prompt-card">
+        <div class="prompt-step">${next.step} <span style="opacity:0.5;font-size:9px;">(${templateStep + 1}/${tmpl.steps.length})</span></div>
+        <div class="prompt-q">${next.q}</div>
+      </div>
+    `));
+  } else {
+    msgs.appendChild(makeMsgEl('assistant', `
+      <strong>That's a complete ${tmpl.name} entry.</strong> Let's file it to SmartSuite.
+      <div class="prompt-card" style="margin-top:12px;">
+        <div class="prompt-step">Filing · 1 of 3</div>
+        <div class="prompt-q">Who should this be linked to?</div>
+      </div>
+      <div class="chips" style="margin-top:10px;">
+        <span class="chip" onclick="filingStep('journal','people','Clint only')">Just me</span>
+        <span class="chip" onclick="filingStep('journal','people','Team (Kaylee, Gino, Zach)')">Team</span>
+        <span class="chip" onclick="filingStep('journal','people','Bill (coach)')">Bill</span>
+        <span class="chip" onclick="filingStep('journal','people','None')">No link</span>
+      </div>
+    `));
+    filingCtx = { step: 1, data: {}, chatId: 'journal' };
+  }
+  scrollChat('journal');
+}
+
+// ═══════════════════════════════════════════════════════
+// FILING
+// ═══════════════════════════════════════════════════════
+function filingStep(chatId, field, val) {
+  // Only used for guided template journals now (not uploads)
+  // Upload journals use showSearchFiling / fileUploadToSmartSuite directly
+
+  if (filingCtx.step === 99) return; // upload mode — handled separately
+
+  filingCtx.data[field] = val;
+  const msgs = document.getElementById(`chat-messages-${chatId}`);
+  msgs.appendChild(makeMsgEl('user', val));
+
+  if (filingCtx.step === 1) {
+    filingCtx.step = 2;
+    // Show project search
+    const searchHtml = `
+      <div class="prompt-card"><div class="prompt-step">Filing · 2 of 3</div><div class="prompt-q">Which project should this be linked to?</div></div>
+      <div style="display:flex;gap:8px;margin-top:10px;align-items:center;">
+        <input type="text" id="search-project-${chatId}" placeholder="Search projects…"
+          style="flex:1;padding:8px 12px;background:var(--warm-white);border:1px solid var(--border-strong);border-radius:6px;font-size:13px;color:var(--ink);outline:none;font-family:'Outfit',sans-serif;"
+          oninput="searchSS('${chatId}','project',this.value)"
+          onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border-strong)'">
+      </div>
+      <div id="search-results-project-${chatId}" style="margin-top:6px;"></div>
+      <div id="selected-project-${chatId}" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;min-height:20px;"></div>
+      <div class="chips" style="margin-top:10px;">
+        <span class="chip" onclick="searchAndSelect('${chatId}','project','Squeeze Inn')">Squeeze Inn</span>
+        <span class="chip" onclick="searchAndSelect('${chatId}','project','Harmony Mesa')">Harmony Mesa</span>
+        <span class="chip" onclick="searchAndSelect('${chatId}','project','Canyon')">Canyon's Edge</span>
+        <span class="chip" onclick="guidedFilingNext('${chatId}')">Skip →</span>
+      </div>
+    `;
+    msgs.appendChild(makeMsgEl('assistant', searchHtml));
+    if (!filingCtx.data.project_ids) filingCtx.data.project_ids = [];
+
+  } else if (filingCtx.step === 2) {
+    filingCtx.step = 3;
+    msgs.appendChild(makeMsgEl('assistant', `
+      <div class="prompt-card"><div class="prompt-step">Filing · 3 of 3</div><div class="prompt-q">Any goal stats to update from this session?</div></div>
+      <div class="chips" style="margin-top:10px;">
+        <span class="chip" onclick="filingStep('${chatId}','goal_stat','No updates')">No updates</span>
+        <span class="chip" onclick="filingStep('${chatId}','goal_stat','Fitness / body progress')">Fitness</span>
+        <span class="chip" onclick="filingStep('${chatId}','goal_stat','Revenue / deals progress')">Revenue/Deals</span>
+        <span class="chip" onclick="filingStep('${chatId}','goal_stat','S-BOS build progress')">S-BOS</span>
+      </div>
+    `));
+  } else if (filingCtx.step === 3) {
+    fileToSmartSuite(chatId);
+  }
+  scrollChat(chatId);
+}
+
+function guidedFilingNext(chatId) {
+  // Advance filing step without a selection
+  filingCtx.step++;
+  filingStep(chatId, 'project', 'No link');
+}
+
+
+// ═══════════════════════════════════════════════════════
+// DUPLICATE DETECTION — with content comparison
+// ═══════════════════════════════════════════════════════
+
+// Global pending file state — used by duplicate warning buttons
+let pendingFile = null;
+
+function contentSimilarity(a, b) {
+  // Token overlap similarity — returns 0.0 to 1.0
+  if (!a || !b) return 0;
+  const tokenize = s => new Set(s.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 3));
+  const setA = tokenize(a);
+  const setB = tokenize(b);
+  if (!setA.size || !setB.size) return 0;
+  let overlap = 0;
+  setA.forEach(t => { if (setB.has(t)) overlap++; });
+  return overlap / Math.max(setA.size, setB.size);
+}
+
+async function checkForDuplicate(journalType, journalDate, newContent) {
+  try {
+    const data = await ssRequest('POST', `applications/${SS_JOURNALS}/records/list/`, {
+      filter: {
+        operator: 'and',
+        fields: [{ field: 's5293705a7', comparison: 'is', value: journalDate }]
+      },
+      limit: 20
+    });
+
+    const items = data.items || [];
+
+    // Match on title prefix (journal type name at start of title)
+    const typePrefix = journalType.split('/')[0].toLowerCase().trim();
+    const matches = items.filter(r => {
+      const t = (r.title || '').toLowerCase();
+      return t.includes(typePrefix);
+    });
+
+    if (!matches.length) return null;
+
+    // Content comparison — check each match
+    for (const match of matches) {
+      const existingContent = match.sc347cd0b9 || match.se2ae24b44 || '';
+      const similarity = contentSimilarity(newContent || '', existingContent);
+
+      // Attach similarity score and content preview to the record for the warning UI
+      match._similarity = similarity;
+      match._existingPreview = existingContent.slice(0, 200);
+      match._isDuplicate = similarity > 0.5; // >50% token overlap = likely duplicate
+    }
+
+    // Return the most similar match (or the first one if no content to compare)
+    matches.sort((a, b) => (b._similarity || 0) - (a._similarity || 0));
+    return matches[0];
+  } catch(e) {
+    console.warn('Duplicate check failed:', e);
+    return null; // On error, never block filing
+  }
+}
+
+function showDuplicateWarning(chatId, existingRecord, proceedFn) {
+  const msgs = document.getElementById(`chat-messages-${chatId}`);
+  const existingDate = existingRecord.first_created?.on
+    ? new Date(existingRecord.first_created.on).toLocaleString('en-US', {month:'short', day:'numeric', hour:'numeric', minute:'2-digit'})
+    : 'earlier today';
+
+  const sim = existingRecord._similarity || 0;
+  const simPct = Math.round(sim * 100);
+  const isDupe = existingRecord._isDuplicate;
+  const preview = existingRecord._existingPreview;
+
+  // Store proceed function globally so buttons can call it
+  pendingFile = { chatId, proceedFn };
+
+  const severityColor = isDupe ? 'var(--rust)' : '#6A89A7';
+  const severityLabel = isDupe
+    ? `⚠ Likely Duplicate — ${simPct}% content match`
+    : `ℹ Same Type & Date — content appears different (${simPct}% match)`;
+
+  const warnEl = makeMsgEl('assistant', `
+    <div style="background:rgba(166,141,163,0.10);border:1px solid rgba(166,141,163,0.4);border-radius:10px;padding:16px 20px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:${severityColor};text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">
+        ${severityLabel}
+      </div>
+      <p style="font-size:13px;line-height:1.6;margin-bottom:10px;">
+        A <strong>${existingRecord.title}</strong> entry already exists from <strong>${existingDate}</strong>.
+      </p>
+      ${preview ? `
+        <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:12px;font-style:italic;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Existing record preview</div>
+          ${preview.replace(/</g,'&lt;').replace(/>/g,'&gt;')}…
+        </div>
+      ` : ''}
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button onclick="confirmFileAnyway()" style="background:var(--gold);color:#fff;border:none;border-radius:6px;padding:9px 18px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;">
+          File Anyway — New Record
+        </button>
+        <button onclick="openExistingRecord('${existingRecord.id}')" style="background:transparent;border:1px solid var(--border-strong);color:var(--ink);border-radius:6px;padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:10px;cursor:pointer;">
+          View Existing in SmartSuite →
+        </button>
+        <button onclick="cancelPendingFile('${chatId}')" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:10px;cursor:pointer;">
+          Cancel
+        </button>
+      </div>
+    </div>
+  `);
+  msgs.appendChild(warnEl);
+  scrollChat(chatId);
+}
+
+function confirmFileAnyway() {
+  if (!pendingFile) return;
+  const { proceedFn } = pendingFile;
+  pendingFile = null;
+  proceedFn();
+}
+
+function cancelPendingFile(chatId) {
+  pendingFile = null;
+  const msgs = document.getElementById(`chat-messages-${chatId}`);
+  msgs.appendChild(makeMsgEl('assistant', 'Filing cancelled. Your journal content is still here if you want to file it.'));
+  scrollChat(chatId);
+}
+
+function openExistingRecord(recordId) {
+  window.open(`https://app.smartsuite.com/s71hvw05/solution/68216a706900e8eaf75a05a6/68f8f8fe3757414d70d94ae0/${recordId}`, '_blank');
+}
+
+async function fileToSmartSuite(chatId, skipDupeCheck) {
+  const msgs = document.getElementById(`chat-messages-${chatId}`);
+
+  // ── Duplicate check ──
+  if (!skipDupeCheck) {
+    const newContent = journalData.journalType === 'Upload'
+      ? (journalData.parsed?.complete_journal || journalData.responses[0]?.response || '')
+      : journalData.responses.map(r => r.response).join(' ');
+    const existing = await checkForDuplicate(journalData.journalType, journalData.date, newContent);
+    if (existing) {
+      showDuplicateWarning(chatId, existing, () => fileToSmartSuite(chatId, true));
+      return;
+    }
+  }
+
+  const loadingEl = makeMsgEl('assistant', `<span class="spinner"></span>  Writing to SmartSuite Journals/Rituals…`);
+  msgs.appendChild(loadingEl);
+  scrollChat(chatId);
+
+  const completeJournal = journalData.journalType === 'Upload'
+    ? (journalData.parsed?.complete_journal || journalData.responses[0]?.response || '')
+    : journalData.responses.map(r => `${r.step}\nQ: ${r.q}\nA: ${r.response}`).join('\n\n---\n\n');
+
+  const projectIds = filingCtx.data.project_ids?.map(i=>i.id).filter(Boolean) || [];
+  const fields = {
+    title: `${journalData.journalType} — ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`,
+    sa4f36f00f: journalData.journalType,
+    s5293705a7: { date: journalData.date, include_time: false },
+    sc347cd0b9: completeJournal,
+    ...(journalData.responses[3] ? { seb7792729: journalData.responses[3].response } : {}),
+    ...(journalData.responses[4] ? { sbfeb856cc: journalData.responses[4].response } : {}),
+    ...(journalData.responses[5] ? { se56f53ec1: journalData.responses[5].response } : {}),
+    ...(journalData.responses[0] ? { se2ae24b44: journalData.responses[0].response } : {}),
+    ...(journalData.responses[1] ? { sf0a405cfc: journalData.responses[1].response } : {}),
+    ...(journalData.responses[2] ? { s034f5700a: journalData.responses[2].response } : {}),
+    ...(projectIds.length ? { s7kcnpn2: projectIds } : {}),
+  };
+
+  try {
+    const data = await ssRequest('POST', `applications/${SS_JOURNALS}/records/`, fields);
+    loadingEl.remove();
+
+    if (data.id) {
+      addToHistory({ type: journalData.template, title: fields.title, preview: completeJournal.slice(0,150)+'…', date: new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}), people: filingCtx.data.people, project: filingCtx.data.project, id: data.id.slice(-8).toUpperCase() });
+      msgs.appendChild(makeMsgEl('assistant', `
+        <div class="filed-card">
+          <div class="filed-title">✓ Filed to SmartSuite · Journals/Rituals</div>
+          <div class="filed-row"><span class="filed-key">Record ID</span><span class="filed-val">${data.id}</span></div>
+          <div class="filed-row"><span class="filed-key">Title</span><span class="filed-val">${fields.title}</span></div>
+          <div class="filed-row"><span class="filed-key">Type</span><span class="filed-val">${journalData.journalType}</span></div>
+          <div class="filed-row"><span class="filed-key">Linked To</span><span class="filed-val">${filingCtx.data.people || '—'} · ${filingCtx.data.project || '—'}</span></div>
+        </div>
+        <div style="margin-top:12px;"><span class="chip" onclick="switchPanel('history')">View in History →</span></div>
+      `));
+    } else {
+      msgs.appendChild(makeMsgEl('assistant', `Note: SmartSuite returned ${JSON.stringify(data).slice(0,100)}`));
+    }
+  } catch(err) {
+    loadingEl.remove();
+    msgs.appendChild(makeMsgEl('assistant', `⚠️ Write error: ${err.message}`));
+  }
+  currentTemplate = null; templateStep = 0;
+  filingCtx = {};  // clear so normal chat resumes on this panel
+  scrollChat(chatId);
+}
+
+// ═══════════════════════════════════════════════════════
+// AI CHAT — Railway proxy
+// ═══════════════════════════════════════════════════════
+async function sendMessage(panelId) {
+  const richText = getRichText(panelId);
+  const plainText = getPlainText(panelId);
+  if (!plainText) return;
+  clearInput(panelId);
+
+  const msgs = document.getElementById(`chat-messages-${panelId}`);
+
+  // Show user message with rich formatting preserved
+  const userDiv = document.createElement('div');
+  userDiv.className = 'msg user';
+  userDiv.innerHTML = `<div class="msg-avatar">C</div><div class="msg-bubble">${richText}</div>`;
+  msgs.appendChild(userDiv);
+  scrollChat(panelId);
+
+  // Template intercept — covers journal and morning panels
+  if ((panelId === 'journal' || panelId === 'morning') && currentTemplate) {
+    advanceTemplate(richText, plainText);
+    return;
+  }
+
+  // Filing intercept — if we're mid-filing on ANY panel, typed input shouldn't hit AI
+  if (filingCtx.chatId === panelId && filingCtx.step >= 1 && filingCtx.step <= 3) {
+    // User typed instead of clicking a chip — treat as their filing answer
+    const field = filingCtx.step === 1 ? 'people' : filingCtx.step === 2 ? 'project' : 'goal_stat';
+    filingStep(panelId, field, plainText);
+    return;
+  }
+
+  const typing = makeTyping();
+  msgs.appendChild(typing);
+  scrollChat(panelId);
+
+  conversations[panelId].push({ role: 'user', content: plainText });
+
+  try {
+    const res = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: MODEL, max_tokens: 1000, system: sysPrompt(panelId), messages: conversations[panelId] })
+    });
+    if (!res.ok) throw new Error(`Server returned ${res.status} — check Railway is running`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    const reply = data.content?.find(b => b.type === 'text')?.text || 'No response.';
+    conversations[panelId].push({ role: 'assistant', content: reply });
+    typing.remove();
+    msgs.appendChild(makeMsgEl('assistant', fmt_reply(reply)));
+  } catch(e) {
+    typing.remove();
+    msgs.appendChild(makeMsgEl('assistant', `⚠️ Connection error: ${e.message}<br><br>Make sure Railway is running at <code>earnest-vitality-production.up.railway.app</code>`));
+  }
+  scrollChat(panelId);
+}
+
+function quickSend(panelId, text) {
+  const input = document.getElementById(`input-${panelId}`);
+  if (input) { input.innerText = text; }
+  sendMessage(panelId);
+}
+
+// ═══════════════════════════════════════════════════════
+// SMARTSUITE GOALS
+// ═══════════════════════════════════════════════════════
+async function loadGoals() {
+  const subtitleEl = document.getElementById('goals-subtitle');
+  if (subtitleEl) subtitleEl.textContent = 'Loading from SmartSuite…';
+  try {
+    const data = await ssRequest('POST', `applications/${SS_GOALS}/records/list/`, {});
+    const items = data.items || data || [];
+    liveGoals = items.map(g => ({ id: g.id, title: g.title || '—', pct: parseFloat(g.sc9f2f3411 || 0), target: g.s80be76f59 ? `$${Number(g.s80be76f59).toLocaleString()}` : '—', progress: parseFloat(g.sa2e70ce39 || 0), status: g.s36cccbaa8 || '—', dueDate: g.s65ce469a2?.date?.split('T')[0] || '—', year: g.s04491cd60 || '—' }));
+    renderGoals();
+    renderSidebarBars();
+    document.getElementById('goals-subtitle').textContent = `${liveGoals.length} goals · Last updated ${new Date().toLocaleTimeString()}`;
+    const built = liveGoals.find(g => g.title.includes('$12,000,000'));
+    const formation = liveGoals.find(g => g.title.includes('30 Homes Closed'));
+    const granite = liveGoals.find(g => g.title.includes('$800,000'));
+    const sp = liveGoals.find(g => g.title.includes('$200,000'));
+    if (built) { document.getElementById('score-rev').textContent = `${built.pct.toFixed(0)}%`; document.getElementById('score-rev-pct').textContent = `$${(built.progress/1e6).toFixed(1)}M / $12M`; }
+    if (formation) { document.getElementById('score-formation').textContent = `${formation.pct.toFixed(0)}%`; document.getElementById('score-formation-pct').textContent = formation.status; }
+    if (granite) { document.getElementById('score-gp').textContent = `${granite.pct.toFixed(0)}%`; document.getElementById('score-gp-pct').textContent = `$${(granite.progress/1000).toFixed(0)}K / $800K`; }
+    if (sp) { document.getElementById('score-sp').textContent = `${sp.pct.toFixed(0)}%`; document.getElementById('score-sp-status').textContent = sp.status; }
+  } catch(e) {
+    console.warn('loadGoals failed:', e.message);
+    const el = document.getElementById('goals-subtitle');
+    if (el) el.textContent = 'Goals unavailable — check connection';
+  }
+}
+
+function renderGoals() {
+  const colors = ['','rust','sage','slate','','rust','sage','slate'];
+  document.getElementById('goals-grid').innerHTML = liveGoals.slice(0,8).map((g,i) => {
+    const pct = Math.min(100, Math.max(0, g.pct));
+    const sClass = g.status.includes('🔴') || g.status.includes('Overdue') ? 'red' : g.status.includes('🟡') ? 'yellow' : '';
+    const shortTitle = g.title.replace('BUILT.- ','').replace('Formation (CRF/Homestead Dwellings)- ','Formation · ').replace('Granite Perfection- ','Granite · ').replace('Stitser Properties Inc.- ','SP · ');
+    return `<div class="goal-card"><div class="goal-card-header"><div><div class="goal-category">${g.year}</div><div class="goal-title">${shortTitle}</div><div class="goal-target">Target: ${g.target} · Due: ${g.dueDate}</div></div><div class="goal-pct">${pct.toFixed(0)}%</div></div><div class="goal-progress"><div class="goal-progress-fill ${colors[i]}" style="width:${pct}%"></div></div><div class="goal-status ${sClass}">${g.status}</div></div>`;
+  }).join('');
+}
+
+function renderSidebarBars() {
+  const colors = ['','sage','rust'];
+  document.getElementById('sidebar-goal-bars').innerHTML = liveGoals.slice(0,3).map((g,i) => {
+    const pct = Math.min(100, Math.max(0, g.pct));
+    return `<div class="goal-mini"><div class="goal-mini-label">${g.title.split(/[-·]/)[0].trim().slice(0,18)} <span>${pct.toFixed(0)}%</span></div><div class="goal-bar"><div class="goal-bar-fill ${colors[i]}" style="width:${pct}%"></div></div></div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// JOURNAL MODE / UPLOAD
+// ═══════════════════════════════════════════════════════
+function selectJournalMode(mode, el) {
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('journal-chat-mode').style.display = mode === 'chat' ? 'block' : 'none';
+  document.getElementById('journal-upload-mode').style.display = mode !== 'chat' ? 'block' : 'none';
+  if (mode !== 'chat') {
+    document.getElementById('upload-icon').textContent = mode === 'handwritten' ? '✍️' : '📄';
+    document.getElementById('upload-hint-text').textContent = mode === 'handwritten' ? 'JPG or PNG of handwritten journal' : 'PDF or TXT typed journal';
+  }
+}
+
+function handleDrop(e) { e.preventDefault(); document.getElementById('upload-zone').classList.remove('dragover'); const f = e.dataTransfer.files[0]; if (f) processFile(f); }
+function handleFileSelect(e) { const f = e.target.files[0]; if (f) processFile(f); }
+
+async function processFile(file) {
+  document.getElementById('upload-zone').style.display = 'none';
+  document.getElementById('upload-processing').style.display = 'block';
+  const msgs = document.getElementById('chat-messages-upload');
+  const loadEl = makeMsgEl('assistant', `<span class="spinner"></span>  Reading <strong>${file.name}</strong>…`);
+  msgs.appendChild(loadEl);
+
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const base64 = e.target.result.split(',')[1];
+    loadEl.remove();
+    const isImage = file.type.startsWith('image/');
+
+    // Smart system prompt — knows the full journal schema and field slugs
+    const uploadSysPrompt = `You are Kompass, the executive journaling assistant for Clint Stitser.
+
+Your job is to parse an uploaded journal entry (handwritten or typed) and extract a COMPLETE structured JSON object that maps directly to the SmartSuite Journals/Rituals table.
+
+JOURNAL TYPES — you MUST use exactly one of these values for journal_type.
+Read the content carefully and pick the most accurate match:
+- "Morning Ritual" — morning planning, daily intentions, dominos, warrior's way style
+- "Evening Ritual" — end of day review, recap, tomorrow prep
+- "Weekly Ritual" — weekly review across BODY, BEING, BALANCE, BUSINESS
+- "Irritation Stack" — triggered by irritation or frustration (lower intensity anger)
+- "Discovery/Idea Log" — a new insight, idea, or discovery being processed
+- "Memory Journal" — capturing a memory, reflection on the past
+- "Exercise Log" — physical training, workout, fitness activity
+- "Anger" — anger stack (medium intensity trigger)
+- "Guilt" — guilt stack, self-accountability
+- "Excitement" — excitement stack, positive trigger
+- "Gratitude" — gratitude stack, appreciation trigger
+- "Rage" — rage stack (highest intensity anger trigger)
+
+FIELD MAPPING — extract values for as many of these as the content supports:
+- title: string — a short descriptive title for this journal entry
+- journal_type: string — one of the types above
+- journal_date: string — date in YYYY-MM-DD format if found, else today
+- one_word_intention: string — the single word intention if present
+- three_dominos: string — the 3 big dominos / daily priorities
+- hurdles: string — obstacles and how they'll be handled
+- gratitude: string — gratitude content
+- celebrate_who: string — who to celebrate
+- action_body: string — how they'll show up physically/energetically
+- coach_advice: string — high performance coach advice
+- complete_journal: string — the FULL verbatim transcription of the entire entry
+- summary: string — 2-3 sentence plain English summary of the entry
+- themes: array of strings — key themes (max 5)
+- action_items: array of strings — concrete next actions
+- emotional_tone: string — brief description of emotional state
+- people_mentioned: array of strings — first+last names of people mentioned
+- projects_mentioned: array of strings — project names mentioned
+
+RESPOND WITH ONLY A JSON OBJECT. No markdown, no explanation, no preamble. Start with { and end with }.`;
+
+    const userMsg = isImage
+      ? [{ role:'user', content:[
+          { type:'image', source:{ type:'base64', media_type:file.type, data:base64 }},
+          { type:'text', text:'Parse this handwritten journal entry and return the structured JSON as instructed.' }
+        ]}]
+      : [{ role:'user', content:`Parse this journal entry and return the structured JSON as instructed.\n\n${atob(base64).slice(0,6000)}` }];
+
+    const typing = makeTyping();
+    msgs.appendChild(typing);
+
+    try {
+      const res = await fetch(PROXY_URL, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ model: MODEL, max_tokens: 2000, system: uploadSysPrompt, messages: userMsg })
+      });
+      const data = await res.json();
+      const rawReply = data.content?.find(b => b.type === 'text')?.text || '{}';
+      typing.remove();
+
+      // Parse the structured JSON
+      let parsed = {};
+      try {
+        parsed = JSON.parse(rawReply.replace(/```json|```/g,'').trim());
+      } catch(pe) {
+        console.error('Parse error:', pe, rawReply);
+      }
+
+      // Store structured data for smart filing
+      journalData = {
+        template: 'Uploaded Journal',
+        journalType: parsed.journal_type || 'Upload',
+        date: parsed.journal_date || new Date().toISOString().split('T')[0],
+        parsed: parsed,
+        responses: [{ step:'Full Journal', q:'Complete entry', response: parsed.complete_journal || rawReply }]
+      };
+
+      // Show the extracted summary to user
+      const summaryHtml = `
+        <strong>${parsed.title || 'Journal Entry'}</strong>
+        <div style="margin-top:8px;padding:10px 14px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;font-size:12px;line-height:1.6;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Extracted · ${parsed.journal_type || 'Journal'}</div>
+          ${parsed.summary ? `<p style="margin-bottom:8px;">${parsed.summary}</p>` : ''}
+          ${parsed.themes?.length ? `<div><strong>Themes:</strong> ${parsed.themes.join(', ')}</div>` : ''}
+          ${parsed.action_items?.length ? `<div style="margin-top:6px;"><strong>Actions:</strong><ul style="padding-left:16px;margin:4px 0;">${parsed.action_items.map(a=>`<li>${a}</li>`).join('')}</ul></div>` : ''}
+          ${parsed.emotional_tone ? `<div style="margin-top:6px;"><strong>Tone:</strong> ${parsed.emotional_tone}</div>` : ''}
+          ${parsed.people_mentioned?.length ? `<div style="margin-top:6px;"><strong>People:</strong> ${parsed.people_mentioned.join(', ')}</div>` : ''}
+          ${parsed.projects_mentioned?.length ? `<div style="margin-top:6px;"><strong>Projects:</strong> ${parsed.projects_mentioned.join(', ')}</div>` : ''}
+        </div>
+      `;
+      msgs.appendChild(makeMsgEl('assistant', summaryHtml));
+
+      // Trigger search-based filing UI
+      setTimeout(() => showSearchFiling('upload', parsed), 500);
+
+    } catch(err) {
+      typing.remove();
+      msgs.appendChild(makeMsgEl('assistant', `⚠️ Parse error: ${err.message}`));
+    }
+    scrollChat('upload');
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─── SEARCH-BASED FILING UI ───
+async function showSearchFiling(chatId, parsed) {
+  const msgs = document.getElementById(`chat-messages-${chatId}`);
+  const peopleHints = parsed?.people_mentioned || [];
+  const projectHints = parsed?.projects_mentioned || [];
+
+  const filingHtml = `
+    <strong>Let's file this to SmartSuite.</strong> Search to link people, projects, and goals — or skip any.
+
+    <div style="margin-top:14px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Link to People</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="text" id="search-people-${chatId}" placeholder="Search by name…" style="flex:1;padding:8px 12px;background:var(--warm-white);border:1px solid var(--border-strong);border-radius:6px;font-size:13px;color:var(--ink);outline:none;font-family:'Outfit',sans-serif;"
+          oninput="searchSS('${chatId}','people',this.value)" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border-strong)'">
+      </div>
+      ${peopleHints.length ? `<div style="margin-top:6px;font-size:11px;color:var(--muted);">Mentioned: ${peopleHints.map(p=>`<span class="chip" style="font-size:10px;padding:3px 8px;" onclick="addSSLink('${chatId}','people','${p}',null)">${p}</span>`).join('')}</div>` : ''}
+      <div id="search-results-people-${chatId}" style="margin-top:6px;"></div>
+      <div id="selected-people-${chatId}" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;min-height:20px;"></div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Link to Project</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="text" id="search-project-${chatId}" placeholder="Search projects…" style="flex:1;padding:8px 12px;background:var(--warm-white);border:1px solid var(--border-strong);border-radius:6px;font-size:13px;color:var(--ink);outline:none;font-family:'Outfit',sans-serif;"
+          oninput="searchSS('${chatId}','project',this.value)" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border-strong)'">
+      </div>
+      ${projectHints.length ? `<div style="margin-top:6px;font-size:11px;color:var(--muted);">Mentioned: ${projectHints.map(p=>`<span class="chip" style="font-size:10px;padding:3px 8px;" onclick="searchAndSelect('${chatId}','project','${p}')">${p}</span>`).join('')}</div>` : ''}
+      <div id="search-results-project-${chatId}" style="margin-top:6px;"></div>
+      <div id="selected-project-${chatId}" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;min-height:20px;"></div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Link to Goal</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="text" id="search-goal-${chatId}" placeholder="Search goals…" style="flex:1;padding:8px 12px;background:var(--warm-white);border:1px solid var(--border-strong);border-radius:6px;font-size:13px;color:var(--ink);outline:none;font-family:'Outfit',sans-serif;"
+          oninput="searchSS('${chatId}','goal',this.value)" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border-strong)'">
+      </div>
+      <div id="search-results-goal-${chatId}" style="margin-top:6px;"></div>
+      <div id="selected-goal-${chatId}" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;min-height:20px;"></div>
+    </div>
+
+    <div style="margin-top:16px;display:flex;gap:10px;">
+      <button class="btn-primary" onclick="fileUploadToSmartSuite('${chatId}',false,false)">↑ File to SmartSuite</button>
+      <button class="btn-ghost" onclick="fileUploadToSmartSuite('${chatId}',true,false)">Skip links & file</button>
+    </div>
+  `;
+  msgs.appendChild(makeMsgEl('assistant', filingHtml));
+  filingCtx = { step: 99, data: { people_ids:[], project_ids:[], goal_ids:[] }, chatId };
+  scrollChat(chatId);
+}
+
+// Search SmartSuite live
+const ssSearchCache = {};
+let ssSearchTimers = {};
+
+async function searchSS(chatId, type, query) {
+  clearTimeout(ssSearchTimers[type]);
+  const resultsEl = document.getElementById(`search-results-${type}-${chatId}`);
+  if (!query.trim() || query.length < 2) { if(resultsEl) resultsEl.innerHTML = ''; return; }
+
+  ssSearchTimers[type] = setTimeout(async () => {
+    if(resultsEl) resultsEl.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">Searching…</span>`;
+
+    const appIds = {
+      people: '698a79cb5448033d905cbe70',  // People Profiles table
+      project: '68216a706900e8eaf75a05a7', // Projects table
+      goal: '6824d4d1885a8769bd2dfc0d'     // Goals table
+    };
+
+    try {
+      const data = await ssRequest('POST', `applications/${appIds[type]}/records/list/`, {
+        filter: { operator:'and', fields:[{ field:'title', comparison:'contains', value: query }]},
+        limit: 5
+      });
+      const items = (data.items || []).map(r => ({ id: r.id, title: r.title || r.sa2519e04c || '—' }));
+
+      if (!items.length) {
+        if(resultsEl) resultsEl.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">No results</span>`;
+        return;
+      }
+
+      if(resultsEl) resultsEl.innerHTML = items.map(item => `
+        <div onclick="addSSLink('${chatId}','${type}','${item.title.replace(/'/g,"\\'")}','${item.id}')"
+          style="padding:7px 12px;background:var(--card-bg);border:1px solid var(--border);border-radius:6px;cursor:pointer;margin-bottom:4px;font-size:12px;transition:all 0.12s;"
+          onmouseover="this.style.borderColor='var(--gold)';this.style.background='rgba(106,137,167,0.12)'"
+          onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--warm-white)'">
+          ${item.title}
+        </div>
+      `).join('');
+    } catch(err) {
+      if(resultsEl) resultsEl.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--rust);">Search error</span>`;
+    }
+  }, 350);
+}
+
+async function searchAndSelect(chatId, type, query) {
+  // Auto-search and select first result for a known name
+  const appIds = { project: '68216a706900e8eaf75a05a7', goal: '6824d4d1885a8769bd2dfc0d', people: '698a79cb5448033d905cbe70' };
+  try {
+    const data = await ssRequest('POST', `applications/${appIds[type]}/records/list/`, {
+      filter: { operator:'and', fields:[{ field:'title', comparison:'contains', value: query }]},
+      limit: 1
+    });
+    const item = data.items?.[0];
+    if (item) addSSLink(chatId, type, item.title || query, item.id);
+    else addSSLink(chatId, type, query, null);
+  } catch(e) {
+    addSSLink(chatId, type, query, null);
+  }
+}
+
+function addSSLink(chatId, type, title, id) {
+  // Add to selection display
+  const selectedEl = document.getElementById(`selected-${type}-${chatId}`);
+  const resultsEl = document.getElementById(`search-results-${type}-${chatId}`);
+  const inputEl = document.getElementById(`search-${type}-${chatId}`);
+  if (!selectedEl) return;
+
+  // Check not already added
+  if (filingCtx.data[`${type}_ids`]?.some(item => item.id === id && id !== null)) return;
+
+  const tag = document.createElement('span');
+  tag.style.cssText = 'background:var(--gold-dim);border:1px solid rgba(106,137,167,0.3);border-radius:4px;padding:3px 8px;font-size:11px;font-family:JetBrains Mono,monospace;color:var(--gold);cursor:pointer;display:flex;align-items:center;gap:5px;';
+  tag.innerHTML = `${title} <span onclick="removeSSLink(this,'${chatId}','${type}','${id}')" style="opacity:0.5;font-size:10px;">✕</span>`;
+  selectedEl.appendChild(tag);
+
+  // Store the link
+  if (!filingCtx.data[`${type}_ids`]) filingCtx.data[`${type}_ids`] = [];
+  filingCtx.data[`${type}_ids`].push({ id, title });
+
+  // Clear search
+  if(resultsEl) resultsEl.innerHTML = '';
+  if(inputEl) inputEl.value = '';
+}
+
+function removeSSLink(el, chatId, type, id) {
+  el.parentElement.remove();
+  if (filingCtx.data[`${type}_ids`]) {
+    filingCtx.data[`${type}_ids`] = filingCtx.data[`${type}_ids`].filter(item => item.id !== id);
+  }
+}
+
+async function fileUploadToSmartSuite(chatId, skipLinks, skipDupeCheck) {
+  const msgs = document.getElementById(`chat-messages-${chatId}`);
+
+  if (!skipDupeCheck) {
+    const newContent = journalData.parsed?.complete_journal || journalData.responses[0]?.response || '';
+    const existing = await checkForDuplicate(journalData.journalType, journalData.date, newContent);
+    if (existing) {
+      showDuplicateWarning(chatId, existing, () => fileUploadToSmartSuite(chatId, skipLinks, true));
+      return;
+    }
+  }
+
+  const loadingEl = makeMsgEl('assistant', `<span class="spinner"></span>  Writing to SmartSuite Journals/Rituals…`);
+  msgs.appendChild(loadingEl);
+  scrollChat(chatId);
+
+  const p = journalData.parsed || {};
+  const projectIds = skipLinks ? [] : (filingCtx.data.project_ids?.map(i=>i.id).filter(Boolean) || []);
+  const goalIds = skipLinks ? [] : (filingCtx.data.goal_ids?.map(i=>i.id).filter(Boolean) || []);
+
+  const fields = {
+    title: p.title || `${journalData.journalType} — ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`,
+    sa4f36f00f: journalData.journalType,
+    s5293705a7: { date: journalData.date, include_time: false },
+    sc347cd0b9: p.complete_journal || journalData.responses[0]?.response || '',
+    // Map specific fields from parsed content
+    ...(p.one_word_intention ? { seb7792729: p.one_word_intention } : {}),
+    ...(p.three_dominos ? { sbfeb856cc: p.three_dominos } : {}),
+    ...(p.hurdles ? { se56f53ec1: p.hurdles } : {}),
+    ...(p.gratitude ? { sf0a405cfc: p.gratitude } : {}),
+    ...(p.celebrate_who ? { s034f5700a: p.celebrate_who } : {}),
+    ...(p.action_body ? { sa3d7954ec: p.action_body } : {}),
+    ...(p.coach_advice ? { s81367c90c: p.coach_advice } : {}),
+    // Linked records
+    ...(projectIds.length ? { s7kcnpn2: projectIds } : {}),
+    ...(goalIds.length ? { s9yxir1y: goalIds } : {}),
+  };
+
+  try {
+    const data = await ssRequest('POST', `applications/${SS_JOURNALS}/records/`, fields);
+    loadingEl.remove();
+
+    if (data.id) {
+      const linkedSummary = [
+        ...(filingCtx.data.project_ids?.map(i=>i.title) || []),
+        ...(filingCtx.data.goal_ids?.map(i=>i.title) || [])
+      ].filter(Boolean);
+
+      addToHistory({
+        type: journalData.journalType,
+        title: fields.title,
+        preview: (p.summary || p.complete_journal || '').slice(0,150) + '…',
+        date: new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}),
+        people: filingCtx.data.people_ids?.map(i=>i.title).join(', ') || '—',
+        project: linkedSummary.join(', ') || '—',
+        id: data.id.slice(-8).toUpperCase()
+      });
+
+      msgs.appendChild(makeMsgEl('assistant', `
+        <div class="filed-card">
+          <div class="filed-title">✓ Filed to SmartSuite · Journals/Rituals</div>
+          <div class="filed-row"><span class="filed-key">Record ID</span><span class="filed-val">${data.id}</span></div>
+          <div class="filed-row"><span class="filed-key">Title</span><span class="filed-val">${fields.title}</span></div>
+          <div class="filed-row"><span class="filed-key">Type</span><span class="filed-val">${journalData.journalType}</span></div>
+          ${linkedSummary.length ? `<div class="filed-row"><span class="filed-key">Linked To</span><span class="filed-val">${linkedSummary.join(' · ')}</span></div>` : ''}
+          ${p.action_items?.length ? `<div class="filed-row"><span class="filed-key">Actions</span><span class="filed-val">${p.action_items.slice(0,3).join(' · ')}</span></div>` : ''}
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px;">
+          <span class="chip" onclick="switchPanel('history')">View in History →</span>
+          <span class="chip" onclick="resetUpload()">File another</span>
+        </div>
+      `));
+    } else {
+      msgs.appendChild(makeMsgEl('assistant', `⚠️ SmartSuite returned: ${JSON.stringify(data).slice(0,120)}`));
+    }
+  } catch(err) {
+    loadingEl.remove();
+    msgs.appendChild(makeMsgEl('assistant', `⚠️ Write error: ${err.message}`));
+  }
+  filingCtx = {};
+  scrollChat(chatId);
+}
+
+function resetUpload() {
+  document.getElementById('upload-zone').style.display = 'block';
+  document.getElementById('upload-processing').style.display = 'none';
+  document.getElementById('chat-messages-upload').innerHTML = '';
+  document.getElementById('file-input').value = '';
+  journalData = {};
+}
+
+// ═══════════════════════════════════════════════════════
+// HISTORY
+// ═══════════════════════════════════════════════════════
+const historyEntries = [
+  { type:"Warrior's Way", title:"I am a builder who leads with clarity.", preview:"Grateful for Tammie, the team, and forward momentum. Mission: Harmony Mesa CMA.", date:"Tue, Mar 31, 2026", people:"Clint only", project:"Harmony Mesa", id:"44821" },
+  { type:"Project Debrief", title:"Canyon's Edge HUD surplus cash discussion", preview:"K-1 timing for stub period. Surplus cash rules — 45-day lag.", date:"Mon, Mar 30, 2026", people:"Clint only", project:"Canyon's Edge", id:"44802" }
+];
+
+function addToHistory(e) { historyEntries.unshift(e); renderHistory(); }
+function renderHistory() {
+  document.getElementById('history-entries').innerHTML = historyEntries.map(e => `
+    <div class="journal-entry">
+      <div class="entry-header"><span class="entry-type-badge">${e.type}</span><span class="entry-date">${e.date} · #${e.id}</span></div>
+      <div class="entry-title">${e.title}</div>
+      <div class="entry-preview">${e.preview}</div>
+      <div class="entry-links">${e.people ? `<span class="entry-link-chip">👤 ${e.people}</span>` : ''}${e.project ? `<span class="entry-link-chip">📁 ${e.project}</span>` : ''}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// DOM HELPERS
+// ═══════════════════════════════════════════════════════
+function makeMsgEl(role, html) {
+  const div = document.createElement('div');
+  div.className = `msg ${role === 'user' ? 'user' : ''}`;
+  div.innerHTML = `<div class="msg-avatar">${role === 'user' ? 'C' : 'K'}</div><div class="msg-bubble">${html}</div>`;
+  return div;
+}
+function makeTyping() {
+  const div = document.createElement('div');
+  div.className = 'msg';
+  div.innerHTML = `<div class="msg-avatar">K</div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+  return div;
+}
+function scrollChat(panelId) {
+  const el = document.getElementById(`chat-messages-${panelId}`);
+  if (el) setTimeout(() => el.scrollTop = el.scrollHeight, 60);
+}
+function fmt_reply(text) {
+  return text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+}
+
+// ═══════════════════════════════════════════════════════
+// MORNING INIT
+// ═══════════════════════════════════════════════════════
+function initMorning() {
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  document.getElementById('morning-date-label').textContent = dateStr;
+  document.getElementById('morning-meta').innerHTML = `🌅 Morning Brief &nbsp;·&nbsp; ${now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})} PDT &nbsp;·&nbsp; Lift ✓ &nbsp;·&nbsp; SB Block → Coldstream → EOD`;
+  const msgs = document.getElementById('chat-messages-morning');
+  msgs.appendChild(makeMsgEl('assistant', `
+    <strong>Good morning.</strong> It's ${dateStr}. Here's the pulse:<br><br>
+    <strong>Today:</strong> Lift ✓ · SB Block (7:45–11) · Coldstream Sales/Built Marketing (9–9:30) · Pond Shift open<br><br>
+    <strong>Active fronts:</strong> Squeeze Inn MEP · Harmony Mesa · Canyon's Edge K-1 · Built to Last Framework<br><br>
+    Ready to run The Warrior's Way? Or run a Stack?
+    <div class="chips" style="margin-top:12px;">
+      <span class="chip" onclick="startTemplateInPanel('warriors-way','morning')">⚔️ Warrior's Way</span>
+      <span class="chip" onclick="startTemplateInPanel('anger-stack','morning')">😤 Anger Stack</span>
+      <span class="chip" onclick="startTemplateInPanel('discovery-stack','morning')">💡 Discovery Stack</span>
+      <span class="chip" onclick="quickSend('morning','What should I focus on most today?')">🎯 Today's focus</span>
+    </div>
+  `));
+  scrollChat('morning');
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+// Safe init — UI renders even if network calls fail
+try { renderHistory(); } catch(e) { console.warn('renderHistory failed:', e); }
+try { initMorning(); } catch(e) { console.warn('initMorning failed:', e); }
+// Load goals async — don't block UI
+setTimeout(() => { try { loadGoals(); } catch(e) { console.warn('loadGoals failed:', e); } }, 500);
+</script>
+</body>
+</html>
