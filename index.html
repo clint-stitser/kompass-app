@@ -587,7 +587,7 @@ async function ssRequest(method, path, body) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ method, path, body: body || null })
     });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     return res.json();
   } catch(e) {
     console.warn('ssRequest failed:', e.message);
@@ -1469,18 +1469,18 @@ async function processFile(file) {
 Your job is to parse an uploaded journal entry (handwritten or typed) and extract a COMPLETE structured JSON object that maps directly to the SmartSuite Journals/Rituals table.
 
 JOURNAL TYPES — use exactly one of these values for journal_type:
-- "Morning Ritual" — morning planning, daily intentions, dominos, warrior's way style
-- "Evening Ritual" — end of day review, recap, tomorrow prep
-- "Weekly Ritual" — weekly review across BODY, BEING, BALANCE, BUSINESS
-- "Irritation Stack" — triggered by irritation or frustration
-- "Discovery/Idea Log" — a new insight, idea, or discovery being processed
-- "Memory Journal" — capturing a memory, reflection on the past
-- "Exercise Log" — physical training, workout, fitness activity
-- "Anger" — anger stack trigger
-- "Guilt" — guilt stack, self-accountability
-- "Excitement" — excitement stack, positive trigger
-- "Gratitude" — gratitude stack, appreciation trigger
-- "Rage" — rage stack, highest intensity anger
+- Morning Ritual — morning planning, daily intentions, dominos
+- Evening Ritual — end of day review, recap, tomorrow prep
+- Weekly Ritual — weekly review across BODY, BEING, BALANCE, BUSINESS
+- Irritation Stack — triggered by irritation or frustration
+- Discovery/Idea Log — a new insight or idea being processed
+- Memory Journal — capturing a memory or reflection
+- Exercise Log — physical training or fitness activity
+- Anger — anger stack trigger
+- Guilt — guilt stack, self-accountability
+- Excitement — excitement stack, positive trigger
+- Gratitude — gratitude stack, appreciation trigger
+- Rage — rage stack, highest intensity anger
 
 FIELD MAPPING — extract values for as many of these as the content supports:
 - title: string — a short descriptive title for this journal entry
@@ -1862,7 +1862,7 @@ function initMorning() {
 // ═══════════════════════════════════════════════════════
 try { renderHistory(); } catch(e) { console.warn(e); }
 try { initMorning(); } catch(e) { console.warn(e); }
-setTimeout(() => { try { loadGoals(); } catch(e) { console.warn(e); } }, 500);
+setTimeout(function() { try { loadGoals(); } catch(e) { console.warn(e); } }, 500);
 </script>
 </body>
 </html>
