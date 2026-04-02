@@ -574,7 +574,14 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
 // CONFIG
 // ═══════════════════════════════════════════════════════
 const PROXY_URL = 'https://earnest-vitality-production.up.railway.app/api/chat';
-const SS_PROXY = 'https://earnest-vitality-production.up.railway.app/api/smartsuite';
+const SS_PROXY       = 'https://earnest-vitality-production.up.railway.app/api/smartsuite';
+const GMAIL_URL      = 'https://earnest-vitality-production.up.railway.app/api/gmail/inbox';
+const CALENDAR_URL   = 'https://earnest-vitality-production.up.railway.app/api/calendar/today';
+const DRIVE_URL      = 'https://earnest-vitality-production.up.railway.app/api/drive/recent';
+const DOCS_URL       = 'https://earnest-vitality-production.up.railway.app/api/docs';
+const SHEETS_URL     = 'https://earnest-vitality-production.up.railway.app/api/sheets';
+const SLIDES_URL     = 'https://earnest-vitality-production.up.railway.app/api/slides';
+const SMARTSHEET_URL = 'https://earnest-vitality-production.up.railway.app/api/smartsheet';
 const MODEL = 'claude-sonnet-4-20250514';
 const SS_JOURNALS = '68f8f8fe3757414d70d94ae0';
 const SS_GOALS = '6824d4d1885a8769bd2dfc0d';
@@ -594,6 +601,68 @@ async function ssRequest(method, path, body) {
     return { items: [], error: e.message };
   }
 }
+
+// ─── Google + Smartsheet connector helpers ───
+async function fetchGmail(max) {
+  try {
+    const res = await fetch(GMAIL_URL + '?max=' + (max || 10));
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  } catch(e) { console.warn('Gmail:', e.message); return {error:e.message, messages:[], count:0}; }
+}
+async function fetchCalendar() {
+  try {
+    const res = await fetch(CALENDAR_URL);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  } catch(e) { console.warn('Calendar:', e.message); return {error:e.message, events:[], count:0}; }
+}
+async function fetchDrive(max) {
+  try {
+    const res = await fetch(DRIVE_URL + '?max=' + (max || 10));
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  } catch(e) { console.warn('Drive:', e.message); return {error:e.message, files:[]}; }
+}
+async function fetchDoc(docId) {
+  try {
+    const res = await fetch(DOCS_URL + '/' + docId);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  } catch(e) { return {error:e.message}; }
+}
+async function fetchSheet(sheetId, range) {
+  try {
+    const url = SHEETS_URL + '/' + sheetId + (range ? '?range=' + encodeURIComponent(range) : '');
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  } catch(e) { return {error:e.message}; }
+}
+async function fetchSmartsheet(sheetId) {
+  try {
+    const res = await fetch(SMARTSHEET_URL + '/' + sheetId);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  } catch(e) { return {error:e.message}; }
+}
+function fmtEvents(events) {
+  if (!events || !events.length) return 'No events today.';
+  return events.map(function(e) {
+    var time = '';
+    if (e.start) { var d = new Date(e.start); if (!isNaN(d)) time = d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) + ' — '; }
+    return time + e.title + (e.location ? ' @ ' + e.location : '');
+  }).join('<br>');
+}
+function fmtEmails(messages) {
+  if (!messages || !messages.length) return 'Inbox clear.';
+  return messages.slice(0,5).map(function(m) {
+    var from = (m.from||'').replace(/<[^>]+>/,'').trim();
+    return '<strong>' + from + ':</strong> ' + (m.subject||'(no subject)');
+  }).join('<br>');
+}
+
+
 
 const conversations = { morning:[], midmorning:[], afternoon:[], eod:[], journal:[], upload:[], assistant:[] };
 let currentTemplate = null, templateStep = 0, journalData = {};
@@ -1925,24 +1994,69 @@ function fmt_reply(text) {
 // MORNING INIT
 // ═══════════════════════════════════════════════════════
 function initMorning() {
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  var timeStr = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
   document.getElementById('morning-date-label').textContent = dateStr;
-  document.getElementById('morning-meta').innerHTML = `🌅 Morning Brief &nbsp;·&nbsp; ${now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})} PDT &nbsp;·&nbsp; Lift ✓ &nbsp;·&nbsp; SB Block → Coldstream → EOD`;
-  const msgs = document.getElementById('chat-messages-morning');
-  msgs.appendChild(makeMsgEl('assistant', `
-    <strong>Good morning.</strong> It's ${dateStr}. Here's the pulse:<br><br>
-    <strong>Today:</strong> Lift ✓ · SB Block (7:45–11) · Coldstream Sales/Built Marketing (9–9:30) · Pond Shift open<br><br>
-    <strong>Active fronts:</strong> Squeeze Inn MEP · Harmony Mesa · Canyon's Edge K-1 · Built to Last Framework<br><br>
-    Ready to run The Warrior's Way? Or run a Stack?
-    <div class="chips" style="margin-top:12px;">
-      <span class="chip" onclick="startTemplateInPanel('warriors-way','morning')">⚔️ Warrior's Way</span>
-      <span class="chip" onclick="startTemplateInPanel('anger-stack','morning')">😤 Anger Stack</span>
-      <span class="chip" onclick="startTemplateInPanel('discovery-stack','morning')">💡 Discovery Stack</span>
-      <span class="chip" onclick="quickSend('morning','What should I focus on most today?')">🎯 Today's focus</span>
-    </div>
-  `));
+  document.getElementById('morning-meta').innerHTML = 'Morning Brief &nbsp;&middot;&nbsp; ' + timeStr + ' PDT &nbsp;&middot;&nbsp; Loading live data&hellip;';
+  var msgs = document.getElementById('chat-messages-morning');
+
+  // Show chips immediately — don't wait on network
+  var chipsDiv = document.createElement('div');
+  chipsDiv.className = 'chips';
+  chipsDiv.style.marginBottom = '12px';
+  var chipDefs = [
+    ['Warriors Way', function(){startTemplateInPanel('warriors-way','morning');}],
+    ['Discovery Stack', function(){startTemplateInPanel('discovery-stack','morning');}],
+    ['Todays Focus', function(){quickSend('morning','What should I focus on most today?');}]
+  ];
+  chipDefs.forEach(function(c) {
+    var s = document.createElement('span');
+    s.className = 'chip';
+    s.textContent = c[0];
+    s.onclick = c[1];
+    chipsDiv.appendChild(s);
+  });
+  var chipsMsg = makeMsgEl('assistant','');
+  chipsMsg.querySelector('.msg-bubble').appendChild(chipsDiv);
+  msgs.appendChild(chipsMsg);
+
+  // Load Gmail + Calendar in parallel
+  var typing = makeTyping();
+  msgs.appendChild(typing);
   scrollChat('morning');
+
+  Promise.all([fetchCalendar(), fetchGmail(5)]).then(function(results) {
+    var cal = results[0];
+    var mail = results[1];
+    typing.remove();
+
+    var html = '<strong>Good morning.</strong> It is ' + dateStr + '.<br><br>';
+
+    if (!cal.error && cal.events) {
+      html += '<strong>Today (' + (cal.count||cal.events.length) + ' events):</strong><br>' + fmtEvents(cal.events) + '<br><br>';
+    } else {
+      html += '<strong>Active fronts:</strong> Squeeze Inn MEP &middot; Harmony Mesa &middot; Canyon Edge K-1 &middot; Built to Last<br><br>';
+    }
+
+    if (!mail.error) {
+      html += '<strong>Unread emails (' + (mail.count||mail.messages.length) + '):</strong><br>' + fmtEmails(mail.messages);
+    } else {
+      html += '<em>Email unavailable: ' + mail.error + '</em>';
+    }
+
+    msgs.appendChild(makeMsgEl('assistant', html));
+    var parts = [];
+    if (!cal.error) parts.push((cal.count||'?') + ' events');
+    if (!mail.error) parts.push((mail.count||'?') + ' unread');
+    document.getElementById('morning-meta').innerHTML = 'Morning Brief &nbsp;&middot;&nbsp; ' + timeStr + ' PDT &nbsp;&middot;&nbsp; ' + (parts.length ? parts.join(' &middot; ') : 'Live');
+    scrollChat('morning');
+  }).catch(function(err) {
+    typing.remove();
+    msgs.appendChild(makeMsgEl('assistant', 'Good morning. Active fronts: Squeeze Inn MEP, Harmony Mesa, Canyon Edge K-1, Built to Last.'));
+    document.getElementById('morning-meta').innerHTML = 'Morning Brief &nbsp;&middot;&nbsp; ' + timeStr + ' PDT';
+    scrollChat('morning');
+  });
 }
 
 // ═══════════════════════════════════════════════════════
