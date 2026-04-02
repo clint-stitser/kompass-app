@@ -307,6 +307,7 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
           <div class="checkin-mode-label" id="morning-date-label">Loading…</div>
           <h2>Good morning, <em>Clint.</em></h2>
           <div class="checkin-meta" id="morning-meta">Initializing Kompass…</div>
+        <button onclick="refreshMorning()" style="background:none;border:1px solid var(--border);border-radius:5px;padding:3px 10px;font-size:10px;color:var(--muted);cursor:pointer;font-family:'JetBrains Mono',monospace;margin-left:8px;">↻ Refresh</button>
         </div>
         <div class="chat-messages" id="chat-messages-morning"></div>
         <div class="chat-input-area">
@@ -1435,20 +1436,54 @@ async function sendMessage(panelId) {
   conversations[panelId].push({ role: 'user', content: plainText });
 
   try {
-    const res = await fetch(PROXY_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: MODEL, max_tokens: 1000, system: sysPrompt(panelId), messages: conversations[panelId] })
-    });
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-    const reply = data.content?.find(b => b.type === 'text')?.text || 'No response.';
+    var reply;
+    if (panelId === 'assistant') {
+      // Inject live calendar + email into every PA message
+      var calData = await fetchCalendar();
+      var mailData = await fetchGmail(5);
+      var liveCtx = '';
+      if (!calData.error && calData.events && calData.events.length) {
+        liveCtx += 'LIVE CALENDAR TODAY:\n' + calData.events.map(function(e) {
+          var t = e.start ? new Date(e.start).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) + ' ' : '';
+          return t + e.title + (e.location ? ' @ ' + e.location : '');
+        }).join('\n') + '\n\n';
+      }
+      if (!mailData.error && mailData.messages && mailData.messages.length) {
+        liveCtx += 'UNREAD EMAILS (last 24h):\n' + mailData.messages.slice(0,5).map(function(m) {
+          return 'From: ' + (m.from||'').replace(/<[^>]+>/g,'').trim() + ' | ' + (m.subject||'');
+        }).join('\n') + '\n\n';
+      }
+      var msgsWithCtx = conversations[panelId].slice();
+      if (liveCtx && msgsWithCtx.length) {
+        var last = msgsWithCtx[msgsWithCtx.length-1];
+        msgsWithCtx[msgsWithCtx.length-1] = { role: last.role, content: liveCtx + last.content };
+      }
+      const paRes = await fetch(PROXY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: MODEL, max_tokens: 1500, system: sysPrompt(panelId), messages: msgsWithCtx })
+      });
+      if (!paRes.ok) throw new Error('Server returned ' + paRes.status);
+      const paData = await paRes.json();
+      if (paData.error) throw new Error(paData.error);
+      reply = paData.content?.find(b => b.type === 'text')?.text || 'No response.';
+    } else {
+      const res = await fetch(PROXY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: MODEL, max_tokens: 1000, system: sysPrompt(panelId), messages: conversations[panelId] })
+      });
+      if (!res.ok) throw new Error('Server returned ' + res.status);
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      reply = data.content?.find(b => b.type === 'text')?.text || 'No response.';
+    }
     conversations[panelId].push({ role: 'assistant', content: reply });
     typing.remove();
     msgs.appendChild(makeMsgEl('assistant', fmt_reply(reply)));
   } catch(e) {
     typing.remove();
-    msgs.appendChild(makeMsgEl('assistant', `⚠️ Error: ${e.message}`));
+    msgs.appendChild(makeMsgEl('assistant', '⚠️ Error: ' + e.message));
   }
   scrollChat(panelId);
 }
@@ -1993,6 +2028,33 @@ function fmt_reply(text) {
 // ═══════════════════════════════════════════════════════
 // MORNING INIT
 // ═══════════════════════════════════════════════════════
+function refreshMorning() {
+  var msgs = document.getElementById('chat-messages-morning');
+  var typing = makeTyping();
+  msgs.appendChild(typing);
+  scrollChat('morning');
+  Promise.all([fetchCalendar(), fetchGmail(5)]).then(function(results) {
+    var cal = results[0];
+    var mail = results[1];
+    typing.remove();
+    var html = '<strong>Refreshed.</strong><br><br>';
+    if (!cal.error && cal.events) {
+      html += '<strong>Today (' + (cal.count||cal.events.length) + ' events):</strong><br>' + fmtEvents(cal.events) + '<br><br>';
+    }
+    if (!mail.error) {
+      html += '<strong>Unread (' + (mail.count||mail.messages.length) + '):</strong><br>' + fmtEmails(mail.messages);
+    } else {
+      html += '<em>Email: ' + mail.error + '</em>';
+    }
+    msgs.appendChild(makeMsgEl('assistant', html));
+    scrollChat('morning');
+  }).catch(function(err) {
+    typing.remove();
+    msgs.appendChild(makeMsgEl('assistant', 'Refresh failed: ' + err.message));
+    scrollChat('morning');
+  });
+}
+
 function initMorning() {
   var now = new Date();
   var dateStr = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
