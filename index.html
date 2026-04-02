@@ -582,7 +582,8 @@ const DRIVE_URL      = 'https://earnest-vitality-production.up.railway.app/api/d
 const DOCS_URL       = 'https://earnest-vitality-production.up.railway.app/api/docs';
 const SHEETS_URL     = 'https://earnest-vitality-production.up.railway.app/api/sheets';
 const SLIDES_URL     = 'https://earnest-vitality-production.up.railway.app/api/slides';
-const SMARTSHEET_URL = 'https://earnest-vitality-production.up.railway.app/api/smartsheet';
+const SMARTSHEET_URL       = 'https://earnest-vitality-production.up.railway.app/api/smartsheet';
+const CALENDAR_EVENT_URL   = 'https://earnest-vitality-production.up.railway.app/api/calendar/event';
 const MODEL = 'claude-sonnet-4-20250514';
 const SS_JOURNALS = '68f8f8fe3757414d70d94ae0';
 const SS_GOALS = '6824d4d1885a8769bd2dfc0d';
@@ -604,6 +605,27 @@ async function ssRequest(method, path, body) {
 }
 
 // ─── Google + Smartsheet connector helpers ───
+async function createCalendarEvent(title, start, end, description, location) {
+  try {
+    const res = await fetch(CALENDAR_EVENT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: title,
+        start: start,
+        end: end,
+        description: description || '',
+        location: location || '',
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+      })
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  } catch(e) {
+    console.warn('createCalendarEvent:', e.message);
+    return { error: e.message };
+  }
+}
 async function fetchGmail(max) {
   try {
     const res = await fetch(GMAIL_URL + '?max=' + (max || 10));
