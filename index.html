@@ -585,12 +585,18 @@ const SS_PROJECTS = '68216a706900e8eaf75a05a7';
 
 // SmartSuite calls route through Railway proxy to avoid CORS
 async function ssRequest(method, path, body) {
-  const res = await fetch(SS_PROXY, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ method, path, body: body || null })
-  });
-  return res.json();
+  try {
+    const res = await fetch(SS_PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ method, path, body: body || null })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  } catch(e) {
+    console.warn('ssRequest failed:', e.message);
+    return { items: [], error: e.message };
+  }
 }
 
 const conversations = { morning:[], midmorning:[], afternoon:[], eod:[], journal:[], upload:[], assistant:[] };
@@ -1538,6 +1544,7 @@ async function sendMessage(panelId) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: MODEL, max_tokens: 1000, system: sysPrompt(panelId), messages: conversations[panelId] })
     });
+    if (!res.ok) throw new Error(`Server returned ${res.status} — check Railway is running`);
     const data = await res.json();
     if (data.error) throw new Error(data.error);
     const reply = data.content?.find(b => b.type === 'text')?.text || 'No response.';
@@ -1546,7 +1553,7 @@ async function sendMessage(panelId) {
     msgs.appendChild(makeMsgEl('assistant', fmt_reply(reply)));
   } catch(e) {
     typing.remove();
-    msgs.appendChild(makeMsgEl('assistant', `⚠️ Error: ${e.message}`));
+    msgs.appendChild(makeMsgEl('assistant', `⚠️ Connection error: ${e.message}<br><br>Make sure Railway is running at <code>earnest-vitality-production.up.railway.app</code>`));
   }
   scrollChat(panelId);
 }
@@ -1561,7 +1568,8 @@ function quickSend(panelId, text) {
 // SMARTSUITE GOALS
 // ═══════════════════════════════════════════════════════
 async function loadGoals() {
-  document.getElementById('goals-subtitle').textContent = 'Loading from SmartSuite…';
+  const subtitleEl = document.getElementById('goals-subtitle');
+  if (subtitleEl) subtitleEl.textContent = 'Loading from SmartSuite…';
   try {
     const data = await ssRequest('POST', `applications/${SS_GOALS}/records/list/`, {});
     const items = data.items || data || [];
@@ -1578,7 +1586,9 @@ async function loadGoals() {
     if (granite) { document.getElementById('score-gp').textContent = `${granite.pct.toFixed(0)}%`; document.getElementById('score-gp-pct').textContent = `$${(granite.progress/1000).toFixed(0)}K / $800K`; }
     if (sp) { document.getElementById('score-sp').textContent = `${sp.pct.toFixed(0)}%`; document.getElementById('score-sp-status').textContent = sp.status; }
   } catch(e) {
-    document.getElementById('goals-subtitle').textContent = `Error: ${e.message}`;
+    console.warn('loadGoals failed:', e.message);
+    const el = document.getElementById('goals-subtitle');
+    if (el) el.textContent = 'Goals unavailable — check connection';
   }
 }
 
@@ -2038,9 +2048,11 @@ function initMorning() {
 // ═══════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════
-renderHistory();
-initMorning();
-loadGoals();
+// Safe init — UI renders even if network calls fail
+try { renderHistory(); } catch(e) { console.warn('renderHistory failed:', e); }
+try { initMorning(); } catch(e) { console.warn('initMorning failed:', e); }
+// Load goals async — don't block UI
+setTimeout(() => { try { loadGoals(); } catch(e) { console.warn('loadGoals failed:', e); } }, 500);
 </script>
 </body>
 </html>
