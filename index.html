@@ -1503,12 +1503,26 @@ FIELD MAPPING — extract values for as many of these as the content supports:
 
 RESPOND WITH ONLY A JSON OBJECT. No markdown, no explanation, no preamble. Start with { and end with }.`;
 
-    const userMsg = isImage
-      ? [{ role:'user', content:[
-          { type:'image', source:{ type:'base64', media_type:file.type, data:base64 }},
-          { type:'text', text:'Parse this handwritten journal entry and return the structured JSON as instructed.' }
-        ]}]
-      : [{ role:'user', content:`Parse this journal entry and return the structured JSON as instructed.\n\n${atob(base64).slice(0,6000)}` }];
+    // Build the message — images and PDFs use native content blocks;
+    // plain text files are decoded and sent inline
+    const isPdf = file.type === 'application/pdf';
+    let userMsg;
+    if (isImage) {
+      userMsg = [{ role:'user', content:[
+        { type:'image', source:{ type:'base64', media_type:file.type, data:base64 }},
+        { type:'text', text:'Parse this handwritten journal entry and return the structured JSON as instructed.' }
+      ]}];
+    } else if (isPdf) {
+      userMsg = [{ role:'user', content:[
+        { type:'document', source:{ type:'base64', media_type:'application/pdf', data:base64 }},
+        { type:'text', text:'Parse this PDF journal entry and return the structured JSON as instructed.' }
+      ]}];
+    } else {
+      // Plain text — safe to decode
+      let textContent;
+      try { textContent = atob(base64).slice(0, 8000); } catch(e) { textContent = '(could not decode file)'; }
+      userMsg = [{ role:'user', content:'Parse this journal entry and return the structured JSON as instructed.\n\n' + textContent }];
+    }
 
     const typing = makeTyping();
     msgs.appendChild(typing);
