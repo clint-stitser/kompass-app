@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>KOMPASS · The Stitser Way v3</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@200;300;400;500&display=swap');
@@ -280,6 +280,53 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
 @media (max-width: 480px) {
   .checkin-header h2 { font-size: 1.6rem; }
   .morning-date { font-size: 9px; }
+}
+
+/* ── Mobile keyboard / viewport fix ── */
+@media (max-width: 768px) {
+  /* Use dynamic viewport height so keyboard shrink is handled */
+  html, body { height: 100%; height: -webkit-fill-available; }
+  .app {
+    height: 100vh;
+    height: -webkit-fill-available;
+    min-height: -webkit-fill-available;
+  }
+  /* Make each panel a flex column so input sticks to bottom */
+  .panel.active {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+  .chat-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .checkin-header {
+    flex-shrink: 0;
+  }
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    min-height: 0;
+  }
+  .chat-input-area {
+    flex-shrink: 0;
+    position: relative;
+    background: var(--warm-white);
+    border-top: 1px solid var(--border);
+    padding-bottom: env(safe-area-inset-bottom, 8px);
+  }
+  /* Main scrolls its active panel */
+  .main {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
 }
 </style>
 </head>
