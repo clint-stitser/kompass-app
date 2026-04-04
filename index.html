@@ -1460,7 +1460,7 @@ async function sendMessage(panelId) {
   try {
     var reply;
     if (panelId === 'assistant') {
-      // Inject live calendar + email into every PA message
+      // Inject live calendar + email context
       var calData = await fetchCalendar();
       var mailData = await fetchGmail(5);
       var liveCtx = '';
@@ -1488,7 +1488,37 @@ async function sendMessage(panelId) {
       if (!paRes.ok) throw new Error('Server returned ' + paRes.status);
       const paData = await paRes.json();
       if (paData.error) throw new Error(paData.error);
-      reply = paData.content?.find(b => b.type === 'text')?.text || 'No response.';
+      var rawReply = paData.content?.find(b => b.type === 'text')?.text || 'No response.';
+
+      // Detect action JSON from Claude
+      var action = null;
+      try {
+        var cleaned = rawReply.replace(/```json|```/g,'').trim();
+        if (cleaned.startsWith('{') && cleaned.includes('"action"')) {
+          action = JSON.parse(cleaned);
+        }
+      } catch(e) { /* not JSON, normal reply */ }
+
+      if (action && action.action === 'create_calendar_event') {
+        // Execute the calendar event creation
+        typing.remove();
+        var execTyping = makeTyping();
+        msgs.appendChild(execTyping);
+        scrollChat(panelId);
+        var result = await createCalendarEvent(
+          action.title, action.start, action.end,
+          action.description || '', action.location || ''
+        );
+        execTyping.remove();
+        if (result.error) {
+          reply = 'Failed to create calendar event: ' + result.error;
+        } else {
+          reply = (action.confirm || 'Done.') +
+            (result.link ? ' <a href="' + result.link + '" target="_blank" style="color:var(--gold);">Open in Google Calendar</a>' : '');
+        }
+      } else {
+        reply = rawReply;
+      }
     } else {
       const res = await fetch(PROXY_URL, {
         method: 'POST',
