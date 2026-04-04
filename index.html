@@ -571,8 +571,8 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
         <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event)">
           <div class="upload-icon" id="upload-icon">📄</div>
           <p><strong>Click to upload or drag & drop</strong></p>
-          <p id="upload-hint-text">PDF, TXT, or image (JPG, PNG) · Max 20MB</p>
-          <input type="file" id="file-input" accept=".pdf,.txt,.jpg,.jpeg,.png" onchange="handleFileSelect(event)">
+          <p id="upload-hint-text">PDF, TXT, or images (JPG, PNG) · Select multiple for long journals</p>
+          <input type="file" id="file-input" accept=".pdf,.txt,.jpg,.jpeg,.png" multiple onchange="handleFileSelect(event)">
         </div>
         <div id="upload-processing" style="display:none;padding:0 40px;">
           <div class="chat-messages" id="chat-messages-upload" style="max-height:320px;overflow-y:auto;"></div>
@@ -1696,8 +1696,116 @@ function selectJournalMode(mode, el) {
   }
 }
 
-function handleDrop(e) { e.preventDefault(); document.getElementById('upload-zone').classList.remove('dragover'); const f = e.dataTransfer.files[0]; if (f) processFile(f); }
-function handleFileSelect(e) { const f = e.target.files[0]; if (f) processFile(f); }
+function handleDrop(e) { e.preventDefault(); document.getElementById('upload-zone').classList.remove('dragover'); var files = Array.from(e.dataTransfer.files); if (files.length) processFiles(files); }
+function handleFileSelect(e) { var files = Array.from(e.target.files); if (files.length) processFiles(files); }
+
+async function processFiles(files) {
+  // For a single file, use original flow
+  if (files.length === 1) {
+    processFile(files[0]);
+    return;
+  }
+  // Multiple files — collect all images, send as one multi-page message
+  var images = files.filter(function(f) { return f.type.startsWith('image/'); });
+  var nonImages = files.filter(function(f) { return !f.type.startsWith('image/'); });
+
+  // Non-images (PDFs, text) processed individually
+  if (nonImages.length > 0 && images.length === 0) {
+    processFile(files[0]);
+    return;
+  }
+
+  // All images — combine into one multi-image Claude call
+  if (images.length > 0) {
+    processMultipleImages(images);
+    return;
+  }
+  processFile(files[0]);
+}
+
+async function processMultipleImages(files) {
+  document.getElementById('upload-zone').style.display = 'none';
+  document.getElementById('upload-processing').style.display = 'block';
+  var msgs = document.getElementById('chat-messages-upload');
+  var loadEl = makeMsgEl('assistant', '<span class="spinner"></span>  Reading ' + files.length + ' pages…');
+  msgs.appendChild(loadEl);
+
+  // Read all files as base64
+  var readFile = function(file) {
+    return new Promise(function(resolve, reject) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        resolve({ base64: e.target.result.split(',')[1], type: file.type });
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
+  try {
+    var fileData = await Promise.all(files.map(readFile));
+    loadEl.remove();
+
+    var uploadSysPrompt = `You are Kompass, the executive journaling assistant for Clint Stitser.
+
+Parse this multi-page handwritten journal entry and extract a COMPLETE structured JSON object.
+
+JOURNAL TYPES — use exactly one:
+Morning Ritual, Evening Ritual, Weekly Ritual, Irritation Stack, Discovery/Idea Log, Memory Journal, Exercise Log, Anger, Guilt, Excitement, Gratitude, Rage
+
+FIELDS to extract:
+title, journal_type, journal_date (YYYY-MM-DD), one_word_intention, three_dominos, hurdles, gratitude, celebrate_who, action_body, coach_advice, complete_journal (full verbatim transcript of ALL pages), summary (2-3 sentences), themes (array), action_items (array), emotional_tone, people_mentioned (array), projects_mentioned (array)
+
+RESPOND WITH ONLY A JSON OBJECT. No markdown, no preamble.`;
+
+    // Build content array with all images
+    var contentArr = fileData.map(function(fd, i) {
+      return { type: 'image', source: { type: 'base64', media_type: fd.type, data: fd.base64 } };
+    });
+    contentArr.push({ type: 'text', text: 'These are ' + files.length + ' pages of a single journal entry. Parse all pages together and return the structured JSON.' });
+
+    var typing = makeTyping();
+    msgs.appendChild(typing);
+    scrollChat('upload');
+
+    var res = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: MODEL, max_tokens: 2000, system: uploadSysPrompt, messages: [{ role: 'user', content: contentArr }] })
+    });
+    var data = await res.json();
+    var rawReply = data.content?.find(function(b) { return b.type === 'text'; })?.text || '{}';
+    typing.remove();
+
+    var parsed = {};
+    try { parsed = JSON.parse(rawReply.replace(/```json|```/g,'').trim()); } catch(e) { console.error('parse error', e); }
+
+    journalData = {
+      template: 'Uploaded Journal',
+      journalType: parsed.journal_type || 'Morning Ritual',
+      date: parsed.journal_date || new Date().toISOString().split('T')[0],
+      parsed: parsed,
+      responses: [{ step: 'Full Journal', q: 'Complete entry', response: parsed.complete_journal || rawReply }]
+    };
+
+    var summaryEl = document.createElement('div');
+    summaryEl.innerHTML = '<strong>' + (parsed.title || 'Journal Entry (' + files.length + ' pages)') + '</strong>'
+      + '<div style="margin-top:8px;padding:10px 14px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;font-size:12px;line-height:1.6;">'
+      + '<div style="font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">'
+      + files.length + ' pages · ' + (parsed.journal_type || 'Journal') + '</div>'
+      + (parsed.summary ? '<p style="margin-bottom:8px;">' + parsed.summary + '</p>' : '')
+      + (parsed.themes && parsed.themes.length ? '<div><strong>Themes:</strong> ' + parsed.themes.join(', ') + '</div>' : '')
+      + (parsed.emotional_tone ? '<div style="margin-top:4px;"><strong>Tone:</strong> ' + parsed.emotional_tone + '</div>' : '')
+      + '</div>';
+    msgs.appendChild(makeMsgEl('assistant', summaryEl.innerHTML));
+    setTimeout(function() { showTypeConfirmation('upload', parsed); }, 500);
+
+  } catch(err) {
+    loadEl.remove();
+    msgs.appendChild(makeMsgEl('assistant', '⚠️ Error reading files: ' + err.message));
+  }
+  scrollChat('upload');
+}
 
 async function processFile(file) {
   document.getElementById('upload-zone').style.display = 'none';
