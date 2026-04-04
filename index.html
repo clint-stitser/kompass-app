@@ -1039,7 +1039,7 @@ Live goals: ${liveGoals.map(g=>`${g.title.split(/[-·]/)[0].trim()}: ${g.pct.toF
     eod: base + `\nMODE: End of Day. Wins, misses, learnings, tomorrow's top 3. Offer to file a journal.`,
     journal: base + `\nMODE: Journal guide. Walk through template step by step. Acknowledge warmly, keep momentum. When complete say "That's a complete entry — let's file it."`,
     upload: base + `\nMODE: Parse uploaded journal. Extract themes, insights, actions, emotional tone. Present clean summary then offer filing.`,
-    assistant: base + `\nMODE: Full PA. High-caliber executive assistant. Direct, specific, anticipate needs.`
+    assistant: base + `\\nMODE: Full PA. You have live Gmail and Calendar data injected above. IMPORTANT: When the user asks to schedule, add, or create a calendar event, respond with ONLY this JSON and nothing else: {\"action\":\"create_calendar_event\",\"title\":\"...\",\"start\":\"YYYY-MM-DDTHH:MM:SS\",\"end\":\"YYYY-MM-DDTHH:MM:SS\",\"description\":\"...\",\"location\":\"...\",\"confirm\":\"Added: [title] at [time]\"} Use today's date when the user says 'today' or 'tonight'. Default event duration is 1 hour if not specified. For all other requests respond normally in plain text.`
   };
   return modes[mode] || base;
 }
