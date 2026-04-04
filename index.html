@@ -664,6 +664,7 @@ const DOCS_URL       = 'https://earnest-vitality-production.up.railway.app/api/d
 const SHEETS_URL     = 'https://earnest-vitality-production.up.railway.app/api/sheets';
 const SLIDES_URL     = 'https://earnest-vitality-production.up.railway.app/api/slides';
 const SMARTSHEET_URL       = 'https://earnest-vitality-production.up.railway.app/api/smartsheet';
+const MORNING_BRIEF_URL    = 'https://earnest-vitality-production.up.railway.app/api/morning-brief';
 const CALENDAR_EVENT_URL   = 'https://earnest-vitality-production.up.railway.app/api/calendar/event';
 const MODEL = 'claude-sonnet-4-20250514';
 const SS_JOURNALS = '68f8f8fe3757414d70d94ae0';
@@ -683,6 +684,46 @@ async function ssRequest(method, path, body) {
     console.warn('ssRequest failed:', e.message);
     return { items: [], error: e.message };
   }
+}
+
+// ─── Morning Brief SmartSuite fetch ───
+async function fetchMorningBrief() {
+  try {
+    const res = await fetch(MORNING_BRIEF_URL);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  } catch(e) { return { error: e.message, sections: [], total_attention_items: 0 }; }
+}
+function gyrBadge(gyr) {
+  var c = {'Exceeding Target':'#2d8a4e','On Track':'#4a7c59','At Risk':'#c67c1a','Critical':'#b83232'};
+  var col = c[gyr]||'#888';
+  return '<span style="padding:1px 7px;border-radius:10px;font-size:10px;font-weight:600;background:'+col+'22;color:'+col+';border:1px solid '+col+'44;">'+gyr+'</span>';
+}
+function renderMorningBrief(data) {
+  if (!data||data.error) return '<em style="color:var(--muted)">Brief unavailable</em>';
+  var html = '';
+  (data.sections||[]).forEach(function(sec) {
+    if (!sec.items||!sec.items.length) return;
+    html += '<div style="margin-bottom:14px;"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--gold);margin-bottom:6px;">'+sec.table+' ('+sec.items.length+')</div>';
+    sec.items.forEach(function(item) {
+      html += '<div style="padding:8px 12px;margin-bottom:5px;background:var(--card-bg);border:1px solid var(--border);border-radius:6px;font-size:12px;">';
+      html += '<div style="font-weight:600;">'+(item.title||'Untitled')+'</div>';
+      var meta = [];
+      if (item.gyr) meta.push(gyrBadge(item.gyr));
+      if (item.status) meta.push('<span style="color:var(--muted)">'+item.status+'</span>');
+      if (item.due_date) meta.push('<span style="color:var(--muted)">Due: '+item.due_date+'</span>');
+      if (item.follow_up_date) meta.push('<span style="color:#c67c1a">FU: '+item.follow_up_date+'</span>');
+      if (item.past_due) meta.push('<span style="color:#b83232;font-weight:600;">PAST DUE</span>');
+      if (item.priority) meta.push('<span style="color:var(--muted)">'+item.priority+'</span>');
+      if (item.pct_complete) meta.push('<span style="color:var(--muted)">'+item.pct_complete+'% done</span>');
+      if (meta.length) html += '<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:3px;">'+meta.join('')+'</div>';
+      if (item.issues) html += '<div style="color:var(--muted);font-size:11px;margin-top:3px;">'+item.issues.slice(0,120)+'</div>';
+      if (item.note) html += '<div style="color:var(--muted);font-size:11px;margin-top:3px;">'+item.note.slice(0,120)+'</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+  return html||'<em style="color:var(--muted)">No attention items.</em>';
 }
 
 // ─── Google + Smartsheet connector helpers ───
@@ -2286,9 +2327,10 @@ function refreshMorning() {
   var typing = makeTyping();
   msgs.appendChild(typing);
   scrollChat('morning');
-  Promise.all([fetchCalendar(), fetchGmail(5)]).then(function(results) {
+  Promise.all([fetchCalendar(), fetchGmail(5), fetchMorningBrief()]).then(function(results) {
     var cal = results[0];
     var mail = results[1];
+    var brief = results[2];
     typing.remove();
     var html = '<strong>Refreshed.</strong><br><br>';
     if (!cal.error && cal.events) {
@@ -2300,6 +2342,11 @@ function refreshMorning() {
       html += '<em>Email: ' + mail.error + '</em>';
     }
     msgs.appendChild(makeMsgEl('assistant', html));
+    if (!brief.error) {
+      var n = brief.total_attention_items||0;
+      var bh = '<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--gold);margin-bottom:8px;">S-BOS &middot; '+n+' ATTENTION ITEMS</div>';
+      msgs.appendChild(makeMsgEl('assistant', bh + renderMorningBrief(brief)));
+    }
     scrollChat('morning');
   }).catch(function(err) {
     typing.remove();
@@ -2341,9 +2388,10 @@ function initMorning() {
   msgs.appendChild(typing);
   scrollChat('morning');
 
-  Promise.all([fetchCalendar(), fetchGmail(5)]).then(function(results) {
+  Promise.all([fetchCalendar(), fetchGmail(5), fetchMorningBrief()]).then(function(results) {
     var cal = results[0];
     var mail = results[1];
+    var brief = results[2];
     typing.remove();
 
     var html = '<strong>Good morning.</strong> It is ' + dateStr + '.<br><br>';
@@ -2357,13 +2405,19 @@ function initMorning() {
     if (!mail.error) {
       html += '<strong>Unread emails (' + (mail.count||mail.messages.length) + '):</strong><br>' + fmtEmails(mail.messages);
     } else {
-      html += '<em>Email unavailable: ' + mail.error + '</em>';
+      html += '<em>Email: ' + mail.error + '</em>';
     }
 
     msgs.appendChild(makeMsgEl('assistant', html));
+    if (!brief.error) {
+      var n = brief.total_attention_items||0;
+      var bh = '<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--gold);margin-bottom:8px;">S-BOS &middot; '+n+' ATTENTION ITEMS</div>';
+      msgs.appendChild(makeMsgEl('assistant', bh + renderMorningBrief(brief)));
+    }
     var parts = [];
     if (!cal.error) parts.push((cal.count||'?') + ' events');
     if (!mail.error) parts.push((mail.count||'?') + ' unread');
+    if (!brief.error) parts.push((brief.total_attention_items||0) + ' action items');
     document.getElementById('morning-meta').innerHTML = 'Morning Brief &nbsp;&middot;&nbsp; ' + timeStr + ' PDT &nbsp;&middot;&nbsp; ' + (parts.length ? parts.join(' &middot; ') : 'Live');
     scrollChat('morning');
   }).catch(function(err) {
