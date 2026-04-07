@@ -283,6 +283,48 @@ select, input, textarea { font-size: 16px !important; }
 .morning-date { font-size: 9px; }
 }
 
+/* ── Journal panel mobile fix ── */
+@media (max-width: 768px) {
+/* Mode selector: compact on mobile */
+.mode-selector {
+padding: 10px 12px 0;
+gap: 6px;
+}
+.mode-card {
+padding: 8px 6px;
+flex: 1;
+}
+.mode-icon { font-size: 16px; }
+.mode-name { font-size: 10px; }
+.mode-desc { display: none; }
+
+/* Override hardcoded height on journal chat container */
+#journal-chat-container {
+height: auto !important;
+flex: 1;
+min-height: 0;
+}
+
+/* Ensure journal panel is flex column so input stays visible */
+#panel-journal {
+display: flex;
+flex-direction: column;
+height: 100%;
+overflow: hidden;
+}
+#journal-chat-mode {
+display: flex;
+flex-direction: column;
+flex: 1;
+min-height: 0;
+overflow: hidden;
+}
+/* Send button always visible -- pin input row */
+.input-row {
+flex-shrink: 0;
+}
+}
+
 /* ── Mobile keyboard / viewport fix ── */
 @media (max-width: 768px) {
 /* Use dynamic viewport height so keyboard shrink is handled */
@@ -531,7 +573,7 @@ flex-direction: column;
   </div>
 
   <div id="journal-chat-mode">
-    <div class="chat-container" style="height:calc(100vh - 52px - 108px);">
+    <div class="chat-container" style="height:calc(100vh - 52px - 108px);" id="journal-chat-container">
       <div class="chat-messages" id="chat-messages-journal">
         <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">
           Choose your template:
