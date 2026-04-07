@@ -283,48 +283,6 @@ select, input, textarea { font-size: 16px !important; }
 .morning-date { font-size: 9px; }
 }
 
-/* ── Journal panel mobile fix ── */
-@media (max-width: 768px) {
-/* Mode selector: compact on mobile */
-.mode-selector {
-padding: 10px 12px 0;
-gap: 6px;
-}
-.mode-card {
-padding: 8px 6px;
-flex: 1;
-}
-.mode-icon { font-size: 16px; }
-.mode-name { font-size: 10px; }
-.mode-desc { display: none; }
-
-/* Override hardcoded height on journal chat container */
-#journal-chat-container {
-height: auto !important;
-flex: 1;
-min-height: 0;
-}
-
-/* Ensure journal panel is flex column so input stays visible */
-#panel-journal {
-display: flex;
-flex-direction: column;
-height: 100%;
-overflow: hidden;
-}
-#journal-chat-mode {
-display: flex;
-flex-direction: column;
-flex: 1;
-min-height: 0;
-overflow: hidden;
-}
-/* Send button always visible -- pin input row */
-.input-row {
-flex-shrink: 0;
-}
-}
-
 /* ── Mobile keyboard / viewport fix ── */
 @media (max-width: 768px) {
 /* Use dynamic viewport height so keyboard shrink is handled */
@@ -370,6 +328,25 @@ overflow: hidden;
 display: flex;
 flex-direction: column;
 }
+}
+
+/* ── Journal panel: send button fix on mobile ── */
+@media (max-width: 768px) {
+.mode-desc { display: none; }
+.mode-selector { padding: 8px 12px 0; gap: 6px; }
+.mode-card { padding: 8px 6px; }
+#journal-chat-container { height: auto !important; }
+#journal-chat-mode {
+display: flex;
+flex-direction: column;
+overflow: hidden;
+}
+#journal-chat-mode .chat-messages {
+flex: 1;
+overflow-y: auto;
+-webkit-overflow-scrolling: touch;
+}
+#journal-chat-mode .chat-input-area { flex-shrink: 0; }
 }
 </style>
 
@@ -2379,8 +2356,15 @@ function makeTyping() {
   return div;
 }
 function scrollChat(panelId) {
-  const el = document.getElementById(`chat-messages-${panelId}`);
-  if (el) setTimeout(() => el.scrollTop = el.scrollHeight, 60);
+  var el = document.getElementById("chat-messages-" + panelId);
+  if (!el) return;
+  // Primary: scrollTop -- works on most browsers
+  setTimeout(function() {
+    el.scrollTop = el.scrollHeight;
+    // Fallback: scrollIntoView on last child -- more reliable on iOS Safari
+    var last = el.lastElementChild;
+    if (last) last.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, 80);
 }
 function fmt_reply(text) {
   return text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
