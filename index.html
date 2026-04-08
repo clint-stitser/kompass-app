@@ -2349,8 +2349,13 @@ function makeTyping() {
   return div;
 }
 function scrollChat(panelId) {
-  const el = document.getElementById(`chat-messages-${panelId}`);
-  if (el) setTimeout(() => el.scrollTop = el.scrollHeight, 60);
+  var el = document.getElementById("chat-messages-" + panelId);
+  if (!el) return;
+  setTimeout(function() {
+    el.scrollTop = el.scrollHeight;
+    var last = el.lastElementChild;
+    if (last) last.scrollIntoView({ block: "end" });
+  }, 80);
 }
 function fmt_reply(text) {
   return text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
