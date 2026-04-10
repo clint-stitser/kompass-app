@@ -261,7 +261,9 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
 .app { grid-template-columns: 1fr; grid-template-rows: 52px 1fr; }
 .sidebar {
 position: fixed; top: 52px; left: -240px; width: 240px;
-height: calc(100vh - 52px); z-index: 100;
+height: calc(100vh - 52px); z-index: 1100;
+background: #3D454B;
+overflow-y: auto;
 transition: left 0.25s ease; box-shadow: 4px 0 20px rgba(0,0,0,0.3);
 }
 .sidebar.open { left: 0; }
@@ -357,7 +359,7 @@ overflow-y: auto;
 </style>
 </head>
 <body>
-<div id="nav-overlay" onclick="toggleNav()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="nav-overlay" onclick="toggleNav()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:1050;"></div>
 <div class="app">
 
   <!-- TOPBAR -->
