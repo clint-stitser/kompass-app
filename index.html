@@ -258,108 +258,106 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
    MOBILE RESPONSIVE — 768px and below
 ═══════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  .app { grid-template-columns: 1fr; grid-template-rows: 52px 1fr; }
-  .sidebar {
-    position: fixed; top: 52px; left: -240px; width: 240px;
-    height: calc(100dvh - 52px); z-index: 1100;
-    background: #3D454B;
-    transition: left 0.25s ease; box-shadow: 4px 0 20px rgba(0,0,0,0.3);
-    overflow-y: auto;
-  }
-  .sidebar.open { left: 0; }
-  .topbar { grid-column: 1; }
-  #nav-toggle { display: block !important; }
-  .main { grid-column: 1; }
-  .checkin-header { padding: 16px 16px 0; }
-  .checkin-header h2 { font-size: 2rem; }
-  .chat-messages { padding: 12px; }
-  .chat-input-area { padding: 10px 12px 12px; }
-  .msg-bubble { max-width: calc(100vw - 80px); font-size: 13px; }
-  .chips { gap: 6px; }
-  .chip { font-size: 11px; padding: 5px 10px; }
-  .goals-grid { grid-template-columns: 1fr; }
-  .score-grid { grid-template-columns: 1fr 1fr; }
-  .sidebar-goals { display: none; }
-  .rich-input { font-size: 16px !important; min-height: 44px; }
-  .send-btn { width: 40px; height: 40px; }
-  select, input, textarea { font-size: 16px !important; }
-  .time-display { display: none; }
-  .topbar-brand span { display: none; }
-  .mode-desc { display: none; }
-  .mode-selector { padding: 8px 12px 0; gap: 6px; }
-  .mode-card { padding: 8px 6px; }
+.app { grid-template-columns: 1fr; grid-template-rows: 52px 1fr; }
+.sidebar {
+position: fixed; top: 52px; left: -240px; width: 240px;
+height: calc(100vh - 52px); z-index: 100;
+transition: left 0.25s ease; box-shadow: 4px 0 20px rgba(0,0,0,0.3);
 }
-
+.sidebar.open { left: 0; }
+.topbar { grid-column: 1; }
+#nav-toggle { display: block !important; }
+.main { grid-column: 1; }
+.checkin-header { padding: 16px 16px 0; }
+.checkin-header h2 { font-size: 2rem; }
+.chat-messages { padding: 12px; }
+.chat-input-area { padding: 10px 12px 12px; }
+.msg-bubble { max-width: calc(100vw - 80px); font-size: 13px; }
+.chips { gap: 6px; }
+.chip { font-size: 11px; padding: 5px 10px; }
+.goals-grid { grid-template-columns: 1fr; }
+.score-grid { grid-template-columns: 1fr 1fr; }
+.sidebar-goals { display: none; }
+.rich-input { font-size: 16px !important; min-height: 44px; }
+.send-btn { width: 40px; height: 40px; }
+select, input, textarea { font-size: 16px !important; }
+.time-display { display: none; }
+.topbar-brand span { display: none; }
+.mode-desc { display: none; }
+.mode-selector { padding: 8px 12px 0; gap: 6px; }
+.mode-card { padding: 8px 6px; }
+}
 @media (max-width: 768px) {
-  /* Use dynamic viewport height so keyboard shrink is handled */
-  html, body { height: 100%; height: -webkit-fill-available; }
-  .app {
-    height: 100dvh;
-    height: -webkit-fill-available;
-    min-height: -webkit-fill-available;
-  }
-  /* Make each panel a flex column so input sticks to bottom */
-  .panel.active {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
-  }
-  .chat-container {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
-  }
-  .checkin-header {
-    flex-shrink: 0;
-  }
-  .chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    min-height: 0;
-  }
-  .chat-input-area {
-    flex-shrink: 0;
-    position: relative;
-    background: var(--warm-white);
-    border-top: 1px solid var(--border);
-    padding-bottom: env(safe-area-inset-bottom, 8px);
-  }
-  .main {
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
+/* Use dynamic viewport height so keyboard shrink is handled */
+html, body { height: 100%; height: -webkit-fill-available; }
+.app {
+height: 100vh;
+height: -webkit-fill-available;
+min-height: -webkit-fill-available;
 }
-
+/* Make each panel a flex column so input sticks to bottom */
+.panel.active {
+display: flex;
+flex-direction: column;
+height: 100%;
+overflow: hidden;
+}
+.chat-container {
+display: flex;
+flex-direction: column;
+flex: 1;
+min-height: 0;
+overflow: hidden;
+}
+.checkin-header {
+flex-shrink: 0;
+}
+.chat-messages {
+flex: 1;
+overflow-y: auto;
+-webkit-overflow-scrolling: touch;
+min-height: 0;
+}
+.chat-input-area {
+flex-shrink: 0;
+position: relative;
+background: var(--warm-white);
+border-top: 1px solid var(--border);
+padding-bottom: env(safe-area-inset-bottom, 8px);
+}
+/* Main scrolls its active panel */
+.main {
+overflow: hidden;
+display: flex;
+flex-direction: column;
+}
+}
 @media (max-width: 768px) {
-  #journal-chat-mode {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-  #journal-chat-mode .chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  #journal-chat-mode .chat-input-area { flex-shrink: 0; }
-  #upload-processing { display: flex; flex-direction: column; flex: 1; overflow: hidden; padding: 0 12px !important; }
-  #chat-messages-upload { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; max-height: none !important; }
-  #journal-chat-mode > .chat-container { height: auto !important; min-height: 0; flex: 1; }
-  #journal-chat-mode { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.mode-desc { display: none; }
+.mode-selector { padding: 8px 12px 0; gap: 6px; }
+.mode-card { padding: 8px 6px; }
+#journal-chat-container { height: auto !important; }
+#journal-chat-mode {
+display: flex;
+flex-direction: column;
+overflow: hidden;
 }
-
+#journal-chat-mode .chat-messages {
+flex: 1;
+overflow-y: auto;
+-webkit-overflow-scrolling: touch;
+}
+#journal-chat-mode .chat-input-area { flex-shrink: 0; }
+}
 @media (max-width: 480px) {
-  .checkin-header h2 { font-size: 1.6rem; }
+.checkin-header h2 { font-size: 1.6rem; }
+.morning-date { font-size: 9px; }
 }
+
 </style>
 </head>
 <body>
-<div id="nav-overlay" onclick="toggleNav()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:1050;"></div>
+<div id="nav-overlay" onclick="toggleNav()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
 <div class="app">
 
   <!-- TOPBAR -->
