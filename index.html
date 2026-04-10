@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KOMPASS · The Stitser Way v3</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@200;300;400;500&display=swap');
@@ -249,113 +249,13 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
 .btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border); border-radius:7px; padding:8px 16px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:all 0.15s; }
 .btn-ghost:hover { border-color:var(--gold); color:var(--gold); }
 ::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:2px}
-
-/* ── Mobile Responsive ── */
-@media (max-width: 768px) {
-  .app { grid-template-columns: 1fr; grid-template-rows: 52px 1fr; }
-  .sidebar {
-    position: fixed; top: 52px; left: -240px; width: 240px;
-    height: calc(100vh - 52px); z-index: 100;
-    transition: left 0.25s ease; box-shadow: 4px 0 20px rgba(0,0,0,0.3);
-  }
-  .sidebar.open { left: 0; }
-  .topbar { grid-column: 1; }
-  #nav-toggle { display: block !important; }
-  .main { grid-column: 1; }
-  .checkin-header { padding: 16px 16px 0; }
-  .checkin-header h2 { font-size: 2rem; }
-  .chat-messages { padding: 12px; }
-  .chat-input-area { padding: 10px 12px 12px; }
-  .msg-bubble { max-width: calc(100vw - 80px); font-size: 13px; }
-  .chips { gap: 6px; }
-  .chip { font-size: 11px; padding: 5px 10px; }
-  .goals-grid { grid-template-columns: 1fr; }
-  .scoreboard-grid { grid-template-columns: 1fr 1fr; }
-  .sidebar-goal-bars { display: none; }
-  .live-goals-label { display: none; }
-  .rich-input { font-size: 16px !important; min-height: 44px; }
-  .send-btn { width: 40px; height: 40px; }
-  select, input, textarea { font-size: 16px !important; }
-}
-@media (max-width: 480px) {
-  .checkin-header h2 { font-size: 1.6rem; }
-  .morning-date { font-size: 9px; }
-}
-
-/* ── Mobile keyboard / viewport fix ── */
-@media (max-width: 768px) {
-  /* Use dynamic viewport height so keyboard shrink is handled */
-  html, body { height: 100%; height: -webkit-fill-available; }
-  .app {
-    height: 100vh;
-    height: -webkit-fill-available;
-    min-height: -webkit-fill-available;
-  }
-  /* Make each panel a flex column so input sticks to bottom */
-  .panel.active {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
-  }
-  .chat-container {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
-  }
-  .checkin-header {
-    flex-shrink: 0;
-  }
-  .chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    min-height: 0;
-  }
-  .chat-input-area {
-    flex-shrink: 0;
-    position: relative;
-    background: var(--warm-white);
-    border-top: 1px solid var(--border);
-    padding-bottom: env(safe-area-inset-bottom, 8px);
-  }
-  /* Main scrolls its active panel */
-  .main {
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-/* ── Journal panel: send button fix on mobile ── */
-@media (max-width: 768px) {
-  .mode-desc { display: none; }
-  .mode-selector { padding: 8px 12px 0; gap: 6px; }
-  .mode-card { padding: 8px 6px; }
-  #journal-chat-container { height: auto !important; }
-  #journal-chat-mode {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-  #journal-chat-mode .chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  #journal-chat-mode .chat-input-area { flex-shrink: 0; }
-}
 </style>
 </head>
 <body>
-<div id="nav-overlay" onclick="toggleNav()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
 <div class="app">
 
   <!-- TOPBAR -->
   <div class="topbar">
-      <button id="nav-toggle" onclick="toggleNav()" style="display:none;background:none;border:none;cursor:pointer;padding:0 14px;color:rgba(255,255,255,0.85);font-size:22px;line-height:52px;">&#9776;</button>
     <div class="topbar-brand">
       <h1>Kompass</h1>
       <span>The Stitser Way · v3</span>
@@ -368,7 +268,7 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
   </div>
 
   <!-- SIDEBAR -->
-  <div class="sidebar" id="sidebar">
+  <div class="sidebar">
     <div class="sidebar-section">
       <div class="sidebar-label">Check-ins</div>
       <div class="nav-item active" onclick="switchPanel('morning')" id="nav-morning"><span class="nav-icon">🌅</span> Morning Brief</div>
@@ -407,12 +307,11 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
           <div class="checkin-mode-label" id="morning-date-label">Loading…</div>
           <h2>Good morning, <em>Clint.</em></h2>
           <div class="checkin-meta" id="morning-meta">Initializing Kompass…</div>
-        <button onclick="refreshMorning()" style="background:none;border:1px solid var(--border);border-radius:5px;padding:3px 10px;font-size:10px;color:var(--muted);cursor:pointer;font-family:'JetBrains Mono',monospace;margin-left:8px;">↻ Refresh</button>
         </div>
         <div class="chat-messages" id="chat-messages-morning"></div>
         <div class="chat-input-area">
           <div class="tool-row">
-            <button class="tool-btn" onclick="startTemplateInPanel('warriors-way','morning')">⚔️ Warrior's Way</button>
+            <button class="tool-btn" onclick="startTemplateInPanel('warriors-way','morning')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="16" height="16" style="display:inline-block;vertical-align:middle;margin-right:3px"><circle cx="50" cy="50" r="48" fill="#6A89A7"/><path d="M63 30 C63 30 37 28 33 40 C29 52 44 56 54 59 C64 62 68 67 64 73 C60 79 37 77 37 77" stroke="white" stroke-width="11" stroke-linecap="round" fill="none"/></svg> Stitser Way</button>
             <button class="tool-btn" onclick="startTemplateInPanel('gratitude-stack','morning')">🙏 Gratitude</button>
             <button class="tool-btn" onclick="startTemplateInPanel('free','morning')">✍️ Free Write</button>
           </div>
@@ -544,15 +443,16 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
       </div>
 
       <div id="journal-chat-mode">
-        <div class="chat-container" style="height:calc(100vh - 52px - 108px);" id="journal-chat-container">
+        <div class="chat-container" style="height:calc(100vh - 52px - 108px);">
           <div class="chat-messages" id="chat-messages-journal">
             <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">
               Choose your template:
               <div class="chips" style="margin-top:10px;">
-                <span class="chip" onclick="startTemplate('warriors-way')">⚔️ Warrior's Way</span>
+                <span class="chip" onclick="startTemplate('warriors-way')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="16" height="16" style="display:inline-block;vertical-align:middle;margin-right:3px"><circle cx="50" cy="50" r="48" fill="#6A89A7"/><path d="M63 30 C63 30 37 28 33 40 C29 52 44 56 54 59 C64 62 68 67 64 73 C60 79 37 77 37 77" stroke="white" stroke-width="11" stroke-linecap="round" fill="none"/></svg> Stitser Way</span>
                 <span class="chip" onclick="startTemplate('strategic-vision')">🏔 Strategic Vision</span>
                 <span class="chip" onclick="startTemplate('project-debrief')">📋 Project Debrief</span>
                 <span class="chip" onclick="startTemplate('weekly-review')">📆 Weekly Review</span>
+                  <span class="chip" onclick="startTemplate('evening-ritual')">🌙 Evening Ritual</span>
                 <span class="chip" onclick="startTemplate('free')">✏️ Free Write</span>
               </div>
               <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
@@ -590,8 +490,8 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
         <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event)">
           <div class="upload-icon" id="upload-icon">📄</div>
           <p><strong>Click to upload or drag & drop</strong></p>
-          <p id="upload-hint-text">PDF, TXT, or images (JPG, PNG) · Select multiple for long journals</p>
-          <input type="file" id="file-input" accept=".pdf,.txt,.jpg,.jpeg,.png" multiple onchange="handleFileSelect(event)">
+          <p id="upload-hint-text">PDF, TXT, or image (JPG, PNG) · Max 20MB</p>
+          <input type="file" id="file-input" accept=".pdf,.txt,.jpg,.jpeg,.png" onchange="handleFileSelect(event)">
         </div>
         <div id="upload-processing" style="display:none;padding:0 40px;">
           <div class="chat-messages" id="chat-messages-upload" style="max-height:320px;overflow-y:auto;"></div>
@@ -675,17 +575,8 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
 // CONFIG
 // ═══════════════════════════════════════════════════════
 const PROXY_URL = 'https://earnest-vitality-production.up.railway.app/api/chat';
-const SS_PROXY       = 'https://earnest-vitality-production.up.railway.app/api/smartsuite';
-const GMAIL_URL      = 'https://earnest-vitality-production.up.railway.app/api/gmail/inbox';
-const CALENDAR_URL   = 'https://earnest-vitality-production.up.railway.app/api/calendar/today';
-const DRIVE_URL      = 'https://earnest-vitality-production.up.railway.app/api/drive/recent';
-const DOCS_URL       = 'https://earnest-vitality-production.up.railway.app/api/docs';
-const SHEETS_URL     = 'https://earnest-vitality-production.up.railway.app/api/sheets';
-const SLIDES_URL     = 'https://earnest-vitality-production.up.railway.app/api/slides';
-const SMARTSHEET_URL       = 'https://earnest-vitality-production.up.railway.app/api/smartsheet';
-const MORNING_BRIEF_URL    = 'https://earnest-vitality-production.up.railway.app/api/morning-brief';
-const ATTACH_JOURNAL_URL   = 'https://earnest-vitality-production.up.railway.app/api/attach-journal';
-const CALENDAR_EVENT_URL   = 'https://earnest-vitality-production.up.railway.app/api/calendar/event';
+const SS_PROXY = 'https://earnest-vitality-production.up.railway.app/api/smartsuite';
+const CONNECTORS_URL = 'https://earnest-vitality-production.up.railway.app/api/connectors';
 const MODEL = 'claude-sonnet-4-20250514';
 const SS_JOURNALS = '68f8f8fe3757414d70d94ae0';
 const SS_GOALS = '6824d4d1885a8769bd2dfc0d';
@@ -698,140 +589,181 @@ async function ssRequest(method, path, body) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ method, path, body: body || null })
     });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return res.json();
   } catch(e) {
     console.warn('ssRequest failed:', e.message);
     return { items: [], error: e.message };
   }
 }
-
-// ─── Morning Brief SmartSuite fetch ───
-async function fetchMorningBrief() {
+// ═══════════════════════════════════════════════════════
+// LIVE CONTEXT LOADER — runs on startup, injects into sysPrompt
+// ═══════════════════════════════════════════════════════
+async function loadLiveContext() {
   try {
-    const res = await fetch(MORNING_BRIEF_URL);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    return await res.json();
-  } catch(e) { return { error: e.message, sections: [], total_attention_items: 0 }; }
-}
-function gyrBadge(gyr) {
-  var c = {'Exceeding Target':'#2d8a4e','On Track':'#4a7c59','At Risk':'#c67c1a','Critical':'#b83232'};
-  var col = c[gyr]||'#888';
-  return '<span style="padding:1px 7px;border-radius:10px;font-size:10px;font-weight:600;background:'+col+'22;color:'+col+';border:1px solid '+col+'44;">'+gyr+'</span>';
-}
-function renderMorningBrief(data) {
-  if (!data||data.error) return '<em style="color:var(--muted)">Brief unavailable</em>';
-  var html = '';
-  (data.sections||[]).forEach(function(sec) {
-    if (!sec.items||!sec.items.length) return;
-    html += '<div style="margin-bottom:14px;"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--gold);margin-bottom:6px;">'+sec.table+' ('+sec.items.length+')</div>';
-    sec.items.forEach(function(item) {
-      html += '<div style="padding:8px 12px;margin-bottom:5px;background:var(--card-bg);border:1px solid var(--border);border-radius:6px;font-size:12px;">';
-      html += '<div style="font-weight:600;">'+(item.title||'Untitled')+'</div>';
-      var meta = [];
-      if (item.gyr) meta.push(gyrBadge(item.gyr));
-      if (item.status) meta.push('<span style="color:var(--muted)">'+item.status+'</span>');
-      if (item.due_date) meta.push('<span style="color:var(--muted)">Due: '+item.due_date+'</span>');
-      if (item.follow_up_date) meta.push('<span style="color:#c67c1a">FU: '+item.follow_up_date+'</span>');
-      if (item.past_due) meta.push('<span style="color:#b83232;font-weight:600;">PAST DUE</span>');
-      if (item.priority) meta.push('<span style="color:var(--muted)">'+item.priority+'</span>');
-      if (item.pct_complete) meta.push('<span style="color:var(--muted)">'+item.pct_complete+'% done</span>');
-      if (meta.length) html += '<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:3px;">'+meta.join('')+'</div>';
-      if (item.issues) html += '<div style="color:var(--muted);font-size:11px;margin-top:3px;">'+item.issues.slice(0,120)+'</div>';
-      if (item.note) html += '<div style="color:var(--muted);font-size:11px;margin-top:3px;">'+item.note.slice(0,120)+'</div>';
-      html += '</div>';
-    });
-    html += '</div>';
-  });
-  return html||'<em style="color:var(--muted)">No attention items.</em>';
+    // Run all 3 queries in parallel
+    const [journalData, priorityData, projectData] = await Promise.all([
+
+      // Last 5 journal entries
+      ssRequest('POST', `applications/68f8f8fe3757414d70d94ae0/records/list/`, {
+        sort: [{ field: 's5293705a7', direction: 'desc' }],
+        limit: 5
+      }),
+
+      // Current priorities (top 8, in-progress)
+      ssRequest('POST', `applications/68216f48f98789b5bb095a4b/records/list/`, {
+        filter: {
+          operator: 'and',
+          fields: [{ field: 'se7c39059c', comparison: 'is', value: 'in_progress' }]
+        },
+        limit: 8
+      }),
+
+      // Active projects
+      ssRequest('POST', `applications/68216a706900e8eaf75a05a7/records/list/`, {
+        filter: {
+          operator: 'or',
+          fields: [
+            { field: 'status', comparison: 'is', value: 'zOlNR' },   // WIP
+            { field: 'status', comparison: 'is', value: 'backlog' }
+          ]
+        },
+        limit: 10
+      })
+    ]);
+
+    // Parse journals
+    const journals = (journalData.items || []).map(j => ({
+      title: j.title || '—',
+      date: j.s5293705a7?.date?.split('T')[0] || '—',
+      type: j.sa4f36f00f || '—',
+      summary: (j.sc347cd0b9 || j.se2ae24b44 || '').slice(0, 200)
+    }));
+
+    // Parse priorities
+    const priorities = (priorityData.items || []).map(p => ({
+      title: p.title || '—',
+      status: p.se7c39059c?.value || '—'
+    }));
+
+    // Parse projects
+    const projects = (projectData.items || []).map(p => ({
+      title: p.title || '—',
+      status: p.status?.value || '—'
+    }));
+
+    // Build plain-text context summary for system prompt injection
+    const today = new Date().toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'});
+
+    let summary = `\n\n=== LIVE CONTEXT FROM S-BOS (loaded ${today}) ===\n`;
+
+    if (journals.length) {
+      summary += `\nRECENT JOURNALS (last ${journals.length}):\n`;
+      journals.forEach(j => {
+        summary += `• ${j.date} — ${j.type}: ${j.title}`;
+        if (j.summary) summary += `\n  "${j.summary.slice(0,120)}${j.summary.length > 120 ? '…' : ''}"`;
+        summary += '\n';
+      });
+    }
+
+    if (priorities.length) {
+      summary += `\nACTIVE PRIORITIES (${priorities.length} in progress):\n`;
+      priorities.forEach(p => { summary += `• ${p.title}\n`; });
+    }
+
+    if (projects.length) {
+      summary += `\nACTIVE PROJECTS (${projects.length}):\n`;
+      projects.forEach(p => { summary += `• ${p.title}\n`; });
+    }
+
+    summary += '=== END LIVE CONTEXT ===';
+
+    // Store in global
+    liveContext = {
+      loaded: true,
+      journals,
+      priorities,
+      activeProjects: projects,
+      summary
+    };
+
+    console.log(`Kompass: live context loaded — ${journals.length} journals, ${priorities.length} priorities, ${projects.length} projects`);
+
+    // Update sidebar indicator
+    const badge = document.getElementById('railway-badge');
+    if (badge) badge.innerHTML = '⚡ S-BOS Live';
+
+  } catch(e) {
+    console.warn('loadLiveContext failed:', e.message);
+    liveContext.summary = '\n\n[Live context unavailable — SmartSuite unreachable]';
+  }
 }
 
-// ─── Google + Smartsheet connector helpers ───
-async function createCalendarEvent(title, start, end, description, location) {
-  try {
-    const res = await fetch(CALENDAR_EVENT_URL, {
+
+
+// ─── Connector-aware Claude call (Gmail, Calendar, Drive via Railway) ───
+async function connectorRequest(messages, system, connectors, maxTokens) {
+  // Try connectors endpoint first; fall back to standard chat proxy if unavailable
+  const tryConnectors = async () => {
+    const res = await fetch(CONNECTORS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        title: title,
-        start: start,
-        end: end,
-        description: description || '',
-        location: location || '',
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        messages,
+        system: system || sysPrompt('assistant'),
+        connectors: connectors || ['gmail', 'calendar', 'drive'],
+        max_tokens: maxTokens || 1500,
+        model: MODEL
       })
     });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    return await res.json();
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    // Extract text from mixed content blocks (text + mcp_tool_use + mcp_tool_result)
+    const text = (data.content || [])
+      .filter(b => b.type === 'text')
+      .map(b => b.text)
+      .join('\n');
+    return text || 'No response.';
+  };
+
+  const tryStandardChat = async () => {
+    const res = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: MODEL, max_tokens: maxTokens || 1500, system, messages })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    return data.content?.find(b => b.type === 'text')?.text || 'No response.';
+  };
+
+  try {
+    return await tryConnectors();
   } catch(e) {
-    console.warn('createCalendarEvent:', e.message);
-    return { error: e.message };
+    console.warn('connectorRequest failed, falling back to standard chat:', e.message);
+    try {
+      return await tryStandardChat();
+    } catch(e2) {
+      return `⚠️ Unable to reach Railway: ${e2.message}`;
+    }
   }
 }
-async function fetchGmail(max) {
-  try {
-    const res = await fetch(GMAIL_URL + '?max=' + (max || 10));
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    return await res.json();
-  } catch(e) { console.warn('Gmail:', e.message); return {error:e.message, messages:[], count:0}; }
-}
-async function fetchCalendar() {
-  try {
-    const res = await fetch(CALENDAR_URL);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    return await res.json();
-  } catch(e) { console.warn('Calendar:', e.message); return {error:e.message, events:[], count:0}; }
-}
-async function fetchDrive(max) {
-  try {
-    const res = await fetch(DRIVE_URL + '?max=' + (max || 10));
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    return await res.json();
-  } catch(e) { console.warn('Drive:', e.message); return {error:e.message, files:[]}; }
-}
-async function fetchDoc(docId) {
-  try {
-    const res = await fetch(DOCS_URL + '/' + docId);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    return await res.json();
-  } catch(e) { return {error:e.message}; }
-}
-async function fetchSheet(sheetId, range) {
-  try {
-    const url = SHEETS_URL + '/' + sheetId + (range ? '?range=' + encodeURIComponent(range) : '');
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    return await res.json();
-  } catch(e) { return {error:e.message}; }
-}
-async function fetchSmartsheet(sheetId) {
-  try {
-    const res = await fetch(SMARTSHEET_URL + '/' + sheetId);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    return await res.json();
-  } catch(e) { return {error:e.message}; }
-}
-function fmtEvents(events) {
-  if (!events || !events.length) return 'No events today.';
-  return events.map(function(e) {
-    var time = '';
-    if (e.start) { var d = new Date(e.start); if (!isNaN(d)) time = d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) + ' — '; }
-    return time + e.title + (e.location ? ' @ ' + e.location : '');
-  }).join('<br>');
-}
-function fmtEmails(messages) {
-  if (!messages || !messages.length) return 'Inbox clear.';
-  return messages.slice(0,5).map(function(m) {
-    var from = (m.from||'').replace(/<[^>]+>/,'').trim();
-    return '<strong>' + from + ':</strong> ' + (m.subject||'(no subject)');
-  }).join('<br>');
-}
-
-
 
 const conversations = { morning:[], midmorning:[], afternoon:[], eod:[], journal:[], upload:[], assistant:[] };
 let currentTemplate = null, templateStep = 0, journalData = {};
 let filingCtx = {}, activePanel = 'morning', liveGoals = [];
+
+// ── Live context loaded from SmartSuite on startup ──
+let liveContext = {
+  loaded: false,
+  journals: [],        // last 5 journal entries
+  priorities: [],      // current priorities
+  activeProjects: [],  // projects with active status
+  recentGYR: [],       // last GYR status reports
+  summary: ''          // plain text summary injected into system prompt
+};
 
 // ═══════════════════════════════════════════════════════
 // VOICE RECORDING ENGINE
@@ -1154,18 +1086,7 @@ updateClock();
 // ═══════════════════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════════════════
-function toggleNav() {
-  var s = document.getElementById('sidebar');
-  var o = document.getElementById('nav-overlay');
-  var open = s && s.classList.contains('open');
-  if (open) { s.classList.remove('open'); if(o) o.style.display='none'; }
-  else { if(s) s.classList.add('open'); if(o) o.style.display='block'; }
-}
-
 function switchPanel(name) {
-  var s = document.getElementById('sidebar');
-  var o = document.getElementById('nav-overlay');
-  if (s && s.classList.contains('open')) { s.classList.remove('open'); if(o) o.style.display='none'; }
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById(`panel-${name}`).classList.add('active');
@@ -1186,13 +1107,13 @@ Strategy: Built to Last Framework — Boomer SFR equity-rich disposition + 1031/
 Live goals: ${liveGoals.map(g=>`${g.title.split(/[-·]/)[0].trim()}: ${g.pct.toFixed(0)}%`).join(' | ')}`;
 
   const modes = {
-    morning: base + `\nMODE: Morning Brief. Energizing and grounding. Surface today's key priorities, flag urgent items. Offer Warrior's Way journal.`,
+    morning: base + `\nMODE: Morning Brief. Energizing and grounding. Surface today's key priorities, flag urgent items. Offer Stitser Way journal.`,
     midmorning: base + `\nMODE: Mid-Morning debrief post planning block. Capture decisions, update priorities, flag what shifted.`,
     afternoon: base + `\nMODE: Afternoon Refocus. 3 questions: (1) Most important remaining? (2) What threatens PM? (3) What to drop/defer?`,
     eod: base + `\nMODE: End of Day. Wins, misses, learnings, tomorrow's top 3. Offer to file a journal.`,
     journal: base + `\nMODE: Journal guide. Walk through template step by step. Acknowledge warmly, keep momentum. When complete say "That's a complete entry — let's file it."`,
     upload: base + `\nMODE: Parse uploaded journal. Extract themes, insights, actions, emotional tone. Present clean summary then offer filing.`,
-    assistant: base + `\nMODE: Full PA. Live data is injected above as LIVE CALENDAR TODAY and UNREAD EMAILS. When asked to schedule, add, or create a calendar event, respond with ONLY raw JSON: {"action":"create_calendar_event","title":"Event name","start":"2026-04-03T20:00:00","end":"2026-04-03T21:00:00","description":"","location":"","confirm":"Added: Event name at 8:00 PM"} No markdown, no explanation, just the JSON object. Use today date for today or tonight requests. Default event duration is 1 hour unless specified. For all other requests respond in plain text.`
+    assistant: base + `\\nMODE: Full PA. You have LIVE access to Gmail, Google Calendar, and Google Drive via MCP tools. When asked about emails, calendar, or files — USE your tools immediately. Do not say you cannot access external systems.`
   };
   return modes[mode] || base;
 }
@@ -1202,18 +1123,38 @@ Live goals: ${liveGoals.map(g=>`${g.title.split(/[-·]/)[0].trim()}: ${g.pct.toF
 // ═══════════════════════════════════════════════════════
 const TEMPLATES = {
   'warriors-way': {
-    name:"The Warrior's Way", journalType:"Morning Ritual",
+    name:"The Stitser Way", journalType:"Morning Ritual",
     steps:[
-      {step:"1 · Centering", q:"Take 5 centering breaths. What's most alive in your body right now?"},
-      {step:"2 · Gratitude × 3", q:"Stay in gain: celebrate & gratitude × 3. What have you handled well, learned, or made progress on?"},
-      {step:"3 · Who to Celebrate", q:"Who can you celebrate or acknowledge today?"},
-      {step:"4 · One Word Intention", q:"What is your one word intention for today?"},
-      {step:"5 · 3 Dominos", q:"What are the 3 major dominos of today — if knocked down — that make everything else easier?"},
-      {step:"6 · Hurdles", q:"What hurdles might trip you up today, and how will you handle them?"},
-      {step:"7 · Action Body", q:"My action body today is — how will you show up physically and energetically?"},
-      {step:"8 · Coach's Voice", q:"What would your high performance coach tell you right now?"},
+      {step:"First Hour — Habit Check", q:"Which first-hour habits did you complete? \nNo snooze · Cold shower · Morning Journal · Morning sunlight · Meditation/Visualization"},
+      {step:"Be Great at the Few — Score Intent", q:"Score your INTENTION for today 1–5 (1 = low · 5 = locked in):\nWork The System:\nAllocator Seat:\nOwn The Number:\nInvest in People:\nProtect The Body:"},
+      {step:"Settling Prompt", q:"5 centering breaths. What's most alive in me right now?"},
+      {step:"Stacks to Work Through", q:"Any unresolved tension, emotions, or friction to work through today? Name them — or say clear."},
+      {step:"Affirmations & Principles", q:"Write your non-negotiables. Who are you today?\nBODY:\nBEING:\nBALANCE:\nBUSINESS:"},
+      {step:"Gratitude × 3", q:"Stay in gain — 3 things (celebrated, learned, made progress):\n1.\n2.\n3."},
+      {step:"Who Can I Celebrate Today?", q:"Who can you celebrate today — and what specifically did they do?"},
+      {step:"Daily Big 3", q:"The 3 dominos that move everything else today. Be specific — include a due/done-by time for each.\n1.\n2.\n3."},
+      {step:"Hurdles & How I'll Handle Them", q:"What might trip you up today — and exactly how will you handle it?"},
+      {step:"Action for Being / Body", q:"Action for BEING today:\n\nAction for BODY today:"},
+      {step:"2 People to Reach Out To", q:"Intention only — log actuals in evening ritual.\n1. Name: · How:\n2. Name: · How:"},
+      {step:"Coach's Voice", q:"My high-performance coach would tell me:"},
+      {step:"Important But Not Today", q:"Capture & park — what's important but can't get to today?"},
     ]
   },
+  'evening-ritual': {
+    name:"Evening Ritual", journalType:"Evening Ritual",
+    steps:[
+      {step:"Set the Container", q:"No phone. Quiet space. Reflect on the day with honesty and gratitude."},
+      {step:"Stay in Gain — 3 Wins", q:"What did you handle well? What did you learn? Where did you make progress? 3 specific wins."},
+      {step:"Who Can I Celebrate?", q:"Who can you celebrate today — and what specifically did they do?"},
+      {step:"Progress on Big 3", q:"What was your progress on each of your Big 3 today? Mark each Done or In Progress."},
+      {step:"What Tripped Me Up", q:"What tripped you up today — and how did you handle it?"},
+      {step:"Key Takeaways", q:"What are the key notes or takeaways from your meetings today?"},
+      {step:"Capture for Tomorrow", q:"What do you need to capture for tomorrow — tasks, follow-ups, decisions?"},
+      {step:"Be Great at the Few", q:"How did you show up today in each role? Rate 1–5: Work The System · Allocator Seat · Own The Number · Invest in People · Protect The Body"},
+      {step:"Scoreboard Snapshot", q:"Quick scoreboard pulse — Being & Balance: Morning Rituals, Evening Rituals, Journals, Gratitude Touches, Christie Dates, Rides with Max, Snowboard with Max, Golf Rounds."},
+    ]
+  },
+
   'strategic-vision': {
     name:"Strategic Vision", journalType:"Strategic",
     steps:[
@@ -1550,14 +1491,6 @@ async function fileToSmartSuite(chatId) {
 
     if (data.id) {
       addToHistory({ type: journalData.template, title: fields.title, preview: completeJournal.slice(0,150)+'…', date: new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}), people: filingCtx.data.people, project: filingCtx.data.project, id: data.id.slice(-8).toUpperCase() });
-      if (journalData.sourceFiles && journalData.sourceFiles.length > 0) {
-        fetch(ATTACH_JOURNAL_URL, { method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ record_id: data.id, files: journalData.sourceFiles })
-        }).then(function(r){return r.json();}).then(function(a){
-          if (a.attached > 0) console.log('Attached ' + a.attached + ' file(s) to ' + data.id);
-          else console.warn('Attach errors:', a.errors);
-        }).catch(function(e){ console.warn('Attach failed:', e.message); });
-      }
       msgs.appendChild(makeMsgEl('assistant', `
         <div class="filed-card">
           <div class="filed-title">✓ Filed to SmartSuite · Journals/Rituals</div>
@@ -1618,76 +1551,25 @@ async function sendMessage(panelId) {
 
   conversations[panelId].push({ role: 'user', content: plainText });
 
+  // PA Assistant panel routes through connectors proxy (Gmail/Calendar/Drive)
+  const useConnectors = (panelId === 'assistant');
+
   try {
-    var reply;
-    if (panelId === 'assistant') {
-      // Inject live calendar + email context
-      var calData = await fetchCalendar();
-      var mailData = await fetchGmail(5);
-      var liveCtx = '';
-      if (!calData.error && calData.events && calData.events.length) {
-        liveCtx += 'LIVE CALENDAR TODAY:\n' + calData.events.map(function(e) {
-          var t = e.start ? new Date(e.start).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) + ' ' : '';
-          return t + e.title + (e.location ? ' @ ' + e.location : '');
-        }).join('\n') + '\n\n';
-      }
-      if (!mailData.error && mailData.messages && mailData.messages.length) {
-        liveCtx += 'UNREAD EMAILS (last 24h):\n' + mailData.messages.slice(0,5).map(function(m) {
-          return 'From: ' + (m.from||'').replace(/<[^>]+>/g,'').trim() + ' | ' + (m.subject||'');
-        }).join('\n') + '\n\n';
-      }
-      var msgsWithCtx = conversations[panelId].slice();
-      if (liveCtx && msgsWithCtx.length) {
-        var last = msgsWithCtx[msgsWithCtx.length-1];
-        msgsWithCtx[msgsWithCtx.length-1] = { role: last.role, content: liveCtx + last.content };
-      }
-      const paRes = await fetch(PROXY_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model: MODEL, max_tokens: 1500, system: sysPrompt(panelId), messages: msgsWithCtx })
-      });
-      if (!paRes.ok) throw new Error('Server returned ' + paRes.status);
-      const paData = await paRes.json();
-      if (paData.error) throw new Error(paData.error);
-      var rawReply = paData.content?.find(b => b.type === 'text')?.text || 'No response.';
-      console.log('PA raw reply:', rawReply.slice(0,200));
-
-      // Detect action JSON from Claude
-      var action = null;
-      try {
-        var cleaned = rawReply.replace(/```json|```/g,'').trim();
-        if (cleaned.startsWith('{') && cleaned.includes('"action"')) {
-          action = JSON.parse(cleaned);
-        }
-      } catch(e) { /* not JSON, normal reply */ }
-
-      if (action && action.action === 'create_calendar_event') {
-        // Execute the calendar event creation
-        typing.remove();
-        var execTyping = makeTyping();
-        msgs.appendChild(execTyping);
-        scrollChat(panelId);
-        var result = await createCalendarEvent(
-          action.title, action.start, action.end,
-          action.description || '', action.location || ''
-        );
-        execTyping.remove();
-        if (result.error) {
-          reply = 'Failed to create calendar event: ' + result.error;
-        } else {
-          reply = (action.confirm || 'Done.') +
-            (result.link ? ' <a href="' + result.link + '" target="_blank" style="color:var(--gold);">Open in Google Calendar</a>' : '');
-        }
-      } else {
-        reply = rawReply;
-      }
+    let reply;
+    if (useConnectors) {
+      reply = await connectorRequest(
+        conversations[panelId],
+        sysPrompt(panelId),
+        ['gmail', 'calendar', 'drive'],
+        1500
+      );
     } else {
       const res = await fetch(PROXY_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ model: MODEL, max_tokens: 1000, system: sysPrompt(panelId), messages: conversations[panelId] })
       });
-      if (!res.ok) throw new Error('Server returned ' + res.status);
+      if (!res.ok) throw new Error(`Server returned ${res.status}`);
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       reply = data.content?.find(b => b.type === 'text')?.text || 'No response.';
@@ -1697,7 +1579,7 @@ async function sendMessage(panelId) {
     msgs.appendChild(makeMsgEl('assistant', fmt_reply(reply)));
   } catch(e) {
     typing.remove();
-    msgs.appendChild(makeMsgEl('assistant', '⚠️ Error: ' + e.message));
+    msgs.appendChild(makeMsgEl('assistant', `⚠️ Error: ${e.message}`));
   }
   scrollChat(panelId);
 }
@@ -1765,127 +1647,10 @@ function selectJournalMode(mode, el) {
   }
 }
 
-function handleDrop(e) { e.preventDefault(); document.getElementById('upload-zone').classList.remove('dragover'); var files = Array.from(e.dataTransfer.files); if (files.length) processFiles(files); }
-function handleFileSelect(e) { var files = Array.from(e.target.files); if (files.length) processFiles(files); }
-
-async function processFiles(files) {
-  // For a single file, use original flow
-  if (files.length === 1) {
-    processFile(files[0]);
-    return;
-  }
-  // Multiple files — collect all images, send as one multi-page message
-  var images = files.filter(function(f) { return f.type.startsWith('image/'); });
-  var nonImages = files.filter(function(f) { return !f.type.startsWith('image/'); });
-
-  // Non-images (PDFs, text) processed individually
-  if (nonImages.length > 0 && images.length === 0) {
-    processFile(files[0]);
-    return;
-  }
-
-  // All images — combine into one multi-image Claude call
-  if (images.length > 0) {
-    processMultipleImages(images);
-    return;
-  }
-  processFile(files[0]);
-}
-
-async function processMultipleImages(files) {
-  document.getElementById('upload-zone').style.display = 'none';
-  document.getElementById('upload-processing').style.display = 'block';
-  var msgs = document.getElementById('chat-messages-upload');
-  var loadEl = makeMsgEl('assistant', '<span class="spinner"></span>  Reading ' + files.length + ' pages…');
-  msgs.appendChild(loadEl);
-
-  // Read all files as base64
-  var readFile = function(file) {
-    return new Promise(function(resolve, reject) {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        resolve({ base64: e.target.result.split(',')[1], type: file.type });
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
-
-  try {
-    var fileData = await Promise.all(files.map(readFile));
-    loadEl.remove();
-
-    var uploadSysPrompt = `You are Kompass, the executive journaling assistant for Clint Stitser.
-
-Parse this multi-page handwritten journal entry and extract a COMPLETE structured JSON object.
-
-JOURNAL TYPES — use exactly one:
-Morning Ritual, Evening Ritual, Weekly Ritual, Irritation Stack, Discovery/Idea Log, Memory Journal, Exercise Log, Anger, Guilt, Excitement, Gratitude, Rage
-
-FIELDS to extract:
-title, journal_type, journal_date (YYYY-MM-DD), one_word_intention, three_dominos, hurdles, gratitude, celebrate_who, action_body, coach_advice, complete_journal (full verbatim transcript of ALL pages), summary (2-3 sentences), themes (array), action_items (array), emotional_tone, people_mentioned (array), projects_mentioned (array)
-
-RESPOND WITH ONLY A JSON OBJECT. No markdown, no preamble.`;
-
-    // Build content array with all images
-    var contentArr = fileData.map(function(fd, i) {
-      return { type: 'image', source: { type: 'base64', media_type: fd.type, data: fd.base64 } };
-    });
-    contentArr.push({ type: 'text', text: 'These are ' + files.length + ' pages of a single journal entry. Parse all pages together and return the structured JSON.' });
-
-    var typing = makeTyping();
-    msgs.appendChild(typing);
-    scrollChat('upload');
-
-    var res = await fetch(PROXY_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: MODEL, max_tokens: 2000, system: uploadSysPrompt, messages: [{ role: 'user', content: contentArr }] })
-    });
-    var data = await res.json();
-    var rawReply = data.content?.find(function(b) { return b.type === 'text'; })?.text || '{}';
-    typing.remove();
-
-    var parsed = {};
-    try { parsed = JSON.parse(rawReply.replace(/```json|```/g,'').trim()); } catch(e) { console.error('parse error', e); }
-
-    journalData = {
-      template: 'Uploaded Journal',
-      journalType: parsed.journal_type || 'Morning Ritual',
-      date: parsed.journal_date || new Date().toISOString().split('T')[0],
-      sourceFiles: fileData.map(function(fd, i) { return { base64: fd.base64, mime_type: fd.type, filename: 'page_' + (i+1) + '.' + fd.type.split('/')[1] }; }),
-      parsed: parsed,
-      responses: [{ step: 'Full Journal', q: 'Complete entry', response: parsed.complete_journal || rawReply }]
-    };
-
-    var summaryEl = document.createElement('div');
-    summaryEl.innerHTML = '<strong>' + (parsed.title || 'Journal Entry (' + files.length + ' pages)') + '</strong>'
-      + '<div style="margin-top:8px;padding:10px 14px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;font-size:12px;line-height:1.6;">'
-      + '<div style="font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">'
-      + files.length + ' pages · ' + (parsed.journal_type || 'Journal') + '</div>'
-      + (parsed.summary ? '<p style="margin-bottom:8px;">' + parsed.summary + '</p>' : '')
-      + (parsed.themes && parsed.themes.length ? '<div><strong>Themes:</strong> ' + parsed.themes.join(', ') + '</div>' : '')
-      + (parsed.emotional_tone ? '<div style="margin-top:4px;"><strong>Tone:</strong> ' + parsed.emotional_tone + '</div>' : '')
-      + '</div>';
-    msgs.appendChild(makeMsgEl('assistant', summaryEl.innerHTML));
-    setTimeout(function() { showTypeConfirmation('upload', parsed); }, 500);
-
-  } catch(err) {
-    loadEl.remove();
-    msgs.appendChild(makeMsgEl('assistant', '⚠️ Error reading files: ' + err.message));
-  }
-  scrollChat('upload');
-}
+function handleDrop(e) { e.preventDefault(); document.getElementById('upload-zone').classList.remove('dragover'); const f = e.dataTransfer.files[0]; if (f) processFile(f); }
+function handleFileSelect(e) { const f = e.target.files[0]; if (f) processFile(f); }
 
 async function processFile(file) {
-  if (file.type.startsWith('image/')) {
-    var r0 = new FileReader();
-    r0.onload = function(e) {
-      journalData.sourceFiles = journalData.sourceFiles || [];
-      journalData.sourceFiles.push({ base64: e.target.result.split(',')[1], mime_type: file.type, filename: file.name || ('journal.' + file.type.split('/')[1]) });
-    };
-    r0.readAsDataURL(file);
-  }
   document.getElementById('upload-zone').style.display = 'none';
   document.getElementById('upload-processing').style.display = 'block';
   const msgs = document.getElementById('chat-messages-upload');
@@ -1904,18 +1669,18 @@ async function processFile(file) {
 Your job is to parse an uploaded journal entry (handwritten or typed) and extract a COMPLETE structured JSON object that maps directly to the SmartSuite Journals/Rituals table.
 
 JOURNAL TYPES — use exactly one of these values for journal_type:
-- Morning Ritual — morning planning, daily intentions, dominos
-- Evening Ritual — end of day review, recap, tomorrow prep
-- Weekly Ritual — weekly review across BODY, BEING, BALANCE, BUSINESS
-- Irritation Stack — triggered by irritation or frustration
-- Discovery/Idea Log — a new insight or idea being processed
-- Memory Journal — capturing a memory or reflection
-- Exercise Log — physical training or fitness activity
-- Anger — anger stack trigger
-- Guilt — guilt stack, self-accountability
-- Excitement — excitement stack, positive trigger
-- Gratitude — gratitude stack, appreciation trigger
-- Rage — rage stack, highest intensity anger
+- "Morning Ritual" — morning planning, daily intentions, dominos, stitser way style
+- "Evening Ritual" — end of day review, recap, tomorrow prep
+- "Weekly Ritual" — weekly review across BODY, BEING, BALANCE, BUSINESS
+- "Irritation Stack" — triggered by irritation or frustration
+- "Discovery/Idea Log" — a new insight, idea, or discovery being processed
+- "Memory Journal" — capturing a memory, reflection on the past
+- "Exercise Log" — physical training, workout, fitness activity
+- "Anger" — anger stack trigger
+- "Guilt" — guilt stack, self-accountability
+- "Excitement" — excitement stack, positive trigger
+- "Gratitude" — gratitude stack, appreciation trigger
+- "Rage" — rage stack, highest intensity anger
 
 FIELD MAPPING — extract values for as many of these as the content supports:
 - title: string — a short descriptive title for this journal entry
@@ -1938,26 +1703,12 @@ FIELD MAPPING — extract values for as many of these as the content supports:
 
 RESPOND WITH ONLY A JSON OBJECT. No markdown, no explanation, no preamble. Start with { and end with }.`;
 
-    // Build the message — images and PDFs use native content blocks;
-    // plain text files are decoded and sent inline
-    const isPdf = file.type === 'application/pdf';
-    let userMsg;
-    if (isImage) {
-      userMsg = [{ role:'user', content:[
-        { type:'image', source:{ type:'base64', media_type:file.type, data:base64 }},
-        { type:'text', text:'Parse this handwritten journal entry and return the structured JSON as instructed.' }
-      ]}];
-    } else if (isPdf) {
-      userMsg = [{ role:'user', content:[
-        { type:'document', source:{ type:'base64', media_type:'application/pdf', data:base64 }},
-        { type:'text', text:'Parse this PDF journal entry and return the structured JSON as instructed.' }
-      ]}];
-    } else {
-      // Plain text — safe to decode
-      let textContent;
-      try { textContent = atob(base64).slice(0, 8000); } catch(e) { textContent = '(could not decode file)'; }
-      userMsg = [{ role:'user', content:'Parse this journal entry and return the structured JSON as instructed.\n\n' + textContent }];
-    }
+    const userMsg = isImage
+      ? [{ role:'user', content:[
+          { type:'image', source:{ type:'base64', media_type:file.type, data:base64 }},
+          { type:'text', text:'Parse this handwritten journal entry and return the structured JSON as instructed.' }
+        ]}]
+      : [{ role:'user', content:`Parse this journal entry and return the structured JSON as instructed.\n\n${atob(base64).slice(0,6000)}` }];
 
     const typing = makeTyping();
     msgs.appendChild(typing);
@@ -2004,8 +1755,8 @@ RESPOND WITH ONLY A JSON OBJECT. No markdown, no explanation, no preamble. Start
       `;
       msgs.appendChild(makeMsgEl('assistant', summaryHtml));
 
-      // Show journal type confirmation before filing UI
-      setTimeout(() => showTypeConfirmation('upload', parsed), 500);
+      // Trigger search-based filing UI
+      setTimeout(() => showSearchFiling('upload', parsed), 500);
 
     } catch(err) {
       typing.remove();
@@ -2014,80 +1765,6 @@ RESPOND WITH ONLY A JSON OBJECT. No markdown, no explanation, no preamble. Start
     scrollChat('upload');
   };
   reader.readAsDataURL(file);
-}
-
-// ─── JOURNAL TYPE CONFIRMATION ───
-function showTypeConfirmation(chatId, parsed) {
-  const msgs = document.getElementById('chat-messages-' + chatId);
-  const detectedType = (parsed && parsed.journal_type) ? parsed.journal_type : 'Morning Ritual';
-  const types = [
-    'Morning Ritual','Evening Ritual','Weekly Ritual',
-    'Irritation Stack','Discovery/Idea Log','Memory Journal',
-    'Exercise Log','Anger','Guilt','Excitement','Gratitude','Rage'
-  ];
-
-  // Build using DOM to avoid quote escaping issues
-  const wrapper = document.createElement('div');
-  wrapper.style.cssText = 'padding:14px 16px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;';
-
-  const label = document.createElement('div');
-  label.style.cssText = 'font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;';
-  label.textContent = 'Confirm Journal Type';
-
-  const p = document.createElement('p');
-  p.style.cssText = 'font-size:13px;margin-bottom:12px;';
-  p.innerHTML = 'Claude detected: <strong>' + detectedType + '</strong> — confirm or change before filing.';
-
-  const select = document.createElement('select');
-  select.id = 'type-select-' + chatId;
-  select.style.cssText = 'width:100%;padding:8px 12px;background:var(--warm-white);border:1px solid var(--border-strong);border-radius:6px;font-size:13px;color:var(--ink);margin-bottom:12px;';
-  types.forEach(function(t) {
-    const opt = document.createElement('option');
-    opt.value = t;
-    opt.textContent = t;
-    if (t === detectedType) opt.selected = true;
-    select.appendChild(opt);
-  });
-
-  const btn = document.createElement('button');
-  btn.className = 'btn-primary';
-  btn.textContent = 'Confirm Type →';
-  btn.onclick = function() { confirmJournalType(chatId); };
-
-  wrapper.appendChild(label);
-  wrapper.appendChild(p);
-  wrapper.appendChild(select);
-  wrapper.appendChild(btn);
-
-  const msgEl = makeMsgEl('assistant', '');
-  msgEl.querySelector('.msg-bubble').appendChild(wrapper);
-  msgs.appendChild(msgEl);
-
-  window._pendingParsed = parsed;
-  scrollChat(chatId);
-}
-
-function confirmJournalType(chatId) {
-  const select = document.getElementById('type-select-' + chatId);
-  if (!select) return;
-  const confirmedType = select.value;
-
-  journalData.journalType = confirmedType;
-  if (window._pendingParsed) {
-    window._pendingParsed.journal_type = confirmedType;
-  }
-
-  const msgs = document.getElementById('chat-messages-' + chatId);
-  const confirm = document.createElement('strong');
-  confirm.textContent = 'Type confirmed: ' + confirmedType + '. Linking and filing next.';
-  const msgEl = makeMsgEl('assistant', '');
-  msgEl.querySelector('.msg-bubble').appendChild(confirm);
-  msgs.appendChild(msgEl);
-
-  const pending = window._pendingParsed || {};
-  window._pendingParsed = null;
-  setTimeout(function() { showSearchFiling(chatId, pending); }, 300);
-  scrollChat(chatId);
 }
 
 // ─── SEARCH-BASED FILING UI ───
@@ -2154,7 +1831,7 @@ async function searchSS(chatId, type, query) {
     if(resultsEl) resultsEl.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">Searching…</span>`;
 
     const appIds = {
-      people: '68216a706900e8eaf75a05af', // will search People Profiles — using Projects as fallback since we don't have People app id yet
+      people: '698a79cb5448033d905cbe70', // will search People Profiles — using Projects as fallback since we don't have People app id yet
       project: '68216a706900e8eaf75a05a7',
       goal: '6824d4d1885a8769bd2dfc0d'
     };
@@ -2187,7 +1864,7 @@ async function searchSS(chatId, type, query) {
 
 async function searchAndSelect(chatId, type, query) {
   // Auto-search and select first result for a known name
-  const appIds = { project: '68216a706900e8eaf75a05a7', goal: '6824d4d1885a8769bd2dfc0d', people: '68216a706900e8eaf75a05af' };
+  const appIds = { project: '68216a706900e8eaf75a05a7', goal: '6824d4d1885a8769bd2dfc0d', people: '698a79cb5448033d905cbe70' };
   try {
     const data = await ssRequest('POST', `applications/${appIds[type]}/records/list/`, {
       filter: { operator:'and', fields:[{ field:'title', comparison:'contains', value: query }]},
@@ -2317,7 +1994,7 @@ function resetUpload() {
 // HISTORY
 // ═══════════════════════════════════════════════════════
 const historyEntries = [
-  { type:"Warrior's Way", title:"I am a builder who leads with clarity.", preview:"Grateful for Tammie, the team, and forward momentum. Mission: Harmony Mesa CMA.", date:"Tue, Mar 31, 2026", people:"Clint only", project:"Harmony Mesa", id:"44821" },
+  { type:"Stitser Way", title:"I am a builder who leads with clarity.", preview:"Grateful for Tammie, the team, and forward momentum. Mission: Harmony Mesa CMA.", date:"Tue, Mar 31, 2026", people:"Clint only", project:"Harmony Mesa", id:"44821" },
   { type:"Project Debrief", title:"Canyon's Edge HUD surplus cash discussion", preview:"K-1 timing for stub period. Surplus cash rules — 45-day lag.", date:"Mon, Mar 30, 2026", people:"Clint only", project:"Canyon's Edge", id:"44802" }
 ];
 
@@ -2349,13 +2026,8 @@ function makeTyping() {
   return div;
 }
 function scrollChat(panelId) {
-  var el = document.getElementById("chat-messages-" + panelId);
-  if (!el) return;
-  setTimeout(function() {
-    el.scrollTop = el.scrollHeight;
-    var last = el.lastElementChild;
-    if (last) last.scrollIntoView({ block: "end" });
-  }, 80);
+  const el = document.getElementById(`chat-messages-${panelId}`);
+  if (el) setTimeout(() => el.scrollTop = el.scrollHeight, 60);
 }
 function fmt_reply(text) {
   return text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
@@ -2364,118 +2036,57 @@ function fmt_reply(text) {
 // ═══════════════════════════════════════════════════════
 // MORNING INIT
 // ═══════════════════════════════════════════════════════
-function refreshMorning() {
-  var msgs = document.getElementById('chat-messages-morning');
-  var typing = makeTyping();
-  msgs.appendChild(typing);
-  scrollChat('morning');
-  Promise.all([fetchCalendar(), fetchGmail(5), fetchMorningBrief()]).then(function(results) {
-    var cal = results[0];
-    var mail = results[1];
-    var brief = results[2];
-    typing.remove();
-    var html = '<strong>Refreshed.</strong><br><br>';
-    if (!cal.error && cal.events) {
-      html += '<strong>Today (' + (cal.count||cal.events.length) + ' events):</strong><br>' + fmtEvents(cal.events) + '<br><br>';
-    }
-    if (!mail.error) {
-      html += '<strong>Unread (' + (mail.count||mail.messages.length) + '):</strong><br>' + fmtEmails(mail.messages);
-    } else {
-      html += '<em>Email: ' + mail.error + '</em>';
-    }
-    msgs.appendChild(makeMsgEl('assistant', html));
-    if (!brief.error) {
-      var n = brief.total_attention_items||0;
-      var bh = '<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--gold);margin-bottom:8px;">S-BOS &middot; '+n+' ATTENTION ITEMS</div>';
-      msgs.appendChild(makeMsgEl('assistant', bh + renderMorningBrief(brief)));
-    }
-    scrollChat('morning');
-  }).catch(function(err) {
-    typing.remove();
-    msgs.appendChild(makeMsgEl('assistant', 'Refresh failed: ' + err.message));
-    scrollChat('morning');
-  });
-}
-
 function initMorning() {
-  var now = new Date();
-  var dateStr = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-  var timeStr = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
   document.getElementById('morning-date-label').textContent = dateStr;
-  document.getElementById('morning-meta').innerHTML = 'Morning Brief &nbsp;&middot;&nbsp; ' + timeStr + ' PDT &nbsp;&middot;&nbsp; Loading live data&hellip;';
-  var msgs = document.getElementById('chat-messages-morning');
+  document.getElementById('morning-meta').innerHTML = `🌅 Morning Brief &nbsp;·&nbsp; ${now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})} PDT &nbsp;·&nbsp; Loading…`;
+  const msgs = document.getElementById('chat-messages-morning');
 
-  // Show chips immediately — don't wait on network
-  var chipsDiv = document.createElement('div');
-  chipsDiv.className = 'chips';
-  chipsDiv.style.marginBottom = '12px';
-  var chipDefs = [
-    ['Warriors Way', function(){startTemplateInPanel('warriors-way','morning');}],
-    ['Discovery Stack', function(){startTemplateInPanel('discovery-stack','morning');}],
-    ['Todays Focus', function(){quickSend('morning','What should I focus on most today?');}]
-  ];
-  chipDefs.forEach(function(c) {
-    var s = document.createElement('span');
-    s.className = 'chip';
-    s.textContent = c[0];
-    s.onclick = c[1];
-    chipsDiv.appendChild(s);
-  });
-  var chipsMsg = makeMsgEl('assistant','');
-  chipsMsg.querySelector('.msg-bubble').appendChild(chipsDiv);
-  msgs.appendChild(chipsMsg);
-
-  // Load Gmail + Calendar in parallel
-  var typing = makeTyping();
+  // Fetch live calendar + briefing via connectors proxy
+  const typing = makeTyping();
   msgs.appendChild(typing);
-  scrollChat('morning');
 
-  Promise.all([fetchCalendar(), fetchGmail(5), fetchMorningBrief()]).then(function(results) {
-    var cal = results[0];
-    var mail = results[1];
-    var brief = results[2];
+  connectorRequest(
+    [{ role: 'user', content: `Good morning. Today is ${dateStr}. Please: (1) Pull today's Google Calendar events and give me the schedule. (2) Check Gmail for any urgent overnight emails (unread, last 12 hours). (3) Give me a one-paragraph morning pulse covering my schedule, any urgent items, and today's active project fronts: Squeeze Inn MEP, Harmony Mesa, Canyon\'s Edge K-1, Built to Last Framework. Keep it concise and sharp.` }],
+    sysPrompt('morning'),
+    ['gmail', 'calendar'],
+    1000
+  ).then(reply => {
     typing.remove();
-
-    var html = '<strong>Good morning.</strong> It is ' + dateStr + '.<br><br>';
-
-    if (!cal.error && cal.events) {
-      html += '<strong>Today (' + (cal.count||cal.events.length) + ' events):</strong><br>' + fmtEvents(cal.events) + '<br><br>';
-    } else {
-      html += '<strong>Active fronts:</strong> Squeeze Inn MEP &middot; Harmony Mesa &middot; Canyon Edge K-1 &middot; Built to Last<br><br>';
-    }
-
-    if (!mail.error) {
-      html += '<strong>Unread emails (' + (mail.count||mail.messages.length) + '):</strong><br>' + fmtEmails(mail.messages);
-    } else {
-      html += '<em>Email: ' + mail.error + '</em>';
-    }
-
-    msgs.appendChild(makeMsgEl('assistant', html));
-    if (!brief.error) {
-      var n = brief.total_attention_items||0;
-      var bh = '<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--gold);margin-bottom:8px;">S-BOS &middot; '+n+' ATTENTION ITEMS</div>';
-      msgs.appendChild(makeMsgEl('assistant', bh + renderMorningBrief(brief)));
-    }
-    var parts = [];
-    if (!cal.error) parts.push((cal.count||'?') + ' events');
-    if (!mail.error) parts.push((mail.count||'?') + ' unread');
-    if (!brief.error) parts.push((brief.total_attention_items||0) + ' action items');
-    document.getElementById('morning-meta').innerHTML = 'Morning Brief &nbsp;&middot;&nbsp; ' + timeStr + ' PDT &nbsp;&middot;&nbsp; ' + (parts.length ? parts.join(' &middot; ') : 'Live');
-    scrollChat('morning');
-  }).catch(function(err) {
+    msgs.appendChild(makeMsgEl('assistant', fmt_reply(reply)));
+    // Update meta bar once loaded
+    document.getElementById('morning-meta').innerHTML = `🌅 Morning Brief &nbsp;·&nbsp; ${now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})} PDT &nbsp;·&nbsp; Live data loaded`;
+    // Add quick action chips after the morning brief
+    setTimeout(() => {
+      msgs.appendChild(makeMsgEl('assistant', `<div class="chips">
+        <span class="chip" onclick="startTemplateInPanel('warriors-way','morning')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="16" height="16" style="display:inline-block;vertical-align:middle;margin-right:3px"><circle cx="50" cy="50" r="48" fill="#6A89A7"/><path d="M63 30 C63 30 37 28 33 40 C29 52 44 56 54 59 C64 62 68 67 64 73 C60 79 37 77 37 77" stroke="white" stroke-width="11" stroke-linecap="round" fill="none"/></svg> Stitser Way</span>
+        <span class="chip" onclick="startTemplateInPanel('anger-stack','morning')">😤 Anger Stack</span>
+        <span class="chip" onclick="startTemplateInPanel('discovery-stack','morning')">💡 Discovery Stack</span>
+        <span class="chip" onclick="quickSend('morning', 'What should I focus on today based on my active projects?')">🎯 Today\'s focus</span>
+      </div>`));
+      scrollChat('morning');
+    }, 300);
+  }).catch(err => {
     typing.remove();
-    msgs.appendChild(makeMsgEl('assistant', 'Good morning. Active fronts: Squeeze Inn MEP, Harmony Mesa, Canyon Edge K-1, Built to Last.'));
-    document.getElementById('morning-meta').innerHTML = 'Morning Brief &nbsp;&middot;&nbsp; ' + timeStr + ' PDT';
+    msgs.appendChild(makeMsgEl('assistant', fmt_reply(
+      'Good morning. Active fronts: Squeeze Inn MEP, Harmony Mesa, Canyon Edge K-1, Built to Last.\n\n'
+      + 'Google connectors not yet live. Update Railway backend to enable real-time email and calendar.'
+    )));
+    const chipDiv = document.createElement('div');
+    chipDiv.className = 'chips';
+    const chip1 = document.createElement('span');
+    chip1.className = 'chip';
+    chip1.textContent = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="16" height="16" style="display:inline-block;vertical-align:middle;margin-right:3px"><circle cx="50" cy="50" r="48" fill="#6A89A7"/><path d="M63 30 C63 30 37 28 33 40 C29 52 44 56 54 59 C64 62 68 67 64 73 C60 79 37 77 37 77" stroke="white" stroke-width="11" stroke-linecap="round" fill="none"/></svg> Stitser Way';
+    chip1.onclick = () => startTemplateInPanel('warriors-way', 'morning');
+    const chip2 = document.createElement('span');
+    chip2.className = 'chip';
+    chip2.textContent = '🎯 Today focus';
+    chip2.onclick = () => quickSend('morning', 'What should I focus on today?');
+    chipDiv.appendChild(chip1);
+    chipDiv.appendChild(chip2);
+    msgs.appendChild(makeMsgEl('assistant', chipDiv.outerHTML));
+    document.getElementById('morning-meta').innerHTML = `🌅 Morning Brief &nbsp;·&nbsp; ${now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})} PDT &nbsp;·&nbsp; Static mode`;
     scrollChat('morning');
   });
 }
-
-// ═══════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════
-try { renderHistory(); } catch(e) { console.warn(e); }
-try { initMorning(); } catch(e) { console.warn(e); }
-setTimeout(function() { try { loadGoals(); } catch(e) { console.warn(e); } }, 500);
-</script>
-</body>
-</html>
