@@ -262,7 +262,9 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
   .sidebar {
     position: fixed; top: 52px; left: -240px; width: 240px;
     height: calc(100dvh - 52px); z-index: 1100;
+    background: #3D454B;
     transition: left 0.25s ease; box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+    overflow-y: auto;
   }
   .sidebar.open { left: 0; }
   .topbar { grid-column: 1; }
