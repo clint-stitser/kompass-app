@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -14,304 +13,302 @@
 /* fonts loaded via <link> tag */
 
 :root {
-/* ── Soft Summer Palette ── */
-–ink: #2F353B;
-–parchment: #F4F1ED;
-–warm-white: #FAF8F5;
-–gold: #6A89A7;
-–gold-light: #8AABC4;
-–gold-dim: rgba(106,137,167,0.10);
-–rust: #A68DA3;
-–sage: #8DA399;
-–slate: #6A89A7;
-–muted: #8E9BA6;
-–border: rgba(181,168,155,0.5);
-–border-strong: rgba(181,168,155,0.75);
-–shadow: 0 2px 16px rgba(47,53,59,0.07);
-–recording: #A68DA3;
-–sidebar: #3D454B;
-–card-bg: #EAE7E2;
-–progress-empty: #D4D8DC;
+  /* ── Soft Summer Palette ── */
+  --ink: #2F353B;
+  --parchment: #F4F1ED;
+  --warm-white: #FAF8F5;
+  --gold: #6A89A7;
+  --gold-light: #8AABC4;
+  --gold-dim: rgba(106,137,167,0.10);
+  --rust: #A68DA3;
+  --sage: #8DA399;
+  --slate: #6A89A7;
+  --muted: #8E9BA6;
+  --border: rgba(181,168,155,0.5);
+  --border-strong: rgba(181,168,155,0.75);
+  --shadow: 0 2px 16px rgba(47,53,59,0.07);
+  --recording: #A68DA3;
+  --sidebar: #3D454B;
+  --card-bg: #EAE7E2;
+  --progress-empty: #D4D8DC;
 }
 
-- { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; background: var(–parchment); color: var(–ink); font-family: ‘Outfit’, sans-serif; font-weight: 300; font-size: 14px; overflow: hidden; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: var(--parchment); color: var(--ink); font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 14px; overflow: hidden; }
 
-body::before { content:’’; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox=‘0 0 256 256’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘noise’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23noise)’ opacity=‘0.04’/%3E%3C/svg%3E"); pointer-events:none; z-index:1000; opacity:0.6; }
+body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:1000; opacity:0.6; }
 
 .app { display:grid; grid-template-columns:220px 1fr; grid-template-rows:52px 1fr; height:100vh; overflow:hidden; }
 
 /* TOPBAR */
-.topbar { grid-column:1/-1; background:var(–sidebar); display:flex; align-items:center; justify-content:space-between; padding:0 24px; border-bottom:1px solid rgba(255,255,255,0.08); }
+.topbar { grid-column:1/-1; background:var(--sidebar); display:flex; align-items:center; justify-content:space-between; padding:0 24px; border-bottom:1px solid rgba(255,255,255,0.08); }
 .topbar-brand { display:flex; align-items:baseline; gap:12px; }
-.topbar-brand h1 { font-family:‘Cormorant Garamond’,serif; font-size:20px; font-weight:600; color:var(–gold-light); letter-spacing:0.12em; text-transform:uppercase; }
-.topbar-brand span { font-family:‘JetBrains Mono’,monospace; font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.08em; }
+.topbar-brand h1 { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:var(--gold-light); letter-spacing:0.12em; text-transform:uppercase; }
+.topbar-brand span { font-family:'JetBrains Mono',monospace; font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.08em; }
 .topbar-right { display:flex; align-items:center; gap:16px; }
-.checkin-indicator { display:flex; align-items:center; gap:8px; font-family:‘JetBrains Mono’,monospace; font-size:10px; color:rgba(255,255,255,0.5); }
-.checkin-dot { width:7px; height:7px; border-radius:50%; background:var(–gold); animation:breathe 3s ease-in-out infinite; }
+.checkin-indicator { display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:10px; color:rgba(255,255,255,0.5); }
+.checkin-dot { width:7px; height:7px; border-radius:50%; background:var(--gold); animation:breathe 3s ease-in-out infinite; }
 @keyframes breathe { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
-.time-display { font-family:‘Cormorant Garamond’,serif; font-size:16px; color:rgba(255,255,255,0.7); font-weight:300; }
-.proxy-badge { font-family:‘JetBrains Mono’,monospace; font-size:9px; padding:2px 7px; border-radius:3px; background:rgba(141,163,153,0.2); color:var(–sage); border:1px solid rgba(141,163,153,0.4); }
+.time-display { font-family:'Cormorant Garamond',serif; font-size:16px; color:rgba(255,255,255,0.7); font-weight:300; }
+.proxy-badge { font-family:'JetBrains Mono',monospace; font-size:9px; padding:2px 7px; border-radius:3px; background:rgba(141,163,153,0.2); color:var(--sage); border:1px solid rgba(141,163,153,0.4); }
 
 /* SIDEBAR */
-.sidebar { background:var(–sidebar); border-right:1px solid rgba(255,255,255,0.06); padding:20px 0; overflow-y:auto; display:flex; flex-direction:column; }
+.sidebar { background:var(--sidebar); border-right:1px solid rgba(255,255,255,0.06); padding:20px 0; overflow-y:auto; display:flex; flex-direction:column; }
 .sidebar-section { margin-bottom:24px; }
-.sidebar-label { font-family:‘JetBrains Mono’,monospace; font-size:9px; color:rgba(255,255,255,0.2); text-transform:uppercase; letter-spacing:0.14em; padding:0 18px; margin-bottom:6px; }
+.sidebar-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.2); text-transform:uppercase; letter-spacing:0.14em; padding:0 18px; margin-bottom:6px; }
 .nav-item { display:flex; align-items:center; gap:10px; padding:9px 18px; cursor:pointer; transition:all 0.15s; border-left:2px solid transparent; color:rgba(255,255,255,0.45); font-size:13px; font-weight:300; white-space:nowrap; }
 .nav-item:hover { color:rgba(255,255,255,0.8); background:rgba(255,255,255,0.04); }
-.nav-item.active { color:var(–gold-light); border-left-color:var(–gold); background:rgba(106,137,167,0.12); }
+.nav-item.active { color:var(--gold-light); border-left-color:var(--gold); background:rgba(106,137,167,0.12); }
 .nav-icon { font-size:14px; width:18px; text-align:center; flex-shrink:0; }
-.checkin-badge { margin-left:auto; background:var(–gold); color:var(–ink); font-family:‘JetBrains Mono’,monospace; font-size:8px; font-weight:500; padding:1px 5px; border-radius:3px; text-transform:uppercase; }
+.checkin-badge { margin-left:auto; background:var(--gold); color:var(--ink); font-family:'JetBrains Mono',monospace; font-size:8px; font-weight:500; padding:1px 5px; border-radius:3px; text-transform:uppercase; }
 .sidebar-divider { height:1px; background:rgba(255,255,255,0.06); margin:8px 18px 16px; }
 .sidebar-goals { padding:0 14px; margin-top:auto; margin-bottom:8px; }
 .goal-mini { margin-bottom:10px; }
-.goal-mini-label { font-family:‘JetBrains Mono’,monospace; font-size:9px; color:rgba(255,255,255,0.3); margin-bottom:4px; display:flex; justify-content:space-between; }
-.goal-mini-label span { color:var(–gold-light); }
+.goal-mini-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.3); margin-bottom:4px; display:flex; justify-content:space-between; }
+.goal-mini-label span { color:var(--gold-light); }
 .goal-bar { height:3px; background:rgba(255,255,255,0.15); border-radius:2px; overflow:hidden; }
-.goal-bar-fill { height:100%; background:linear-gradient(90deg,var(–gold),var(–gold-light)); border-radius:2px; transition:width 0.6s ease; }
-.goal-bar-fill.sage { background:linear-gradient(90deg,var(–sage),#6a9a60); }
+.goal-bar-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light)); border-radius:2px; transition:width 0.6s ease; }
+.goal-bar-fill.sage { background:linear-gradient(90deg,var(--sage),#6a9a60); }
 
 /* MAIN */
-.main { overflow-y:auto; background:var(–warm-white); position:relative; }
+.main { overflow-y:auto; background:var(--warm-white); position:relative; }
 .panel { display:none; }
 .panel.active { display:block; animation:fadeIn 0.25s ease; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
 
 /* CHAT */
 .chat-container { display:flex; flex-direction:column; height:calc(100vh - 52px); }
-.checkin-header { padding:24px 40px 0; border-bottom:1px solid var(–border); }
-.checkin-mode-label { font-family:‘JetBrains Mono’,monospace; font-size:10px; color:var(–gold); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
-.checkin-mode-label::before { content:’’; display:block; width:20px; height:1px; background:var(–gold); }
-.checkin-header h2 { font-family:‘Cormorant Garamond’,serif; font-size:34px; font-weight:300; margin-bottom:6px; line-height:1.1; }
-.checkin-header h2 em { font-style:italic; color:var(–gold); }
-.checkin-meta { font-family:‘JetBrains Mono’,monospace; font-size:10px; color:var(–muted); padding-bottom:18px; display:flex; gap:20px; flex-wrap:wrap; }
+.checkin-header { padding:24px 40px 0; border-bottom:1px solid var(--border); }
+.checkin-mode-label { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--gold); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+.checkin-mode-label::before { content:''; display:block; width:20px; height:1px; background:var(--gold); }
+.checkin-header h2 { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:300; margin-bottom:6px; line-height:1.1; }
+.checkin-header h2 em { font-style:italic; color:var(--gold); }
+.checkin-meta { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); padding-bottom:18px; display:flex; gap:20px; flex-wrap:wrap; }
 .chat-messages { flex:1; overflow-y:auto; padding:20px 40px; display:flex; flex-direction:column; gap:16px; }
 .msg { display:flex; gap:14px; max-width:820px; }
 .msg.user { flex-direction:row-reverse; margin-left:auto; }
-.msg-avatar { width:32px; height:32px; border-radius:50%; background:var(–gold-dim); border:1px solid rgba(106,137,167,0.25); display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; font-family:‘Cormorant Garamond’,serif; font-weight:600; color:var(–gold); }
-.msg.user .msg-avatar { background:#4A5560; border-color:#4A5560; color:var(–gold-light); }
-.msg-bubble { background:var(–card-bg); border:1px solid var(–border); border-radius:2px 14px 14px 14px; padding:14px 18px; font-size:14px; line-height:1.65; color:var(–ink); box-shadow:var(–shadow); max-width:660px; }
+.msg-avatar { width:32px; height:32px; border-radius:50%; background:var(--gold-dim); border:1px solid rgba(106,137,167,0.25); display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; font-family:'Cormorant Garamond',serif; font-weight:600; color:var(--gold); }
+.msg.user .msg-avatar { background:#4A5560; border-color:#4A5560; color:var(--gold-light); }
+.msg-bubble { background:var(--card-bg); border:1px solid var(--border); border-radius:2px 14px 14px 14px; padding:14px 18px; font-size:14px; line-height:1.65; color:var(--ink); box-shadow:var(--shadow); max-width:660px; }
 .msg.user .msg-bubble { background:#4A5560; color:rgba(255,255,255,0.92); border-color:transparent; border-radius:14px 2px 14px 14px; }
 .msg-bubble strong { font-weight:500; }
-.msg-bubble em { font-style:italic; color:var(–gold); }
+.msg-bubble em { font-style:italic; color:var(--gold); }
 .msg-bubble ul,.msg-bubble ol { padding-left:20px; margin:6px 0; }
 .msg-bubble li { margin-bottom:3px; }
 
-.prompt-card { background:var(–warm-white); border:1px solid rgba(106,137,167,0.3); border-left:3px solid var(–gold); border-radius:0 12px 12px 0; padding:14px 18px; margin:8px 0; }
-.prompt-card .prompt-step { font-family:‘JetBrains Mono’,monospace; font-size:9px; color:var(–gold); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px; }
-.prompt-card .prompt-q { font-family:‘Cormorant Garamond’,serif; font-size:19px; font-weight:400; font-style:italic; color:var(–ink); line-height:1.3; }
+.prompt-card { background:var(--warm-white); border:1px solid rgba(106,137,167,0.3); border-left:3px solid var(--gold); border-radius:0 12px 12px 0; padding:14px 18px; margin:8px 0; }
+.prompt-card .prompt-step { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--gold); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px; }
+.prompt-card .prompt-q { font-family:'Cormorant Garamond',serif; font-size:19px; font-weight:400; font-style:italic; color:var(--ink); line-height:1.3; }
 
 .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
-.chip { background:transparent; border:1px solid var(–border-strong); color:var(–ink); padding:5px 12px; border-radius:20px; cursor:pointer; font-size:12px; font-family:‘Outfit’,sans-serif; transition:all 0.15s; }
-.chip:hover { background:var(–ink); color:var(–gold-light); border-color:var(–ink); }
+.chip { background:transparent; border:1px solid var(--border-strong); color:var(--ink); padding:5px 12px; border-radius:20px; cursor:pointer; font-size:12px; font-family:'Outfit',sans-serif; transition:all 0.15s; }
+.chip:hover { background:var(--ink); color:var(--gold-light); border-color:var(--ink); }
 
 .filed-card { background:linear-gradient(135deg,rgba(141,163,153,0.10),rgba(141,163,153,0.05)); border:1px solid rgba(141,163,153,0.35); border-radius:10px; padding:16px 20px; }
-.filed-card .filed-title { font-family:‘JetBrains Mono’,monospace; font-size:10px; color:var(–sage); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px; }
+.filed-card .filed-title { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--sage); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px; }
 .filed-card .filed-row { display:flex; gap:10px; font-size:12px; margin-bottom:6px; }
-.filed-card .filed-key { font-family:‘JetBrains Mono’,monospace; color:var(–muted); min-width:80px; font-size:10px; }
+.filed-card .filed-key { font-family:'JetBrains Mono',monospace; color:var(--muted); min-width:80px; font-size:10px; }
 
 /* ═══════════════════════════════════
-RICH TEXT INPUT AREA
+   RICH TEXT INPUT AREA
 ═══════════════════════════════════ */
-.chat-input-area { border-top:1px solid var(–border); background:var(–warm-white); padding:12px 40px 16px; }
-.input-toolbar { display:flex; align-items:center; gap:4px; margin-bottom:8px; padding:6px 10px; background:var(–warm-white); border:1px solid var(–border); border-radius:8px 8px 0 0; border-bottom:none; flex-wrap:wrap; }
-.tb-btn { background:transparent; border:none; cursor:pointer; padding:4px 7px; border-radius:4px; font-size:13px; color:var(–muted); transition:all 0.12s; display:flex; align-items:center; justify-content:center; min-width:28px; height:26px; font-family:‘JetBrains Mono’,monospace; font-weight:500; }
-.tb-btn:hover { background:var(–gold-dim); color:var(–gold); }
-.tb-btn.active { background:var(–gold-dim); color:var(–gold); }
-.tb-sep { width:1px; height:18px; background:var(–border); margin:0 4px; flex-shrink:0; }
-.tb-label { font-family:‘JetBrains Mono’,monospace; font-size:9px; color:var(–muted); text-transform:uppercase; letter-spacing:0.08em; margin-left:4px; }
+.chat-input-area { border-top:1px solid var(--border); background:var(--warm-white); padding:12px 40px 16px; }
+.input-toolbar { display:flex; align-items:center; gap:4px; margin-bottom:8px; padding:6px 10px; background:var(--warm-white); border:1px solid var(--border); border-radius:8px 8px 0 0; border-bottom:none; flex-wrap:wrap; }
+.tb-btn { background:transparent; border:none; cursor:pointer; padding:4px 7px; border-radius:4px; font-size:13px; color:var(--muted); transition:all 0.12s; display:flex; align-items:center; justify-content:center; min-width:28px; height:26px; font-family:'JetBrains Mono',monospace; font-weight:500; }
+.tb-btn:hover { background:var(--gold-dim); color:var(--gold); }
+.tb-btn.active { background:var(--gold-dim); color:var(--gold); }
+.tb-sep { width:1px; height:18px; background:var(--border); margin:0 4px; flex-shrink:0; }
+.tb-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-left:4px; }
 
 .rich-input {
-width:100%;
-background:var(–warm-white);
-border:1px solid var(–border-strong);
-border-radius:0 0 10px 10px;
-padding:12px 16px;
-font-family:‘Outfit’,sans-serif;
-font-size:14px;
-font-weight:300;
-color:var(–ink);
-outline:none;
-min-height:52px;
-max-height:200px;
-overflow-y:auto;
-line-height:1.6;
-transition:border-color 0.15s;
+  width:100%;
+  background:var(--warm-white);
+  border:1px solid var(--border-strong);
+  border-radius:0 0 10px 10px;
+  padding:12px 16px;
+  font-family:'Outfit',sans-serif;
+  font-size:14px;
+  font-weight:300;
+  color:var(--ink);
+  outline:none;
+  min-height:52px;
+  max-height:200px;
+  overflow-y:auto;
+  line-height:1.6;
+  transition:border-color 0.15s;
 }
-.rich-input:focus { border-color:var(–gold); }
-.rich-input:empty::before { content:attr(data-placeholder); color:var(–muted); pointer-events:none; }
+.rich-input:focus { border-color:var(--gold); }
+.rich-input:empty::before { content:attr(data-placeholder); color:var(--muted); pointer-events:none; }
 .rich-input ul,.rich-input ol { padding-left:22px; }
 .rich-input li { margin-bottom:2px; }
 .rich-input b,.rich-input strong { font-weight:600; }
 .rich-input i,.rich-input em { font-style:italic; }
 
 .input-row { display:flex; gap:10px; align-items:flex-end; margin-top:8px; }
-.send-btn { width:44px; height:44px; background:var(–gold); border:none; border-radius:10px; cursor:pointer; color:#fff; font-size:17px; display:flex; align-items:center; justify-content:center; transition:all 0.15s; flex-shrink:0; }
-.send-btn:hover { background:var(–gold-light); color:#fff; }
+.send-btn { width:44px; height:44px; background:var(--gold); border:none; border-radius:10px; cursor:pointer; color:#fff; font-size:17px; display:flex; align-items:center; justify-content:center; transition:all 0.15s; flex-shrink:0; }
+.send-btn:hover { background:var(--gold-light); color:#fff; }
 .send-btn:disabled { opacity:0.4; cursor:not-allowed; }
 
 /* ═══════════════════════════════════
-VOICE RECORDING
+   VOICE RECORDING
 ═══════════════════════════════════ */
-.voice-bar { display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(–card-bg); border:1px solid var(–border); border-radius:10px; margin-bottom:8px; }
-.voice-bar.recording { border-color:var(–rust); background:rgba(166,141,163,0.05); }
-.voice-bar.transcribing { border-color:var(–gold); background:var(–gold-dim); }
+.voice-bar { display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; margin-bottom:8px; }
+.voice-bar.recording { border-color:var(--rust); background:rgba(166,141,163,0.05); }
+.voice-bar.transcribing { border-color:var(--gold); background:var(--gold-dim); }
 
 .voice-btn {
-width:36px; height:36px; border-radius:50%; border:none; cursor:pointer;
-display:flex; align-items:center; justify-content:center;
-font-size:16px; flex-shrink:0; transition:all 0.2s;
-background:var(–ink); color:var(–gold-light);
+  width:36px; height:36px; border-radius:50%; border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; flex-shrink:0; transition:all 0.2s;
+  background:var(--ink); color:var(--gold-light);
 }
-.voice-btn.recording { background:var(–recording); color:#fff; animation:recordPulse 1s ease-in-out infinite; }
+.voice-btn.recording { background:var(--recording); color:#fff; animation:recordPulse 1s ease-in-out infinite; }
 .voice-btn:hover { transform:scale(1.08); }
 @keyframes recordPulse { 0%,100%{box-shadow:0 0 0 0 rgba(166,141,163,0.4)} 50%{box-shadow:0 0 0 8px rgba(166,141,163,0)} }
 
 .voice-waveform { flex:1; height:28px; display:flex; align-items:center; gap:2px; overflow:hidden; }
-.wave-bar { width:3px; background:var(–border-strong); border-radius:2px; transition:height 0.1s; min-height:3px; }
-.wave-bar.active { background:var(–recording); }
+.wave-bar { width:3px; background:var(--border-strong); border-radius:2px; transition:height 0.1s; min-height:3px; }
+.wave-bar.active { background:var(--recording); }
 
-.voice-time { font-family:‘JetBrains Mono’,monospace; font-size:11px; color:var(–muted); min-width:42px; text-align:right; }
-.voice-status { font-family:‘JetBrains Mono’,monospace; font-size:10px; color:var(–muted); }
-.voice-bar.recording .voice-status { color:var(–recording); }
-.voice-bar.transcribing .voice-status { color:var(–gold); }
+.voice-time { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); min-width:42px; text-align:right; }
+.voice-status { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); }
+.voice-bar.recording .voice-status { color:var(--recording); }
+.voice-bar.transcribing .voice-status { color:var(--gold); }
 
-.voice-toggle { background:transparent; border:1px solid var(–border); border-radius:6px; padding:5px 12px; font-family:‘JetBrains Mono’,monospace; font-size:10px; color:var(–muted); cursor:pointer; transition:all 0.15s; display:flex; align-items:center; gap:5px; }
-.voice-toggle:hover { border-color:var(–gold); color:var(–gold); }
-.voice-toggle.active { border-color:var(–rust); color:var(–recording); background:rgba(166,141,163,0.05); }
+.voice-toggle { background:transparent; border:1px solid var(--border); border-radius:6px; padding:5px 12px; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); cursor:pointer; transition:all 0.15s; display:flex; align-items:center; gap:5px; }
+.voice-toggle:hover { border-color:var(--gold); color:var(--gold); }
+.voice-toggle.active { border-color:var(--rust); color:var(--recording); background:rgba(166,141,163,0.05); }
 
-.transcript-preview { font-size:12px; color:var(–muted); font-style:italic; max-width:400px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; }
+.transcript-preview { font-size:12px; color:var(--muted); font-style:italic; max-width:400px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; }
 
 .tool-row { display:flex; gap:8px; margin-bottom:8px; align-items:center; flex-wrap:wrap; }
-.tool-btn { background:transparent; border:1px solid var(–border); border-radius:6px; padding:5px 12px; font-family:‘JetBrains Mono’,monospace; font-size:10px; color:var(–muted); cursor:pointer; transition:all 0.15s; }
-.tool-btn:hover { border-color:var(–gold); color:var(–gold); }
+.tool-btn { background:transparent; border:1px solid var(--border); border-radius:6px; padding:5px 12px; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); cursor:pointer; transition:all 0.15s; }
+.tool-btn:hover { border-color:var(--gold); color:var(--gold); }
 
 /* JOURNAL MODE SELECTOR */
 .mode-selector { display:flex; gap:10px; padding:18px 40px 0; }
-.mode-card { flex:1; background:var(–card-bg); border:1px solid var(–border); border-radius:10px; padding:12px 14px; cursor:pointer; transition:all 0.2s; text-align:center; }
-.mode-card:hover { border-color:var(–gold); }
-.mode-card.selected { border-color:var(–gold); background:var(–gold-dim); }
+.mode-card { flex:1; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:12px 14px; cursor:pointer; transition:all 0.2s; text-align:center; }
+.mode-card:hover { border-color:var(--gold); }
+.mode-card.selected { border-color:var(--gold); background:var(--gold-dim); }
 .mode-card .mode-icon { font-size:20px; margin-bottom:5px; }
-.mode-card .mode-name { font-family:‘JetBrains Mono’,monospace; font-size:10px; color:var(–ink); text-transform:uppercase; letter-spacing:0.06em; }
-.mode-card .mode-desc { font-size:11px; color:var(–muted); margin-top:3px; line-height:1.4; }
+.mode-card .mode-name { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--ink); text-transform:uppercase; letter-spacing:0.06em; }
+.mode-card .mode-desc { font-size:11px; color:var(--muted); margin-top:3px; line-height:1.4; }
 
 /* UPLOAD */
-.upload-zone { border:2px dashed var(–border-strong); border-radius:10px; padding:32px; text-align:center; margin:20px 40px; cursor:pointer; transition:all 0.2s; background:var(–warm-white); }
-.upload-zone:hover,.upload-zone.dragover { border-color:var(–gold); background:var(–gold-dim); }
+.upload-zone { border:2px dashed var(--border-strong); border-radius:10px; padding:32px; text-align:center; margin:20px 40px; cursor:pointer; transition:all 0.2s; background:var(--warm-white); }
+.upload-zone:hover,.upload-zone.dragover { border-color:var(--gold); background:var(--gold-dim); }
 .upload-zone .upload-icon { font-size:32px; margin-bottom:10px; }
-.upload-zone p { font-size:13px; color:var(–muted); line-height:1.6; }
-.upload-zone strong { color:var(–ink); font-weight:400; }
+.upload-zone p { font-size:13px; color:var(--muted); line-height:1.6; }
+.upload-zone strong { color:var(--ink); font-weight:400; }
 .upload-zone input { display:none; }
 
 /* GOALS */
 .goals-panel { padding:28px 40px; }
-.goals-panel h2 { font-family:‘Cormorant Garamond’,serif; font-size:28px; font-weight:300; margin-bottom:4px; }
-.goals-panel h2 em { font-style:italic; color:var(–gold); }
-.goals-subtitle { font-family:‘JetBrains Mono’,monospace; font-size:10px; color:var(–muted); margin-bottom:24px; }
-.scoreboard { background:var(–sidebar); border-radius:12px; padding:22px; margin-bottom:22px; }
-.scoreboard h3 { font-family:‘Cormorant Garamond’,serif; font-size:18px; color:var(–gold-light); font-weight:300; margin-bottom:14px; }
+.goals-panel h2 { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; margin-bottom:4px; }
+.goals-panel h2 em { font-style:italic; color:var(--gold); }
+.goals-subtitle { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:24px; }
+.scoreboard { background:var(--sidebar); border-radius:12px; padding:22px; margin-bottom:22px; }
+.scoreboard h3 { font-family:'Cormorant Garamond',serif; font-size:18px; color:var(--gold-light); font-weight:300; margin-bottom:14px; }
 .score-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
 .score-item { text-align:center; }
-.score-val { font-family:‘Cormorant Garamond’,serif; font-size:30px; font-weight:300; color:var(–gold-light); line-height:1; margin-bottom:4px; }
-.score-label { font-family:‘JetBrains Mono’,monospace; font-size:9px; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:0.08em; }
-.score-trend { font-family:‘JetBrains Mono’,monospace; font-size:10px; color:var(–sage); margin-top:3px; }
-.score-trend.warn { color:var(–rust); }
+.score-val { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:300; color:var(--gold-light); line-height:1; margin-bottom:4px; }
+.score-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:0.08em; }
+.score-trend { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--sage); margin-top:3px; }
+.score-trend.warn { color:var(--rust); }
 .goals-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:22px; }
-.goal-card { background:var(–card-bg); border:1px solid var(–border); border-radius:10px; padding:16px; }
-.goal-category { font-family:‘JetBrains Mono’,monospace; font-size:9px; color:var(–gold); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px; }
+.goal-card { background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:16px; }
+.goal-category { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--gold); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px; }
 .goal-card-header { display:flex; justify-content:space-between; margin-bottom:10px; }
-.goal-pct { font-family:‘Cormorant Garamond’,serif; font-size:24px; font-weight:300; }
+.goal-pct { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:300; }
 .goal-title { font-size:13px; font-weight:400; margin-bottom:4px; line-height:1.3; }
-.goal-target { font-family:‘JetBrains Mono’,monospace; font-size:10px; color:var(–muted); margin-bottom:8px; }
-.goal-progress { height:4px; background:var(–progress-empty); border-radius:2px; overflow:hidden; margin-bottom:6px; }
-.goal-progress-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,var(–gold),var(–gold-light)); transition:width 0.8s cubic-bezier(0.4,0,0.2,1); }
-.goal-status { font-family:‘JetBrains Mono’,monospace; font-size:9px; color:var(–muted); }
+.goal-target { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:8px; }
+.goal-progress { height:4px; background:var(--progress-empty); border-radius:2px; overflow:hidden; margin-bottom:6px; }
+.goal-progress-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--gold),var(--gold-light)); transition:width 0.8s cubic-bezier(0.4,0,0.2,1); }
+.goal-status { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--muted); }
 .goal-status.red { color:#8A6A6A; }
-.goal-status.yellow { color:var(–rust); }
+.goal-status.yellow { color:var(--rust); }
 
 /* HISTORY */
 .history-panel { padding:28px 40px; }
-.history-panel h2 { font-family:‘Cormorant Garamond’,serif; font-size:28px; font-weight:300; margin-bottom:20px; }
-.history-panel h2 em { font-style:italic; color:var(–gold); }
-.journal-entry { background:var(–card-bg); border:1px solid var(–border); border-radius:10px; padding:16px; margin-bottom:12px; cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden; }
-.journal-entry::before { content:’’; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(–gold); }
-.journal-entry:hover { box-shadow:var(–shadow); }
+.history-panel h2 { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; margin-bottom:20px; }
+.history-panel h2 em { font-style:italic; color:var(--gold); }
+.journal-entry { background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:12px; cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden; }
+.journal-entry::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--gold); }
+.journal-entry:hover { box-shadow:var(--shadow); }
 .entry-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:7px; }
-.entry-type-badge { font-family:‘JetBrains Mono’,monospace; font-size:9px; text-transform:uppercase; letter-spacing:0.08em; padding:2px 7px; border-radius:4px; background:var(–gold-dim); color:var(–gold); border:1px solid rgba(106,137,167,0.2); }
-.entry-date { font-family:‘JetBrains Mono’,monospace; font-size:10px; color:var(–muted); }
+.entry-type-badge { font-family:'JetBrains Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:0.08em; padding:2px 7px; border-radius:4px; background:var(--gold-dim); color:var(--gold); border:1px solid rgba(106,137,167,0.2); }
+.entry-date { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); }
 .entry-title { font-size:13px; font-weight:400; margin-bottom:5px; }
-.entry-preview { font-size:12px; color:var(–muted); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.entry-preview { font-size:12px; color:var(--muted); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 .entry-links { display:flex; gap:7px; margin-top:9px; flex-wrap:wrap; }
-.entry-link-chip { font-family:‘JetBrains Mono’,monospace; font-size:9px; padding:2px 7px; border:1px solid var(–border); border-radius:4px; color:var(–muted); }
+.entry-link-chip { font-family:'JetBrains Mono',monospace; font-size:9px; padding:2px 7px; border:1px solid var(--border); border-radius:4px; color:var(--muted); }
 
 /* UTILS */
-.typing-indicator { display:flex; gap:4px; padding:14px 18px; background:var(–card-bg); border:1px solid var(–border); border-radius:2px 14px 14px 14px; width:fit-content; align-items:center; }
-.typing-dot { width:6px; height:6px; border-radius:50%; background:var(–muted); animation:typingBounce 1.2s ease-in-out infinite; }
+.typing-indicator { display:flex; gap:4px; padding:14px 18px; background:var(--card-bg); border:1px solid var(--border); border-radius:2px 14px 14px 14px; width:fit-content; align-items:center; }
+.typing-dot { width:6px; height:6px; border-radius:50%; background:var(--muted); animation:typingBounce 1.2s ease-in-out infinite; }
 .typing-dot:nth-child(2){animation-delay:0.2s} .typing-dot:nth-child(3){animation-delay:0.4s}
 @keyframes typingBounce { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-6px);opacity:1} }
 @keyframes spin { to{transform:rotate(360deg)} }
-.spinner { display:inline-block; width:13px; height:13px; border:2px solid rgba(106,137,167,0.3); border-top-color:var(–gold); border-radius:50%; animation:spin 0.7s linear infinite; }
-.btn-primary { background:var(–gold); color:#fff; border:none; border-radius:7px; padding:9px 18px; font-family:‘JetBrains Mono’,monospace; font-size:11px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:all 0.15s; }
-.btn-primary:hover { background:var(–gold-light); color:#fff; }
-.btn-ghost { background:transparent; color:var(–muted); border:1px solid var(–border); border-radius:7px; padding:8px 16px; font-family:‘JetBrains Mono’,monospace; font-size:10px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:all 0.15s; }
-.btn-ghost:hover { border-color:var(–gold); color:var(–gold); }
-::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(–border-strong);border-radius:2px}
+.spinner { display:inline-block; width:13px; height:13px; border:2px solid rgba(106,137,167,0.3); border-top-color:var(--gold); border-radius:50%; animation:spin 0.7s linear infinite; }
+.btn-primary { background:var(--gold); color:#fff; border:none; border-radius:7px; padding:9px 18px; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:all 0.15s; }
+.btn-primary:hover { background:var(--gold-light); color:#fff; }
+.btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border); border-radius:7px; padding:8px 16px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:all 0.15s; }
+.btn-ghost:hover { border-color:var(--gold); color:var(--gold); }
+::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:2px}
 
 /* ── Mobile ── */
 @media (max-width: 768px) {
-.app { grid-template-columns: 1fr; grid-template-rows: 52px 1fr; }
-.sidebar {
-position: fixed; top: 52px; left: -240px; width: 240px;
-height: calc(100vh - 52px); z-index: 1100;
-background: #3D454B;
-overflow-y: auto;
-transition: left 0.25s ease;
-box-shadow: 4px 0 20px rgba(0,0,0,0.3);
-}
-.sidebar.open { left: 0; }
-.topbar { grid-column: 1; position: relative; z-index: 1200; }
-#nav-toggle { display: block !important; }
-.main { grid-column: 1; overflow: hidden; display: flex; flex-direction: column; }
-.panel.active { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
-.chat-container { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
-.checkin-header { flex-shrink: 0; padding: 16px 16px 0; }
-.checkin-header h2 { font-size: 2rem; }
-.chat-messages { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; min-height: 0; padding: 12px; }
-.chat-input-area { flex-shrink: 0; padding: 8px 12px 12px; padding-bottom: max(12px, env(safe-area-inset-bottom)); background: var(–warm-white); border-top: 1px solid var(–border); }
-.msg-bubble { max-width: calc(100vw - 80px); font-size: 13px; }
-.chips { gap: 6px; }
-.chip { font-size: 11px; padding: 5px 10px; }
-.goals-grid { grid-template-columns: 1fr; }
-.score-grid { grid-template-columns: 1fr 1fr; }
-.sidebar-goals { display: none; }
-.rich-input { font-size: 16px !important; min-height: 44px; }
-.send-btn { width: 40px; height: 40px; }
-select, input, textarea { font-size: 16px !important; }
-.time-display { display: none; }
-.topbar-brand span { display: none; }
-.mode-selector { padding: 8px 12px 0; gap: 6px; }
-.mode-card { padding: 8px 6px; }
-.mode-desc { display: none; }
-#journal-chat-mode { display: flex; flex-direction: column; overflow: hidden; flex: 1; }
-#journal-chat-mode .chat-container { flex: 1; height: auto !important; }
-#journal-chat-mode .chat-messages { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-#journal-chat-mode .chat-input-area { flex-shrink: 0; }
-.goals-panel, .history-panel, .assistant-panel { padding: 16px; overflow-y: auto; }
-html, body { height: 100%; height: -webkit-fill-available; }
-.app { height: 100vh; height: -webkit-fill-available; min-height: -webkit-fill-available; }
+  .app { grid-template-columns: 1fr; grid-template-rows: 52px 1fr; }
+  .sidebar {
+    position: fixed; top: 52px; left: -240px; width: 240px;
+    height: calc(100vh - 52px); z-index: 1100;
+    background: #3D454B;
+    overflow-y: auto;
+    transition: left 0.25s ease;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+  }
+  .sidebar.open { left: 0; }
+  .topbar { grid-column: 1; position: relative; z-index: 1200; }
+  #nav-toggle { display: block !important; }
+  .main { grid-column: 1; overflow: hidden; display: flex; flex-direction: column; }
+  .panel.active { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+  .chat-container { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
+  .checkin-header { flex-shrink: 0; padding: 16px 16px 0; }
+  .checkin-header h2 { font-size: 2rem; }
+  .chat-messages { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; min-height: 0; padding: 12px; }
+  .chat-input-area { flex-shrink: 0; padding: 8px 12px 12px; padding-bottom: max(12px, env(safe-area-inset-bottom)); background: var(--warm-white); border-top: 1px solid var(--border); }
+  .msg-bubble { max-width: calc(100vw - 80px); font-size: 13px; }
+  .chips { gap: 6px; }
+  .chip { font-size: 11px; padding: 5px 10px; }
+  .goals-grid { grid-template-columns: 1fr; }
+  .score-grid { grid-template-columns: 1fr 1fr; }
+  .sidebar-goals { display: none; }
+  .rich-input { font-size: 16px !important; min-height: 44px; }
+  .send-btn { width: 40px; height: 40px; }
+  select, input, textarea { font-size: 16px !important; }
+  .time-display { display: none; }
+  .topbar-brand span { display: none; }
+  .mode-selector { padding: 8px 12px 0; gap: 6px; }
+  .mode-card { padding: 8px 6px; }
+  .mode-desc { display: none; }
+  #journal-chat-mode { display: flex; flex-direction: column; overflow: hidden; flex: 1; }
+  #journal-chat-mode .chat-container { flex: 1; height: auto !important; }
+  #journal-chat-mode .chat-messages { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  #journal-chat-mode .chat-input-area { flex-shrink: 0; }
+  .goals-panel, .history-panel, .assistant-panel { padding: 16px; overflow-y: auto; }
+  html, body { height: 100%; height: -webkit-fill-available; }
+  .app { height: 100vh; height: -webkit-fill-available; min-height: -webkit-fill-available; }
 }
 @media (max-width: 480px) {
-.checkin-header h2 { font-size: 1.6rem; }
+  .checkin-header h2 { font-size: 1.6rem; }
 }
 </style>
-
 </head>
 <body>
 <div id="nav-overlay" onclick="toggleNav()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:1050;"></div>
 <div class="app">
 
   <!-- TOPBAR -->
-
   <div class="topbar">
     <button id="nav-toggle" onclick="toggleNav()" style="display:none;background:none;border:none;cursor:pointer;padding:0 14px;color:rgba(255,255,255,0.85);font-size:22px;line-height:52px;">&#9776;</button>
     <div class="topbar-brand">
@@ -321,12 +318,11 @@ html, body { height: 100%; height: -webkit-fill-available; }
     <div class="topbar-right">
       <span class="proxy-badge">⚡ Railway Live</span>
       <div class="checkin-indicator"><div class="checkin-dot"></div><span id="checkin-status">Loading…</span></div>
-      <div class="time-display" id="clock">--</div>
+      <div class="time-display" id="clock">—</div>
     </div>
   </div>
 
   <!-- SIDEBAR -->
-
   <div class="sidebar" id="sidebar">
     <div class="sidebar-section">
       <div class="sidebar-label">Check-ins</div>
@@ -357,281 +353,275 @@ html, body { height: 100%; height: -webkit-fill-available; }
   </div>
 
   <!-- MAIN -->
-
   <div class="main" id="main-content">
 
-```
-<!-- MORNING -->
-<div class="panel active" id="panel-morning">
-  <div class="chat-container">
-    <div class="checkin-header">
-      <div class="checkin-mode-label" id="morning-date-label">Loading…</div>
-      <h2>Good morning, <em>Clint.</em></h2>
-      <div class="checkin-meta" id="morning-meta">Initializing Kompass…</div>
-    </div>
-    <div class="chat-messages" id="chat-messages-morning"></div>
-    <div class="chat-input-area">
-      <div class="tool-row">
-        <button class="tool-btn" onclick="startTemplateInPanel('warriors-way','morning')">⚔️ The Stitser Way</button>
-        <button class="tool-btn" onclick="startTemplateInPanel('gratitude-stack','morning')">🙏 Gratitude</button>
-        <button class="tool-btn" onclick="startTemplateInPanel('free','morning')">✍️ Free Write</button>
-      </div>
-      <div id="voice-bar-morning"></div>
-      <div class="input-toolbar" id="tb-morning">
-        <button class="tb-btn" onclick="fmt('bold','morning')" title="Bold"><b>B</b></button>
-        <button class="tb-btn" onclick="fmt('italic','morning')" title="Italic"><i>I</i></button>
-        <div class="tb-sep"></div>
-        <button class="tb-btn" onclick="fmt('insertUnorderedList','morning')" title="Bullet list">•≡</button>
-        <button class="tb-btn" onclick="fmt('insertOrderedList','morning')" title="Numbered list">1≡</button>
-        <button class="tb-btn" onclick="fmt('indent','morning')" title="Indent">→</button>
-        <button class="tb-btn" onclick="fmt('outdent','morning')" title="Outdent">←</button>
-        <div class="tb-sep"></div>
-        <button class="tb-btn" onclick="fmt('formatBlock','morning','h3')" title="Heading">H</button>
-        <button class="tb-btn" onclick="fmt('removeFormat','morning')" title="Clear format">✕</button>
-        <div class="tb-sep"></div>
-        <button class="voice-toggle" id="voice-toggle-morning" onclick="toggleVoice('morning')">🎙 Voice</button>
-      </div>
-      <div class="rich-input" id="input-morning" contenteditable="true" data-placeholder="Respond here… or use voice above" onkeydown="handleRichKey(event,'morning')"></div>
-      <div class="input-row">
-        <button class="send-btn" onclick="sendMessage('morning')">↑</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MID-MORNING -->
-<div class="panel" id="panel-midmorning">
-  <div class="chat-container">
-    <div class="checkin-header">
-      <div class="checkin-mode-label">Mid-Morning · ~10:30 AM</div>
-      <h2>Planning session <em>debrief.</em></h2>
-      <div class="checkin-meta"><span>☀️ After your SB Block -- what moved?</span></div>
-    </div>
-    <div class="chat-messages" id="chat-messages-midmorning">
-      <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">Your SB Block runs 7:45–11 AM. When you're back, tell me what got decided. Quick captures:
-        <div class="chips">
-          <span class="chip" onclick="quickSend('midmorning','Squeeze Inn update from this morning')">🏗 Squeeze Inn</span>
-          <span class="chip" onclick="quickSend('midmorning','Harmony Mesa lot analysis update')">🗺 Harmony Mesa</span>
-          <span class="chip" onclick="quickSend('midmorning','Canyon\'s Edge HUD update')">🏢 Canyon\'s Edge</span>
-          <span class="chip" onclick="quickSend('midmorning','Built to Last Framework progress')">🏠 Built to Last</span>
+    <!-- MORNING -->
+    <div class="panel active" id="panel-morning">
+      <div class="chat-container">
+        <div class="checkin-header">
+          <div class="checkin-mode-label" id="morning-date-label">Loading…</div>
+          <h2>Good morning, <em>Clint.</em></h2>
+          <div class="checkin-meta" id="morning-meta">Initializing Kompass…</div>
         </div>
-      </div></div>
-    </div>
-    <div class="chat-input-area">
-      <div id="voice-bar-midmorning"></div>
-      <div class="input-toolbar">
-        <button class="tb-btn" onclick="fmt('bold','midmorning')"><b>B</b></button>
-        <button class="tb-btn" onclick="fmt('italic','midmorning')"><i>I</i></button>
-        <div class="tb-sep"></div>
-        <button class="tb-btn" onclick="fmt('insertUnorderedList','midmorning')">•≡</button>
-        <button class="tb-btn" onclick="fmt('insertOrderedList','midmorning')">1≡</button>
-        <button class="tb-btn" onclick="fmt('indent','midmorning')">→</button>
-        <div class="tb-sep"></div>
-        <button class="voice-toggle" id="voice-toggle-midmorning" onclick="toggleVoice('midmorning')">🎙 Voice</button>
-      </div>
-      <div class="rich-input" id="input-midmorning" contenteditable="true" data-placeholder="What came out of your planning session?"></div>
-      <div class="input-row"><button class="send-btn" onclick="sendMessage('midmorning')">↑</button></div>
-    </div>
-  </div>
-</div>
-
-<!-- AFTERNOON -->
-<div class="panel" id="panel-afternoon">
-  <div class="chat-container">
-    <div class="checkin-header">
-      <div class="checkin-mode-label">Afternoon Refocus · ~1:30 PM</div>
-      <h2>Midday <em>reset.</em></h2>
-      <div class="checkin-meta"><span>🌤 Stay on mission through the PM</span></div>
-    </div>
-    <div class="chat-messages" id="chat-messages-afternoon">
-      <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">Three questions to keep the afternoon on track:
-        <div class="prompt-card" style="margin-top:12px;"><div class="prompt-step">Refocus · 1 of 3</div><div class="prompt-q">What's the single most important thing you still need to accomplish today?</div></div>
-      </div></div>
-    </div>
-    <div class="chat-input-area">
-      <div id="voice-bar-afternoon"></div>
-      <div class="input-toolbar">
-        <button class="tb-btn" onclick="fmt('bold','afternoon')"><b>B</b></button>
-        <button class="tb-btn" onclick="fmt('italic','afternoon')"><i>I</i></button>
-        <div class="tb-sep"></div>
-        <button class="tb-btn" onclick="fmt('insertUnorderedList','afternoon')">•≡</button>
-        <button class="tb-btn" onclick="fmt('insertOrderedList','afternoon')">1≡</button>
-        <div class="tb-sep"></div>
-        <button class="voice-toggle" id="voice-toggle-afternoon" onclick="toggleVoice('afternoon')">🎙 Voice</button>
-      </div>
-      <div class="rich-input" id="input-afternoon" contenteditable="true" data-placeholder="Answer here…"></div>
-      <div class="input-row"><button class="send-btn" onclick="sendMessage('afternoon')">↑</button></div>
-    </div>
-  </div>
-</div>
-
-<!-- EOD -->
-<div class="panel" id="panel-eod">
-  <div class="chat-container">
-    <div class="checkin-header">
-      <div class="checkin-mode-label">End of Day · ~5:30 PM</div>
-      <h2>Recap & <em>tomorrow.</em></h2>
-      <div class="checkin-meta"><span>🌙 Close the loop. Prime tomorrow.</span></div>
-    </div>
-    <div class="chat-messages" id="chat-messages-eod">
-      <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">Day recap. Let's close strong and set tomorrow up right.
-        <div class="prompt-card" style="margin-top:12px;"><div class="prompt-step">EOD · 1 of 4</div><div class="prompt-q">What are your top 3 wins from today?</div></div>
-      </div></div>
-    </div>
-    <div class="chat-input-area">
-      <div id="voice-bar-eod"></div>
-      <div class="input-toolbar">
-        <button class="tb-btn" onclick="fmt('bold','eod')"><b>B</b></button>
-        <button class="tb-btn" onclick="fmt('italic','eod')"><i>I</i></button>
-        <div class="tb-sep"></div>
-        <button class="tb-btn" onclick="fmt('insertUnorderedList','eod')">•≡</button>
-        <button class="tb-btn" onclick="fmt('insertOrderedList','eod')">1≡</button>
-        <div class="tb-sep"></div>
-        <button class="voice-toggle" id="voice-toggle-eod" onclick="toggleVoice('eod')">🎙 Voice</button>
-      </div>
-      <div class="rich-input" id="input-eod" contenteditable="true" data-placeholder="Today's wins…"></div>
-      <div class="input-row"><button class="send-btn" onclick="sendMessage('eod')">↑</button></div>
-    </div>
-  </div>
-</div>
-
-<!-- JOURNAL -->
-<div class="panel" id="panel-journal">
-  <div class="mode-selector">
-    <div class="mode-card selected" onclick="selectJournalMode('chat',this)"><div class="mode-icon">💬</div><div class="mode-name">Guided Chat</div><div class="mode-desc">Step-by-step template</div></div>
-    <div class="mode-card" onclick="selectJournalMode('text-upload',this)"><div class="mode-icon">📄</div><div class="mode-name">Text / PDF</div><div class="mode-desc">Upload to parse & file</div></div>
-    <div class="mode-card" onclick="selectJournalMode('handwritten',this)"><div class="mode-icon">✍️</div><div class="mode-name">Handwritten</div><div class="mode-desc">Photo/scan to rasterize</div></div>
-  </div>
-
-  <div id="journal-chat-mode">
-    <div class="chat-container" style="height:calc(100vh - 52px - 108px);">
-      <div class="chat-messages" id="chat-messages-journal">
-        <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">
-          Choose your template:
-          <div class="chips" style="margin-top:10px;">
-            <span class="chip" onclick="startTemplate('warriors-way')">⚔️ The Stitser Way</span>
-            <span class="chip" onclick="startTemplate('strategic-vision')">🏔 Strategic Vision</span>
-            <span class="chip" onclick="startTemplate('project-debrief')">📋 Project Debrief</span>
-            <span class="chip" onclick="startTemplate('weekly-review')">📆 Weekly Review</span>
-            <span class="chip" onclick="startTemplate('free')">✏️ Free Write</span>
+        <div class="chat-messages" id="chat-messages-morning"></div>
+        <div class="chat-input-area">
+          <div class="tool-row">
+            <button class="tool-btn" onclick="startTemplateInPanel('warriors-way','morning')">⚔️ The Stitser Way</button>
+            <button class="tool-btn" onclick="startTemplateInPanel('gratitude-stack','morning')">🙏 Gratitude</button>
+            <button class="tool-btn" onclick="startTemplateInPanel('free','morning')">✍️ Free Write</button>
           </div>
-          <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">⚡ The Stack</div>
-            <div class="chips">
-              <span class="chip" onclick="startTemplate('irritation-stack')">😒 Irritation Stack</span>
-```
-
-<span class="chip" onclick="startTemplate('anger-stack')">😤 Anger Stack</span>
-<span class="chip" onclick="startTemplate('irritation-stack')">😒 Irritation Stack</span>
-<span class="chip" onclick="startTemplate('rage-stack')">🔥 Rage Stack</span>
-<span class="chip" onclick="startTemplate('guilt-stack')">😔 Guilt Stack</span>
-<span class="chip" onclick="startTemplate('discovery-stack')">💡 Discovery Stack</span>
-<span class="chip" onclick="startTemplate('excitement-stack')">🚀 Excitement Stack</span>
-<span class="chip" onclick="startTemplate('gratitude-stack')">🙏 Gratitude Stack</span>
-</div>
-</div>
-</div></div>
-</div>
-<div class="chat-input-area">
-<div id="voice-bar-journal"></div>
-<div class="input-toolbar">
-<button class="tb-btn" onclick="fmt('bold','journal')"><b>B</b></button>
-<button class="tb-btn" onclick="fmt('italic','journal')"><i>I</i></button>
-<div class="tb-sep"></div>
-<button class="tb-btn" onclick="fmt('insertUnorderedList','journal')">•≡</button>
-<button class="tb-btn" onclick="fmt('insertOrderedList','journal')">1≡</button>
-<button class="tb-btn" onclick="fmt('indent','journal')">→</button>
-<div class="tb-sep"></div>
-<button class="voice-toggle" id="voice-toggle-journal" onclick="toggleVoice('journal')">🎙 Voice</button>
-</div>
-<div class="rich-input" id="input-journal" contenteditable="true" data-placeholder="Type your response… or use voice above" onkeydown="handleRichKey(event,'journal')"></div>
-<div class="input-row"><button class="send-btn" onclick="sendMessage('journal')">↑</button></div>
-</div>
-</div>
-</div>
-
-```
-  <div id="journal-upload-mode" style="display:none;">
-    <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event)">
-      <div class="upload-icon" id="upload-icon">📄</div>
-      <p><strong>Click to upload or drag & drop</strong></p>
-      <p id="upload-hint-text">PDF, TXT, or image (JPG, PNG) · Max 20MB</p>
-      <input type="file" id="file-input" accept=".pdf,.txt,.jpg,.jpeg,.png" onchange="handleFileSelect(event)">
-    </div>
-    <div id="upload-processing" style="display:none;padding:0 40px;">
-      <div class="chat-messages" id="chat-messages-upload" style="max-height:320px;overflow-y:auto;"></div>
-      <div class="chat-input-area" style="padding:14px 0;">
-        <div class="rich-input" id="input-upload" contenteditable="true" data-placeholder="Add context…" style="border-radius:10px;"></div>
-        <div class="input-row"><button class="send-btn" onclick="sendMessage('upload')">↑</button></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- HISTORY -->
-<div class="panel" id="panel-history">
-  <div class="history-panel">
-    <h2>Filed <em>Journals</em></h2>
-    <div id="history-entries"></div>
-  </div>
-</div>
-
-<!-- GOALS -->
-<div class="panel" id="panel-goals">
-  <div class="goals-panel">
-    <h2>Goals & <em>Scoreboards</em></h2>
-    <div class="goals-subtitle" id="goals-subtitle">Loading from SmartSuite…</div>
-    <div class="scoreboard">
-      <h3>Business Scoreboard · Live from S-BOS</h3>
-      <div class="score-grid">
-        <div class="score-item"><div class="score-val" id="score-rev">--</div><div class="score-label">Built Revenue</div><div class="score-trend warn" id="score-rev-pct">--</div></div>
-        <div class="score-item"><div class="score-val" id="score-formation">--</div><div class="score-label">Formation Homes</div><div class="score-trend" id="score-formation-pct">--</div></div>
-        <div class="score-item"><div class="score-val" id="score-gp">--</div><div class="score-label">Granite Net</div><div class="score-trend" id="score-gp-pct">--</div></div>
-        <div class="score-item"><div class="score-val" id="score-sp">--</div><div class="score-label">SP Net</div><div class="score-trend warn" id="score-sp-status">--</div></div>
-      </div>
-    </div>
-    <div class="goals-grid" id="goals-grid"><div style="padding:20px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;">Loading goals…</div></div>
-    <div style="display:flex;gap:12px;"><button class="btn-primary" onclick="loadGoals()">↻ Refresh</button><button class="btn-ghost" onclick="switchPanel('assistant');setTimeout(()=>quickSend('assistant','Give me a GYR status summary across all goals'),100)">📊 GYR Summary</button></div>
-  </div>
-</div>
-
-<!-- ASSISTANT -->
-<div class="panel" id="panel-assistant">
-  <div class="chat-container">
-    <div class="checkin-header" style="padding-bottom:20px;">
-      <div class="checkin-mode-label">Full System Access</div>
-      <h2>Personal <em>Assistant</em></h2>
-      <div class="checkin-meta"><span>Gmail · Calendar · Drive · SmartSuite · Smartsheet · Railway MCP</span></div>
-    </div>
-    <div class="chat-messages" id="chat-messages-assistant">
-      <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">Ready, Clint. What do you need?
-        <div class="chips" style="margin-top:12px;">
-          <span class="chip" onclick="quickSend('assistant','What should I prep for today based on my calendar?')">📅 Today's prep</span>
-          <span class="chip" onclick="quickSend('assistant','GYR status summary across all SmartSuite goals')">📊 GYR summary</span>
-          <span class="chip" onclick="quickSend('assistant','What are my current priorities in SmartSuite?')">🎯 Priorities</span>
-          <span class="chip" onclick="quickSend('assistant','Squeeze Inn construction schedule status')">🏗 Squeeze Inn</span>
-          <span class="chip" onclick="quickSend('assistant','Canyon\'s Edge HUD situation and next steps')">🏢 Canyon\'s Edge</span>
-          <span class="chip" onclick="quickSend('assistant','Built to Last Framework -- where are we and what\'s next?')">🏠 Built to Last</span>
+          <div id="voice-bar-morning"></div>
+          <div class="input-toolbar" id="tb-morning">
+            <button class="tb-btn" onclick="fmt('bold','morning')" title="Bold"><b>B</b></button>
+            <button class="tb-btn" onclick="fmt('italic','morning')" title="Italic"><i>I</i></button>
+            <div class="tb-sep"></div>
+            <button class="tb-btn" onclick="fmt('insertUnorderedList','morning')" title="Bullet list">•≡</button>
+            <button class="tb-btn" onclick="fmt('insertOrderedList','morning')" title="Numbered list">1≡</button>
+            <button class="tb-btn" onclick="fmt('indent','morning')" title="Indent">→</button>
+            <button class="tb-btn" onclick="fmt('outdent','morning')" title="Outdent">←</button>
+            <div class="tb-sep"></div>
+            <button class="tb-btn" onclick="fmt('formatBlock','morning','h3')" title="Heading">H</button>
+            <button class="tb-btn" onclick="fmt('removeFormat','morning')" title="Clear format">✕</button>
+            <div class="tb-sep"></div>
+            <button class="voice-toggle" id="voice-toggle-morning" onclick="toggleVoice('morning')">🎙 Voice</button>
+          </div>
+          <div class="rich-input" id="input-morning" contenteditable="true" data-placeholder="Respond here… or use voice above" onkeydown="handleRichKey(event,'morning')"></div>
+          <div class="input-row">
+            <button class="send-btn" onclick="sendMessage('morning')">↑</button>
+          </div>
         </div>
-      </div></div>
-    </div>
-    <div class="chat-input-area">
-      <div id="voice-bar-assistant"></div>
-      <div class="input-toolbar">
-        <button class="tb-btn" onclick="fmt('bold','assistant')"><b>B</b></button>
-        <button class="tb-btn" onclick="fmt('italic','assistant')"><i>I</i></button>
-        <div class="tb-sep"></div>
-        <button class="tb-btn" onclick="fmt('insertUnorderedList','assistant')">•≡</button>
-        <button class="tb-btn" onclick="fmt('insertOrderedList','assistant')">1≡</button>
-        <div class="tb-sep"></div>
-        <button class="voice-toggle" id="voice-toggle-assistant" onclick="toggleVoice('assistant')">🎙 Voice</button>
       </div>
-      <div class="rich-input" id="input-assistant" contenteditable="true" data-placeholder="Ask anything…"></div>
-      <div class="input-row"><button class="send-btn" onclick="sendMessage('assistant')">↑</button></div>
     </div>
-  </div>
-</div>
-```
+
+    <!-- MID-MORNING -->
+    <div class="panel" id="panel-midmorning">
+      <div class="chat-container">
+        <div class="checkin-header">
+          <div class="checkin-mode-label">Mid-Morning · ~10:30 AM</div>
+          <h2>Planning session <em>debrief.</em></h2>
+          <div class="checkin-meta"><span>☀️ After your SB Block — what moved?</span></div>
+        </div>
+        <div class="chat-messages" id="chat-messages-midmorning">
+          <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">Your SB Block runs 7:45–11 AM. When you're back, tell me what got decided. Quick captures:
+            <div class="chips">
+              <span class="chip" onclick="quickSend('midmorning','Squeeze Inn update from this morning')">🏗 Squeeze Inn</span>
+              <span class="chip" onclick="quickSend('midmorning','Harmony Mesa lot analysis update')">🗺 Harmony Mesa</span>
+              <span class="chip" onclick="quickSend('midmorning','Canyon\'s Edge HUD update')">🏢 Canyon\'s Edge</span>
+              <span class="chip" onclick="quickSend('midmorning','Built to Last Framework progress')">🏠 Built to Last</span>
+            </div>
+          </div></div>
+        </div>
+        <div class="chat-input-area">
+          <div id="voice-bar-midmorning"></div>
+          <div class="input-toolbar">
+            <button class="tb-btn" onclick="fmt('bold','midmorning')"><b>B</b></button>
+            <button class="tb-btn" onclick="fmt('italic','midmorning')"><i>I</i></button>
+            <div class="tb-sep"></div>
+            <button class="tb-btn" onclick="fmt('insertUnorderedList','midmorning')">•≡</button>
+            <button class="tb-btn" onclick="fmt('insertOrderedList','midmorning')">1≡</button>
+            <button class="tb-btn" onclick="fmt('indent','midmorning')">→</button>
+            <div class="tb-sep"></div>
+            <button class="voice-toggle" id="voice-toggle-midmorning" onclick="toggleVoice('midmorning')">🎙 Voice</button>
+          </div>
+          <div class="rich-input" id="input-midmorning" contenteditable="true" data-placeholder="What came out of your planning session?"></div>
+          <div class="input-row"><button class="send-btn" onclick="sendMessage('midmorning')">↑</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFTERNOON -->
+    <div class="panel" id="panel-afternoon">
+      <div class="chat-container">
+        <div class="checkin-header">
+          <div class="checkin-mode-label">Afternoon Refocus · ~1:30 PM</div>
+          <h2>Midday <em>reset.</em></h2>
+          <div class="checkin-meta"><span>🌤 Stay on mission through the PM</span></div>
+        </div>
+        <div class="chat-messages" id="chat-messages-afternoon">
+          <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">Three questions to keep the afternoon on track:
+            <div class="prompt-card" style="margin-top:12px;"><div class="prompt-step">Refocus · 1 of 3</div><div class="prompt-q">What's the single most important thing you still need to accomplish today?</div></div>
+          </div></div>
+        </div>
+        <div class="chat-input-area">
+          <div id="voice-bar-afternoon"></div>
+          <div class="input-toolbar">
+            <button class="tb-btn" onclick="fmt('bold','afternoon')"><b>B</b></button>
+            <button class="tb-btn" onclick="fmt('italic','afternoon')"><i>I</i></button>
+            <div class="tb-sep"></div>
+            <button class="tb-btn" onclick="fmt('insertUnorderedList','afternoon')">•≡</button>
+            <button class="tb-btn" onclick="fmt('insertOrderedList','afternoon')">1≡</button>
+            <div class="tb-sep"></div>
+            <button class="voice-toggle" id="voice-toggle-afternoon" onclick="toggleVoice('afternoon')">🎙 Voice</button>
+          </div>
+          <div class="rich-input" id="input-afternoon" contenteditable="true" data-placeholder="Answer here…"></div>
+          <div class="input-row"><button class="send-btn" onclick="sendMessage('afternoon')">↑</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EOD -->
+    <div class="panel" id="panel-eod">
+      <div class="chat-container">
+        <div class="checkin-header">
+          <div class="checkin-mode-label">End of Day · ~5:30 PM</div>
+          <h2>Recap & <em>tomorrow.</em></h2>
+          <div class="checkin-meta"><span>🌙 Close the loop. Prime tomorrow.</span></div>
+        </div>
+        <div class="chat-messages" id="chat-messages-eod">
+          <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">Day recap. Let's close strong and set tomorrow up right.
+            <div class="prompt-card" style="margin-top:12px;"><div class="prompt-step">EOD · 1 of 4</div><div class="prompt-q">What are your top 3 wins from today?</div></div>
+          </div></div>
+        </div>
+        <div class="chat-input-area">
+          <div id="voice-bar-eod"></div>
+          <div class="input-toolbar">
+            <button class="tb-btn" onclick="fmt('bold','eod')"><b>B</b></button>
+            <button class="tb-btn" onclick="fmt('italic','eod')"><i>I</i></button>
+            <div class="tb-sep"></div>
+            <button class="tb-btn" onclick="fmt('insertUnorderedList','eod')">•≡</button>
+            <button class="tb-btn" onclick="fmt('insertOrderedList','eod')">1≡</button>
+            <div class="tb-sep"></div>
+            <button class="voice-toggle" id="voice-toggle-eod" onclick="toggleVoice('eod')">🎙 Voice</button>
+          </div>
+          <div class="rich-input" id="input-eod" contenteditable="true" data-placeholder="Today's wins…"></div>
+          <div class="input-row"><button class="send-btn" onclick="sendMessage('eod')">↑</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOURNAL -->
+    <div class="panel" id="panel-journal">
+      <div class="mode-selector">
+        <div class="mode-card selected" onclick="selectJournalMode('chat',this)"><div class="mode-icon">💬</div><div class="mode-name">Guided Chat</div><div class="mode-desc">Step-by-step template</div></div>
+        <div class="mode-card" onclick="selectJournalMode('text-upload',this)"><div class="mode-icon">📄</div><div class="mode-name">Text / PDF</div><div class="mode-desc">Upload to parse & file</div></div>
+        <div class="mode-card" onclick="selectJournalMode('handwritten',this)"><div class="mode-icon">✍️</div><div class="mode-name">Handwritten</div><div class="mode-desc">Photo/scan to rasterize</div></div>
+      </div>
+
+      <div id="journal-chat-mode">
+        <div class="chat-container" style="height:calc(100vh - 52px - 108px);">
+          <div class="chat-messages" id="chat-messages-journal">
+            <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">
+              Choose your template:
+              <div class="chips" style="margin-top:10px;">
+                <span class="chip" onclick="startTemplate('warriors-way')">⚔️ The Stitser Way</span>
+                <span class="chip" onclick="startTemplate('strategic-vision')">🏔 Strategic Vision</span>
+                <span class="chip" onclick="startTemplate('project-debrief')">📋 Project Debrief</span>
+                <span class="chip" onclick="startTemplate('weekly-review')">📆 Weekly Review</span>
+                <span class="chip" onclick="startTemplate('free')">✏️ Free Write</span>
+              </div>
+              <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">⚡ The Stack</div>
+                <div class="chips">
+                  <span class="chip" onclick="startTemplate('irritation-stack')">😒 Irritation Stack</span>
+<span class="chip" onclick="startTemplate('anger-stack')">😤 Anger Stack</span>
+                  <span class="chip" onclick="startTemplate('irritation-stack')">😒 Irritation Stack</span>
+                  <span class="chip" onclick="startTemplate('rage-stack')">🔥 Rage Stack</span>
+                  <span class="chip" onclick="startTemplate('guilt-stack')">😔 Guilt Stack</span>
+                  <span class="chip" onclick="startTemplate('discovery-stack')">💡 Discovery Stack</span>
+                  <span class="chip" onclick="startTemplate('excitement-stack')">🚀 Excitement Stack</span>
+                  <span class="chip" onclick="startTemplate('gratitude-stack')">🙏 Gratitude Stack</span>
+                </div>
+              </div>
+            </div></div>
+          </div>
+          <div class="chat-input-area">
+            <div id="voice-bar-journal"></div>
+            <div class="input-toolbar">
+              <button class="tb-btn" onclick="fmt('bold','journal')"><b>B</b></button>
+              <button class="tb-btn" onclick="fmt('italic','journal')"><i>I</i></button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="fmt('insertUnorderedList','journal')">•≡</button>
+              <button class="tb-btn" onclick="fmt('insertOrderedList','journal')">1≡</button>
+              <button class="tb-btn" onclick="fmt('indent','journal')">→</button>
+              <div class="tb-sep"></div>
+              <button class="voice-toggle" id="voice-toggle-journal" onclick="toggleVoice('journal')">🎙 Voice</button>
+            </div>
+            <div class="rich-input" id="input-journal" contenteditable="true" data-placeholder="Type your response… or use voice above" onkeydown="handleRichKey(event,'journal')"></div>
+            <div class="input-row"><button class="send-btn" onclick="sendMessage('journal')">↑</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="journal-upload-mode" style="display:none;">
+        <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event)">
+          <div class="upload-icon" id="upload-icon">📄</div>
+          <p><strong>Click to upload or drag & drop</strong></p>
+          <p id="upload-hint-text">PDF, TXT, or image (JPG, PNG) · Max 20MB</p>
+          <input type="file" id="file-input" accept=".pdf,.txt,.jpg,.jpeg,.png" onchange="handleFileSelect(event)">
+        </div>
+        <div id="upload-processing" style="display:none;padding:0 40px;">
+          <div class="chat-messages" id="chat-messages-upload" style="max-height:320px;overflow-y:auto;"></div>
+          <div class="chat-input-area" style="padding:14px 0;">
+            <div class="rich-input" id="input-upload" contenteditable="true" data-placeholder="Add context…" style="border-radius:10px;"></div>
+            <div class="input-row"><button class="send-btn" onclick="sendMessage('upload')">↑</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="panel" id="panel-history">
+      <div class="history-panel">
+        <h2>Filed <em>Journals</em></h2>
+        <div id="history-entries"></div>
+      </div>
+    </div>
+
+    <!-- GOALS -->
+    <div class="panel" id="panel-goals">
+      <div class="goals-panel">
+        <h2>Goals & <em>Scoreboards</em></h2>
+        <div class="goals-subtitle" id="goals-subtitle">Loading from SmartSuite…</div>
+        <div class="scoreboard">
+          <h3>Business Scoreboard · Live from S-BOS</h3>
+          <div class="score-grid">
+            <div class="score-item"><div class="score-val" id="score-rev">—</div><div class="score-label">Built Revenue</div><div class="score-trend warn" id="score-rev-pct">—</div></div>
+            <div class="score-item"><div class="score-val" id="score-formation">—</div><div class="score-label">Formation Homes</div><div class="score-trend" id="score-formation-pct">—</div></div>
+            <div class="score-item"><div class="score-val" id="score-gp">—</div><div class="score-label">Granite Net</div><div class="score-trend" id="score-gp-pct">—</div></div>
+            <div class="score-item"><div class="score-val" id="score-sp">—</div><div class="score-label">SP Net</div><div class="score-trend warn" id="score-sp-status">—</div></div>
+          </div>
+        </div>
+        <div class="goals-grid" id="goals-grid"><div style="padding:20px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;">Loading goals…</div></div>
+        <div style="display:flex;gap:12px;"><button class="btn-primary" onclick="loadGoals()">↻ Refresh</button><button class="btn-ghost" onclick="switchPanel('assistant');setTimeout(()=>quickSend('assistant','Give me a GYR status summary across all goals'),100)">📊 GYR Summary</button></div>
+      </div>
+    </div>
+
+    <!-- ASSISTANT -->
+    <div class="panel" id="panel-assistant">
+      <div class="chat-container">
+        <div class="checkin-header" style="padding-bottom:20px;">
+          <div class="checkin-mode-label">Full System Access</div>
+          <h2>Personal <em>Assistant</em></h2>
+          <div class="checkin-meta"><span>Gmail · Calendar · Drive · SmartSuite · Smartsheet · Railway MCP</span></div>
+        </div>
+        <div class="chat-messages" id="chat-messages-assistant">
+          <div class="msg"><div class="msg-avatar">K</div><div class="msg-bubble">Ready, Clint. What do you need?
+            <div class="chips" style="margin-top:12px;">
+              <span class="chip" onclick="quickSend('assistant','What should I prep for today based on my calendar?')">📅 Today's prep</span>
+              <span class="chip" onclick="quickSend('assistant','GYR status summary across all SmartSuite goals')">📊 GYR summary</span>
+              <span class="chip" onclick="quickSend('assistant','What are my current priorities in SmartSuite?')">🎯 Priorities</span>
+              <span class="chip" onclick="quickSend('assistant','Squeeze Inn construction schedule status')">🏗 Squeeze Inn</span>
+              <span class="chip" onclick="quickSend('assistant','Canyon\'s Edge HUD situation and next steps')">🏢 Canyon\'s Edge</span>
+              <span class="chip" onclick="quickSend('assistant','Built to Last Framework — where are we and what\'s next?')">🏠 Built to Last</span>
+            </div>
+          </div></div>
+        </div>
+        <div class="chat-input-area">
+          <div id="voice-bar-assistant"></div>
+          <div class="input-toolbar">
+            <button class="tb-btn" onclick="fmt('bold','assistant')"><b>B</b></button>
+            <button class="tb-btn" onclick="fmt('italic','assistant')"><i>I</i></button>
+            <div class="tb-sep"></div>
+            <button class="tb-btn" onclick="fmt('insertUnorderedList','assistant')">•≡</button>
+            <button class="tb-btn" onclick="fmt('insertOrderedList','assistant')">1≡</button>
+            <div class="tb-sep"></div>
+            <button class="voice-toggle" id="voice-toggle-assistant" onclick="toggleVoice('assistant')">🎙 Voice</button>
+          </div>
+          <div class="rich-input" id="input-assistant" contenteditable="true" data-placeholder="Ask anything…"></div>
+          <div class="input-row"><button class="send-btn" onclick="sendMessage('assistant')">↑</button></div>
+        </div>
+      </div>
+    </div>
 
   </div><!-- /main -->
 </div><!-- /app -->
@@ -740,7 +730,7 @@ async function processRecording(panelId, blob) {
 
       const data = await res.json();
 
-      // Fallback: Claude doesn't currently process audio directly -- use Web Speech API
+      // Fallback: Claude doesn't currently process audio directly — use Web Speech API
       throw new Error('audio_fallback');
 
     } catch(e) {
@@ -751,14 +741,14 @@ async function processRecording(panelId, blob) {
         insertTranscript(panelId, liveTranscript);
         renderVoiceBar(panelId, 'idle');
       } else {
-        renderVoiceBar(panelId, 'idle', 'Transcript unavailable -- type your response');
+        renderVoiceBar(panelId, 'idle', 'Transcript unavailable — type your response');
       }
     }
   };
   reader.readAsDataURL(blob);
 }
 
-// Web Speech API -- live transcript (primary transcription path)
+// Web Speech API — live transcript (primary transcription path)
 const vs_liveTranscripts = {};
 const vs_recognition = {};
 
@@ -830,7 +820,7 @@ function stopRecording(panelId) {
   const transcript = vs_liveTranscripts[panelId]?.trim() || '';
   if (transcript) {
     insertTranscript(panelId, transcript);
-    renderVoiceBar(panelId, 'done', `✓ Transcribed -- ${transcript.split(' ').length} words`);
+    renderVoiceBar(panelId, 'done', `✓ Transcribed — ${transcript.split(' ').length} words`);
   } else {
     renderVoiceBar(panelId, 'idle');
   }
@@ -1023,11 +1013,11 @@ function switchPanel(name) {
 // SYSTEM PROMPT
 // ═══════════════════════════════════════════════════════
 function sysPrompt(mode) {
-  const base = `You are Kompass -- the personal executive assistant for Clint Stitser. Sharp, direct, warm, no fluff.
+  const base = `You are Kompass — the personal executive assistant for Clint Stitser. Sharp, direct, warm, no fluff.
 Entities: Stitser BUILT (GC), CRF/Formation (homebuilder), Stitser Properties Inc. (brokerage/PM), Granite Perfection (countertops).
 Active projects: Squeeze Inn (construction/MEP), Harmony Mesa (18-lot subdivision), Canyon's Edge (HUD 223f/K-1/surplus).
 Key people: Kaylee (SP), Gino (BUILT), Zach (schedules), Bill (coach/Fridays), Alyssa (Formation).
-Strategy: Built to Last Framework -- Boomer SFR equity-rich disposition + 1031/DST/TIC.
+Strategy: Built to Last Framework — Boomer SFR equity-rich disposition + 1031/DST/TIC.
 Live goals: ${liveGoals.map(g=>`${g.title.split(/[-·]/)[0].trim()}: ${g.pct.toFixed(0)}%`).join(' | ')}`;
 
   const modes = {
@@ -1035,7 +1025,7 @@ Live goals: ${liveGoals.map(g=>`${g.title.split(/[-·]/)[0].trim()}: ${g.pct.toF
     midmorning: base + `\nMODE: Mid-Morning debrief post planning block. Capture decisions, update priorities, flag what shifted.`,
     afternoon: base + `\nMODE: Afternoon Refocus. 3 questions: (1) Most important remaining? (2) What threatens PM? (3) What to drop/defer?`,
     eod: base + `\nMODE: End of Day. Wins, misses, learnings, tomorrow's top 3. Offer to file a journal.`,
-    journal: base + `\nMODE: Journal guide. Walk through template step by step. Acknowledge warmly, keep momentum. When complete say "That's a complete entry -- let's file it."`,
+    journal: base + `\nMODE: Journal guide. Walk through template step by step. Acknowledge warmly, keep momentum. When complete say "That's a complete entry — let's file it."`,
     upload: base + `\nMODE: Parse uploaded journal. Extract themes, insights, actions, emotional tone. Present clean summary then offer filing.`,
     assistant: base + `\nMODE: Full PA. High-caliber executive assistant. Direct, specific, anticipate needs.`
   };
@@ -1043,7 +1033,7 @@ Live goals: ${liveGoals.map(g=>`${g.title.split(/[-·]/)[0].trim()}: ${g.pct.toF
 }
 
 // ═══════════════════════════════════════════════════════
-// TEMPLATES -- WARRIORS WAY + ALL 6 STACKS
+// TEMPLATES — WARRIORS WAY + ALL 6 STACKS
 // ═══════════════════════════════════════════════════════
 const TEMPLATES = {
   'warriors-way': {
@@ -1053,16 +1043,16 @@ const TEMPLATES = {
       {step:"2 · Gratitude × 3", q:"Stay in gain: celebrate & gratitude × 3. What have you handled well, learned, or made progress on?"},
       {step:"3 · Who to Celebrate", q:"Who can you celebrate or acknowledge today?"},
       {step:"4 · One Word Intention", q:"What is your one word intention for today?"},
-      {step:"5 · 3 Dominos", q:"What are the 3 major dominos of today -- if knocked down -- that make everything else easier?"},
+      {step:"5 · 3 Dominos", q:"What are the 3 major dominos of today — if knocked down — that make everything else easier?"},
       {step:"6 · Hurdles", q:"What hurdles might trip you up today, and how will you handle them?"},
-      {step:"7 · Action Body", q:"My action body today is -- how will you show up physically and energetically?"},
+      {step:"7 · Action Body", q:"My action body today is — how will you show up physically and energetically?"},
       {step:"8 · Coach's Voice", q:"What would your high performance coach tell you right now?"},
     ]
   },
   'strategic-vision': {
     name:"Strategic Vision", journalType:"Discovery/Idea Log",
     steps:[
-      {step:"1 · Current Reality", q:"Where are the businesses right now -- honestly, without spin?"},
+      {step:"1 · Current Reality", q:"Where are the businesses right now — honestly, without spin?"},
       {step:"2 · 12-Month Target", q:"What does success look like in 12 months across BUILT, CRF, Formation, and SP?"},
       {step:"3 · Bottleneck", q:"What is the single biggest constraint holding you back right now?"},
       {step:"4 · Next Moves", q:"What are the 3 highest-leverage moves in the next 30 days?"},
@@ -1082,7 +1072,7 @@ const TEMPLATES = {
   'weekly-review': {
     name:"Weekly Review", journalType:"Weekly Ritual",
     steps:[
-      {step:"1 · Milestones", q:"Review last week's milestones -- what did you achieve? Where did you fall short?"},
+      {step:"1 · Milestones", q:"Review last week's milestones — what did you achieve? Where did you fall short?"},
       {step:"2 · BODY", q:"How are you tracking on your BODY missions? What's the story you're telling yourself?"},
       {step:"3 · BEING", q:"How are you tracking on your BEING missions? Are you living your values?"},
       {step:"4 · BALANCE", q:"How are you tracking on your BALANCE missions? Relationships, family, recovery?"},
@@ -1093,17 +1083,17 @@ const TEMPLATES = {
   'free': {
     name:"Free Write", journalType:"Morning Ritual",
     steps:[
-      {step:"1 · Open", q:"What's on your mind? Write freely -- no filter."},
+      {step:"1 · Open", q:"What's on your mind? Write freely — no filter."},
       {step:"2 · Deeper", q:"What's underneath that? What are you not saying?"},
       {step:"3 · Truth", q:"If you had to be completely honest with yourself right now, what would you say?"},
     ]
   },
   // ═══ 6 STACK TEMPLATES ═══
-  'anger-stack': null, // alias -- set below
+  'anger-stack': null, // alias — set below
   'irritation-stack': {
     name:"Irritation Stack", journalType:"Irritation Stack",
     steps:[
-      {step:"Title & Domain", q:"What are you titling this Irritation Stack? Which domain -- BODY, BEING, BALANCE, or BUSINESS?"},
+      {step:"Title & Domain", q:"What are you titling this Irritation Stack? Which domain — BODY, BEING, BALANCE, or BUSINESS?"},
       {step:"The Trigger", q:"Who or what is triggering this irritation?"},
       {step:"Why Irritated", q:"Why has this triggered irritation in you right now?"},
       {step:"The Story", q:"What story are you telling yourself about this person or situation?"},
@@ -1111,52 +1101,52 @@ const TEMPLATES = {
       {step:"Thoughts & Actions", q:"What thoughts and actions does that story produce?"},
       {step:"Evidence", q:"What evidence supports this story as true?"},
       {step:"Cold Facts", q:"What are the non-emotional facts of the situation?"},
-      {step:"If Ignored", q:"If you ignore this irritation now -- how does it escalate toward anger, then rage?"},
+      {step:"If Ignored", q:"If you ignore this irritation now — how does it escalate toward anger, then rage?"},
       {step:"Want for You", q:"What do you truly want for yourself in and beyond this situation?"},
       {step:"Want for Them", q:"What do you want for them?"},
       {step:"Want for Both", q:"What do you want for both of you?"},
       {step:"Story Check", q:"Does the original story get you what you want?"},
-      {step:"Desired Story", q:"Letting go of the original story -- what is your new DESIRED STORY?"},
+      {step:"Desired Story", q:"Letting go of the original story — what is your new DESIRED STORY?"},
       {step:"Evidence", q:"What evidence proves the desired story is accurate?"},
       {step:"Positive Reframe", q:"Why has this irritation been extremely positive?"},
       {step:"Life Lesson", q:"What is the singular lesson on life you're taking from this Stack?"},
       {step:"Revelation", q:"What is the most significant revelation or insight?"},
-      {step:"Feeling Now", q:"Single word -- how do you feel now vs. when you started?"},
+      {step:"Feeling Now", q:"Single word — how do you feel now vs. when you started?"},
       {step:"Committed Actions", q:"What immediate actions are you committed to taking?"},
     ]
   },
     steps:[
-      {step:"Title & Domain", q:"What are you titling this Anger Stack? Which CORE 4 domain -- BODY, BEING, BALANCE, or BUSINESS?"},
+      {step:"Title & Domain", q:"What are you titling this Anger Stack? Which CORE 4 domain — BODY, BEING, BALANCE, or BUSINESS?"},
       {step:"The Trigger", q:"Who or what is triggering your anger right now?"},
       {step:"Why Anger", q:"Why has this triggered anger in you in this moment?"},
       {step:"The Story", q:"What story are you telling yourself about this person or situation?"},
       {step:"Feelings", q:"Describe the single-word feelings that arise when you tell yourself that story."},
       {step:"Thoughts & Actions", q:"What specific thoughts and actions does that story produce in you?"},
       {step:"Evidence", q:"What evidence do you have to support this story as absolutely true?"},
-      {step:"Cold Facts", q:"What are the non-emotional facts of the situation -- just the facts?"},
-      {step:"Escalation", q:"If you ignore this trigger now -- how does it escalate? Where does it lead?"},
-      {step:"Want for You", q:"Regardless of the trigger and your story -- what do you truly want for yourself in and beyond this situation?"},
+      {step:"Cold Facts", q:"What are the non-emotional facts of the situation — just the facts?"},
+      {step:"Escalation", q:"If you ignore this trigger now — how does it escalate? Where does it lead?"},
+      {step:"Want for You", q:"Regardless of the trigger and your story — what do you truly want for yourself in and beyond this situation?"},
       {step:"Want for Them", q:"What do you want for them in and beyond this situation?"},
       {step:"Want for Both", q:"What do you want for both of you in and beyond this situation?"},
-      {step:"Story Check", q:"If you keep telling yourself the original story -- will it ultimately give you what you want?"},
-      {step:"New Story", q:"Letting go of the original story and knowing what you want -- what is your new DESIRED STORY?"},
+      {step:"Story Check", q:"If you keep telling yourself the original story — will it ultimately give you what you want?"},
+      {step:"New Story", q:"Letting go of the original story and knowing what you want — what is your new DESIRED STORY?"},
       {step:"Evidence for New Story", q:"What evidence proves your desired story is accurate right now?"},
-      {step:"Positive Reframe", q:"Stepping back -- why has this anger trigger been extremely positive?"},
+      {step:"Positive Reframe", q:"Stepping back — why has this anger trigger been extremely positive?"},
       {step:"Life Lesson", q:"What is the singular lesson on life you're taking from this Stack?"},
       {step:"Revelation", q:"What is the most significant revelation or insight you're leaving this Stack with?"},
-      {step:"Feeling Now", q:"Compared to when you started -- what single word describes how you feel now?"},
+      {step:"Feeling Now", q:"Compared to when you started — what single word describes how you feel now?"},
       {step:"Committed Actions", q:"What immediate actions are you committed to taking leaving this Stack?"},
     ]
   },
   'rage-stack': {
     name:"Rage Stack", journalType:"Rage",
     steps:[
-      {step:"Title & Domain", q:"What are you titling this Rage Stack? Which domain -- BODY, BEING, BALANCE, or BUSINESS?"},
+      {step:"Title & Domain", q:"What are you titling this Rage Stack? Which domain — BODY, BEING, BALANCE, or BUSINESS?"},
       {step:"The Trigger", q:"Who or what has triggered this rage?"},
       {step:"Why Rage", q:"Why has this triggered rage in you right now?"},
-      {step:"If You Could Scream", q:"If you could scream at this person or situation right now -- with no filter -- what would you say?"},
-      {step:"Force Them", q:"If you could force them to think, say, or do anything -- what would it be?"},
-      {step:"No Filter Truth", q:"With no filter or constraints -- what do you genuinely think about them right now?"},
+      {step:"If You Could Scream", q:"If you could scream at this person or situation right now — with no filter — what would you say?"},
+      {step:"Force Them", q:"If you could force them to think, say, or do anything — what would it be?"},
+      {step:"No Filter Truth", q:"With no filter or constraints — what do you genuinely think about them right now?"},
       {step:"Never Again", q:"What is it you never want to experience with them again?"},
       {step:"The Story", q:"What story are you telling yourself about this person or situation?"},
       {step:"Feelings", q:"Single-word feelings that arise when you tell yourself that story?"},
@@ -1166,11 +1156,11 @@ const TEMPLATES = {
       {step:"Want for Them", q:"What do you want for them?"},
       {step:"Want for Both", q:"What do you want for both of you?"},
       {step:"Story Check", q:"Does your original story get you what you want?"},
-      {step:"ME Version", q:"Letting go of the original story -- what is the ME VERSION? (Make it about you, not them.)"},
+      {step:"ME Version", q:"Letting go of the original story — what is the ME VERSION? (Make it about you, not them.)"},
       {step:"Evidence ME", q:"What evidence proves the ME story is true?"},
       {step:"Opposite Version", q:"What is the OPPOSITE VERSION of the original story?"},
       {step:"Evidence Opposite", q:"What evidence proves the OPPOSITE story is true?"},
-      {step:"Desired Story", q:"Holding all three versions -- what is your final DESIRED VERSION of the story?"},
+      {step:"Desired Story", q:"Holding all three versions — what is your final DESIRED VERSION of the story?"},
       {step:"Evidence Desired", q:"What evidence proves your desired story is accurate?"},
       {step:"Positive Reframe", q:"Why has this rage trigger been extremely positive?"},
       {step:"Life Lesson", q:"What is the singular lesson on life you're taking from this Stack?"},
@@ -1179,17 +1169,17 @@ const TEMPLATES = {
       {step:"BALANCE Application", q:"How does this lesson apply to your BALANCE domain?"},
       {step:"BUSINESS Application", q:"How does this lesson apply to your BUSINESS domain?"},
       {step:"Revelation", q:"What is the most significant revelation you're leaving this Stack with?"},
-      {step:"Feeling Now", q:"Single word -- how do you feel now compared to when you started?"},
+      {step:"Feeling Now", q:"Single word — how do you feel now compared to when you started?"},
       {step:"Committed Actions", q:"What immediate actions are you committed to taking?"},
     ]
   },
   'guilt-stack': {
     name:"Guilt Stack", journalType:"Guilt",
     steps:[
-      {step:"Title & Domain", q:"What are you titling this Guilt Stack? Which domain -- BODY, BEING, BALANCE, or BUSINESS?"},
+      {step:"Title & Domain", q:"What are you titling this Guilt Stack? Which domain — BODY, BEING, BALANCE, or BUSINESS?"},
       {step:"The Trigger", q:"What did you say or do that's triggering this guilt?"},
       {step:"Why Guilt", q:"Why has this triggered guilt for you in this moment?"},
-      {step:"No Filter", q:"If you could say anything to yourself right now with no filter -- what would you say?"},
+      {step:"No Filter", q:"If you could say anything to yourself right now with no filter — what would you say?"},
       {step:"The Story", q:"What story are you telling yourself about what happened?"},
       {step:"Feelings", q:"Single-word feelings when you tell yourself that story?"},
       {step:"Thoughts & Actions", q:"What thoughts and actions does that story produce?"},
@@ -1204,21 +1194,21 @@ const TEMPLATES = {
       {step:"Positive Reframe", q:"Why has this guilt been extremely positive?"},
       {step:"Life Lesson", q:"What is the singular lesson on life you're taking from this Stack?"},
       {step:"Revelation", q:"What is the most significant revelation you're leaving with?"},
-      {step:"Feeling Now", q:"Single word -- how do you feel now vs. when you started?"},
+      {step:"Feeling Now", q:"Single word — how do you feel now vs. when you started?"},
       {step:"Committed Actions", q:"What immediate actions are you committed to taking?"},
     ]
   },
   'discovery-stack': {
     name:"Discovery Stack", journalType:"Discovery/Idea Log",
     steps:[
-      {step:"Title & Domain", q:"What are you titling this Discovery Stack? Which domain -- BODY, BEING, BALANCE, or BUSINESS?"},
+      {step:"Title & Domain", q:"What are you titling this Discovery Stack? Which domain — BODY, BEING, BALANCE, or BUSINESS?"},
       {step:"The Trigger", q:"Who or what has activated this discovery or insight in you?"},
       {step:"The Discovery", q:"What has this discovery activated in you? Describe the full thought or realization."},
       {step:"The Story", q:"What story are you telling yourself about this discovery?"},
       {step:"Feelings", q:"Single-word feelings when you tell yourself that story?"},
       {step:"Thoughts & Actions", q:"What thoughts and actions arise from that story?"},
-      {step:"If Executed", q:"If this discovery is acted on -- what are the positive benefits to your world and those around you?"},
-      {step:"If Ignored", q:"If this discovery is NOT acted on -- what are the possible negative consequences?"},
+      {step:"If Executed", q:"If this discovery is acted on — what are the positive benefits to your world and those around you?"},
+      {step:"If Ignored", q:"If this discovery is NOT acted on — what are the possible negative consequences?"},
       {step:"Fact 1", q:"What is the first measurable FACT that makes this real and actionable? Why is it significant? Give it a title."},
       {step:"Fact 2", q:"What is the second measurable FACT? Why significant? Title it."},
       {step:"Fact 3", q:"What is the third measurable FACT? Why significant? Title it."},
@@ -1232,7 +1222,7 @@ const TEMPLATES = {
   'excitement-stack': {
     name:"Excitement Stack", journalType:"Excitement",
     steps:[
-      {step:"Title & Domain", q:"What are you titling this Excitement Stack? Which domain -- BODY, BEING, BALANCE, or BUSINESS?"},
+      {step:"Title & Domain", q:"What are you titling this Excitement Stack? Which domain — BODY, BEING, BALANCE, or BUSINESS?"},
       {step:"The Trigger", q:"Who or what has triggered this excitement?"},
       {step:"Why Excited", q:"Why has this triggered excitement in you right now?"},
       {step:"The Story", q:"What story are you telling yourself about this?"},
@@ -1252,13 +1242,13 @@ const TEMPLATES = {
   'gratitude-stack': {
     name:"Gratitude Stack", journalType:"Gratitude",
     steps:[
-      {step:"Title & Domain", q:"What are you titling this Gratitude Stack? Which domain -- BODY, BEING, BALANCE, or BUSINESS?"},
+      {step:"Title & Domain", q:"What are you titling this Gratitude Stack? Which domain — BODY, BEING, BALANCE, or BUSINESS?"},
       {step:"The Trigger", q:"Who or what has triggered this gratitude?"},
       {step:"Why Grateful", q:"Why has this triggered gratitude in you? What specifically happened?"},
       {step:"The Story", q:"What story are you telling yourself about this?"},
       {step:"Feelings", q:"Single-word feelings when you tell yourself that story?"},
       {step:"Thoughts & Actions", q:"What thoughts and actions arise?"},
-      {step:"Cold Facts", q:"What are the objective facts that created this outcome -- who did what, what actually happened?"},
+      {step:"Cold Facts", q:"What are the objective facts that created this outcome — who did what, what actually happened?"},
       {step:"Want for You", q:"What do you truly want for yourself in and beyond this?"},
       {step:"Want for It/Them", q:"What do you want for it or them?"},
       {step:"Want for Both", q:"What do you want for both?"},
@@ -1271,25 +1261,25 @@ const TEMPLATES = {
   'anger-stack': {
     name:"Anger Stack", journalType:"Anger",
     steps:[
-      {step:"Title & Domain", q:"What are you titling this Anger Stack? Which CORE 4 domain -- BODY, BEING, BALANCE, or BUSINESS?"},
+      {step:"Title & Domain", q:"What are you titling this Anger Stack? Which CORE 4 domain — BODY, BEING, BALANCE, or BUSINESS?"},
       {step:"The Trigger", q:"Who or what is triggering your anger right now?"},
       {step:"Why Anger", q:"Why has this triggered anger in you in this moment?"},
       {step:"The Story", q:"What story are you telling yourself about this person or situation?"},
       {step:"Feelings", q:"Describe the single-word feelings that arise when you tell yourself that story."},
       {step:"Thoughts & Actions", q:"What specific thoughts and actions does that story produce in you?"},
       {step:"Evidence", q:"What evidence do you have to support this story as absolutely true?"},
-      {step:"Cold Facts", q:"What are the non-emotional facts of the situation -- just the facts?"},
-      {step:"Escalation", q:"If you ignore this trigger now -- how does it escalate? Where does it lead?"},
-      {step:"Want for You", q:"Regardless of the trigger -- what do you truly want for yourself in and beyond this situation?"},
+      {step:"Cold Facts", q:"What are the non-emotional facts of the situation — just the facts?"},
+      {step:"Escalation", q:"If you ignore this trigger now — how does it escalate? Where does it lead?"},
+      {step:"Want for You", q:"Regardless of the trigger — what do you truly want for yourself in and beyond this situation?"},
       {step:"Want for Them", q:"What do you want for them in and beyond this situation?"},
       {step:"Want for Both", q:"What do you want for both of you in and beyond this situation?"},
-      {step:"Story Check", q:"If you keep telling yourself the original story -- will it ultimately give you what you want?"},
-      {step:"New Story", q:"Letting go of the original story -- what is your new DESIRED STORY?"},
+      {step:"Story Check", q:"If you keep telling yourself the original story — will it ultimately give you what you want?"},
+      {step:"New Story", q:"Letting go of the original story — what is your new DESIRED STORY?"},
       {step:"Evidence", q:"What evidence proves your desired story is accurate right now?"},
-      {step:"Positive Reframe", q:"Stepping back -- why has this anger trigger been extremely positive?"},
+      {step:"Positive Reframe", q:"Stepping back — why has this anger trigger been extremely positive?"},
       {step:"Life Lesson", q:"What is the singular lesson on life you're taking from this Stack?"},
       {step:"Revelation", q:"What is the most significant revelation or insight you're leaving this Stack with?"},
-      {step:"Feeling Now", q:"Compared to when you started -- what single word describes how you feel now?"},
+      {step:"Feeling Now", q:"Compared to when you started — what single word describes how you feel now?"},
       {step:"Committed Actions", q:"What immediate actions are you committed to taking leaving this Stack?"},
     ]
   }
@@ -1311,7 +1301,7 @@ function startTemplate(templateId) {
   while (msgs.lastChild) msgs.removeChild(msgs.lastChild);
 
   msgs.appendChild(makeMsgEl('assistant', `
-    <strong>${tmpl.name}</strong><br><br>Let's walk through this together. Take your time with each prompt -- use rich text or voice to respond.
+    <strong>${tmpl.name}</strong><br><br>Let's walk through this together. Take your time with each prompt — use rich text or voice to respond.
     <div class="prompt-card" style="margin-top:14px;">
       <div class="prompt-step">${tmpl.steps[0].step}</div>
       <div class="prompt-q">${tmpl.steps[0].q}</div>
@@ -1361,7 +1351,7 @@ function filingStep(chatId, field, val) {
   // Only used for guided template journals now (not uploads)
   // Upload journals use showSearchFiling / fileUploadToSmartSuite directly
 
-  if (filingCtx.step === 99) return; // upload mode -- handled separately
+  if (filingCtx.step === 99) return; // upload mode — handled separately
 
   filingCtx.data[field] = val;
   const msgs = document.getElementById(`chat-messages-${chatId}`);
@@ -1415,14 +1405,14 @@ function guidedFilingNext(chatId) {
 
 
 // ═══════════════════════════════════════════════════════
-// DUPLICATE DETECTION -- with content comparison
+// DUPLICATE DETECTION — with content comparison
 // ═══════════════════════════════════════════════════════
 
-// Global pending file state -- used by duplicate warning buttons
+// Global pending file state — used by duplicate warning buttons
 let pendingFile = null;
 
 function contentSimilarity(a, b) {
-  // Token overlap similarity -- returns 0.0 to 1.0
+  // Token overlap similarity — returns 0.0 to 1.0
   if (!a || !b) return 0;
   const tokenize = s => new Set(s.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 3));
   const setA = tokenize(a);
@@ -1454,7 +1444,7 @@ async function checkForDuplicate(journalType, journalDate, newContent) {
 
     if (!matches.length) return null;
 
-    // Content comparison -- check each match
+    // Content comparison — check each match
     for (const match of matches) {
       const existingContent = match.sc347cd0b9 || match.se2ae24b44 || '';
       const similarity = contentSimilarity(newContent || '', existingContent);
@@ -1490,8 +1480,8 @@ function showDuplicateWarning(chatId, existingRecord, proceedFn) {
 
   const severityColor = isDupe ? 'var(--rust)' : '#6A89A7';
   const severityLabel = isDupe
-    ? `⚠ Likely Duplicate -- ${simPct}% content match`
-    : `ℹ Same Type & Date -- content appears different (${simPct}% match)`;
+    ? `⚠ Likely Duplicate — ${simPct}% content match`
+    : `ℹ Same Type & Date — content appears different (${simPct}% match)`;
 
   const warnEl = makeMsgEl('assistant', `
     <div style="background:rgba(166,141,163,0.10);border:1px solid rgba(166,141,163,0.4);border-radius:10px;padding:16px 20px;">
@@ -1509,7 +1499,7 @@ function showDuplicateWarning(chatId, existingRecord, proceedFn) {
       ` : ''}
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <button onclick="confirmFileAnyway()" style="background:var(--gold);color:#fff;border:none;border-radius:6px;padding:9px 18px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;">
-          File Anyway -- New Record
+          File Anyway — New Record
         </button>
         <button onclick="openExistingRecord('${existingRecord.id}')" style="background:transparent;border:1px solid var(--border-strong);color:var(--ink);border-radius:6px;padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:10px;cursor:pointer;">
           View Existing in SmartSuite →
@@ -1567,7 +1557,7 @@ async function fileToSmartSuite(chatId, skipDupeCheck) {
 
   const projectIds = filingCtx.data.project_ids?.map(i=>i.id).filter(Boolean) || [];
   const fields = {
-    title: `${journalData.journalType} -- ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`,
+    title: `${journalData.journalType} — ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`,
     sa4f36f00f: journalData.journalType,
     s5293705a7: { date: journalData.date, include_time: false },
     sc347cd0b9: completeJournal,
@@ -1592,7 +1582,7 @@ async function fileToSmartSuite(chatId, skipDupeCheck) {
           <div class="filed-row"><span class="filed-key">Record ID</span><span class="filed-val">${data.id}</span></div>
           <div class="filed-row"><span class="filed-key">Title</span><span class="filed-val">${fields.title}</span></div>
           <div class="filed-row"><span class="filed-key">Type</span><span class="filed-val">${journalData.journalType}</span></div>
-          <div class="filed-row"><span class="filed-key">Linked To</span><span class="filed-val">${filingCtx.data.people || '--'} · ${filingCtx.data.project || '--'}</span></div>
+          <div class="filed-row"><span class="filed-key">Linked To</span><span class="filed-val">${filingCtx.data.people || '—'} · ${filingCtx.data.project || '—'}</span></div>
         </div>
         <div style="margin-top:12px;"><span class="chip" onclick="switchPanel('history')">View in History →</span></div>
       `));
@@ -1609,7 +1599,7 @@ async function fileToSmartSuite(chatId, skipDupeCheck) {
 }
 
 // ═══════════════════════════════════════════════════════
-// AI CHAT -- Railway proxy
+// AI CHAT — Railway proxy
 // ═══════════════════════════════════════════════════════
 async function sendMessage(panelId) {
   const richText = getRichText(panelId);
@@ -1626,15 +1616,15 @@ async function sendMessage(panelId) {
   msgs.appendChild(userDiv);
   scrollChat(panelId);
 
-  // Template intercept -- covers journal and morning panels
+  // Template intercept — covers journal and morning panels
   if ((panelId === 'journal' || panelId === 'morning') && currentTemplate) {
     advanceTemplate(richText, plainText);
     return;
   }
 
-  // Filing intercept -- if we're mid-filing on ANY panel, typed input shouldn't hit AI
+  // Filing intercept — if we're mid-filing on ANY panel, typed input shouldn't hit AI
   if (filingCtx.chatId === panelId && filingCtx.step >= 1 && filingCtx.step <= 3) {
-    // User typed instead of clicking a chip -- treat as their filing answer
+    // User typed instead of clicking a chip — treat as their filing answer
     const field = filingCtx.step === 1 ? 'people' : filingCtx.step === 2 ? 'project' : 'goal_stat';
     filingStep(panelId, field, plainText);
     return;
@@ -1652,7 +1642,7 @@ async function sendMessage(panelId) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: MODEL, max_tokens: 1000, system: sysPrompt(panelId), messages: conversations[panelId] })
     });
-    if (!res.ok) throw new Error(`Server returned ${res.status} -- check Railway is running`);
+    if (!res.ok) throw new Error(`Server returned ${res.status} — check Railway is running`);
     const data = await res.json();
     if (data.error) throw new Error(data.error);
     const reply = data.content?.find(b => b.type === 'text')?.text || 'No response.';
@@ -1681,7 +1671,7 @@ async function loadGoals() {
   try {
     const data = await ssRequest('POST', `applications/${SS_GOALS}/records/list/`, {});
     const items = data.items || data || [];
-    liveGoals = items.map(g => ({ id: g.id, title: g.title || '--', pct: parseFloat(g.sc9f2f3411 || 0), target: g.s80be76f59 ? `$${Number(g.s80be76f59).toLocaleString()}` : '--', progress: parseFloat(g.sa2e70ce39 || 0), status: g.s36cccbaa8 || '--', dueDate: g.s65ce469a2?.date?.split('T')[0] || '--', year: g.s04491cd60 || '--' }));
+    liveGoals = items.map(g => ({ id: g.id, title: g.title || '—', pct: parseFloat(g.sc9f2f3411 || 0), target: g.s80be76f59 ? `$${Number(g.s80be76f59).toLocaleString()}` : '—', progress: parseFloat(g.sa2e70ce39 || 0), status: g.s36cccbaa8 || '—', dueDate: g.s65ce469a2?.date?.split('T')[0] || '—', year: g.s04491cd60 || '—' }));
     renderGoals();
     renderSidebarBars();
     document.getElementById('goals-subtitle').textContent = `${liveGoals.length} goals · Last updated ${new Date().toLocaleTimeString()}`;
@@ -1696,7 +1686,7 @@ async function loadGoals() {
   } catch(e) {
     console.warn('loadGoals failed:', e.message);
     const el = document.getElementById('goals-subtitle');
-    if (el) el.textContent = 'Goals unavailable -- check connection';
+    if (el) el.textContent = 'Goals unavailable — check connection';
   }
 }
 
@@ -1748,44 +1738,44 @@ async function processFile(file) {
     loadEl.remove();
     const isImage = file.type.startsWith('image/');
 
-    // Smart system prompt -- knows the full journal schema and field slugs
+    // Smart system prompt — knows the full journal schema and field slugs
     const uploadSysPrompt = `You are Kompass, the executive journaling assistant for Clint Stitser.
 
 Your job is to parse an uploaded journal entry (handwritten or typed) and extract a COMPLETE structured JSON object that maps directly to the SmartSuite Journals/Rituals table.
 
-JOURNAL TYPES -- you MUST use exactly one of these values for journal_type.
+JOURNAL TYPES — you MUST use exactly one of these values for journal_type.
 Read the content carefully and pick the most accurate match:
-- "Morning Ritual" -- morning planning, daily intentions, dominos, warrior's way style
-- "Evening Ritual" -- end of day review, recap, tomorrow prep
-- "Weekly Ritual" -- weekly review across BODY, BEING, BALANCE, BUSINESS
-- "Irritation Stack" -- triggered by irritation or frustration (lower intensity anger)
-- "Discovery/Idea Log" -- a new insight, idea, or discovery being processed
-- "Memory Journal" -- capturing a memory, reflection on the past
-- "Exercise Log" -- physical training, workout, fitness activity
-- "Anger" -- anger stack (medium intensity trigger)
-- "Guilt" -- guilt stack, self-accountability
-- "Excitement" -- excitement stack, positive trigger
-- "Gratitude" -- gratitude stack, appreciation trigger
-- "Rage" -- rage stack (highest intensity anger trigger)
+- "Morning Ritual" — morning planning, daily intentions, dominos, warrior's way style
+- "Evening Ritual" — end of day review, recap, tomorrow prep
+- "Weekly Ritual" — weekly review across BODY, BEING, BALANCE, BUSINESS
+- "Irritation Stack" — triggered by irritation or frustration (lower intensity anger)
+- "Discovery/Idea Log" — a new insight, idea, or discovery being processed
+- "Memory Journal" — capturing a memory, reflection on the past
+- "Exercise Log" — physical training, workout, fitness activity
+- "Anger" — anger stack (medium intensity trigger)
+- "Guilt" — guilt stack, self-accountability
+- "Excitement" — excitement stack, positive trigger
+- "Gratitude" — gratitude stack, appreciation trigger
+- "Rage" — rage stack (highest intensity anger trigger)
 
-FIELD MAPPING -- extract values for as many of these as the content supports:
-- title: string -- a short descriptive title for this journal entry
-- journal_type: string -- one of the types above
-- journal_date: string -- date in YYYY-MM-DD format if found, else today
-- one_word_intention: string -- the single word intention if present
-- three_dominos: string -- the 3 big dominos / daily priorities
-- hurdles: string -- obstacles and how they'll be handled
-- gratitude: string -- gratitude content
-- celebrate_who: string -- who to celebrate
-- action_body: string -- how they'll show up physically/energetically
-- coach_advice: string -- high performance coach advice
-- complete_journal: string -- the FULL verbatim transcription of the entire entry
-- summary: string -- 2-3 sentence plain English summary of the entry
-- themes: array of strings -- key themes (max 5)
-- action_items: array of strings -- concrete next actions
-- emotional_tone: string -- brief description of emotional state
-- people_mentioned: array of strings -- first+last names of people mentioned
-- projects_mentioned: array of strings -- project names mentioned
+FIELD MAPPING — extract values for as many of these as the content supports:
+- title: string — a short descriptive title for this journal entry
+- journal_type: string — one of the types above
+- journal_date: string — date in YYYY-MM-DD format if found, else today
+- one_word_intention: string — the single word intention if present
+- three_dominos: string — the 3 big dominos / daily priorities
+- hurdles: string — obstacles and how they'll be handled
+- gratitude: string — gratitude content
+- celebrate_who: string — who to celebrate
+- action_body: string — how they'll show up physically/energetically
+- coach_advice: string — high performance coach advice
+- complete_journal: string — the FULL verbatim transcription of the entire entry
+- summary: string — 2-3 sentence plain English summary of the entry
+- themes: array of strings — key themes (max 5)
+- action_items: array of strings — concrete next actions
+- emotional_tone: string — brief description of emotional state
+- people_mentioned: array of strings — first+last names of people mentioned
+- projects_mentioned: array of strings — project names mentioned
 
 RESPOND WITH ONLY A JSON OBJECT. No markdown, no explanation, no preamble. Start with { and end with }.`;
 
@@ -1860,7 +1850,7 @@ async function showSearchFiling(chatId, parsed) {
   const projectHints = parsed?.projects_mentioned || [];
 
   const filingHtml = `
-    <strong>Let's file this to SmartSuite.</strong> Search to link people, projects, and goals -- or skip any.
+    <strong>Let's file this to SmartSuite.</strong> Search to link people, projects, and goals — or skip any.
 
     <div style="margin-top:14px;">
       <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Link to People</div>
@@ -1927,7 +1917,7 @@ async function searchSS(chatId, type, query) {
         filter: { operator:'and', fields:[{ field:'title', comparison:'contains', value: query }]},
         limit: 5
       });
-      const items = (data.items || []).map(r => ({ id: r.id, title: r.title || r.sa2519e04c || '--' }));
+      const items = (data.items || []).map(r => ({ id: r.id, title: r.title || r.sa2519e04c || '—' }));
 
       if (!items.length) {
         if(resultsEl) resultsEl.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">No results</span>`;
@@ -2016,7 +2006,7 @@ async function fileUploadToSmartSuite(chatId, skipLinks, skipDupeCheck) {
   const goalIds = skipLinks ? [] : (filingCtx.data.goal_ids?.map(i=>i.id).filter(Boolean) || []);
 
   const fields = {
-    title: p.title || `${journalData.journalType} -- ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`,
+    title: p.title || `${journalData.journalType} — ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`,
     sa4f36f00f: journalData.journalType,
     s5293705a7: { date: journalData.date, include_time: false },
     sc347cd0b9: p.complete_journal || journalData.responses[0]?.response || '',
@@ -2048,8 +2038,8 @@ async function fileUploadToSmartSuite(chatId, skipLinks, skipDupeCheck) {
         title: fields.title,
         preview: (p.summary || p.complete_journal || '').slice(0,150) + '…',
         date: new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}),
-        people: filingCtx.data.people_ids?.map(i=>i.title).join(', ') || '--',
-        project: linkedSummary.join(', ') || '--',
+        people: filingCtx.data.people_ids?.map(i=>i.title).join(', ') || '—',
+        project: linkedSummary.join(', ') || '—',
         id: data.id.slice(-8).toUpperCase()
       });
 
@@ -2091,7 +2081,7 @@ function resetUpload() {
 // ═══════════════════════════════════════════════════════
 const historyEntries = [
   { type:"Warrior's Way", title:"I am a builder who leads with clarity.", preview:"Grateful for Tammie, the team, and forward momentum. Mission: Harmony Mesa CMA.", date:"Tue, Mar 31, 2026", people:"Clint only", project:"Harmony Mesa", id:"44821" },
-  { type:"Project Debrief", title:"Canyon's Edge HUD surplus cash discussion", preview:"K-1 timing for stub period. Surplus cash rules -- 45-day lag.", date:"Mon, Mar 30, 2026", people:"Clint only", project:"Canyon's Edge", id:"44802" }
+  { type:"Project Debrief", title:"Canyon's Edge HUD surplus cash discussion", preview:"K-1 timing for stub period. Surplus cash rules — 45-day lag.", date:"Mon, Mar 30, 2026", people:"Clint only", project:"Canyon's Edge", id:"44802" }
 ];
 
 function addToHistory(e) { historyEntries.unshift(e); renderHistory(); }
@@ -2156,12 +2146,11 @@ function initMorning() {
 // ═══════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════
-// Safe init -- UI renders even if network calls fail
+// Safe init — UI renders even if network calls fail
 try { renderHistory(); } catch(e) { console.warn('renderHistory failed:', e); }
 try { initMorning(); } catch(e) { console.warn('initMorning failed:', e); }
-// Load goals async -- don't block UI
+// Load goals async — don't block UI
 setTimeout(() => { try { loadGoals(); } catch(e) { console.warn('loadGoals failed:', e); } }, 500);
 </script>
-
 </body>
 </html>
