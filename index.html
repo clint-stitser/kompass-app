@@ -34,102 +34,102 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; background: var(--parchment); color: var(--ink); font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 14px; overflow: hidden; }
+html, body { height: 100%; background: #F4F1ED; color: #2F353B; font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 14px; overflow: hidden; }
 
 body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:1000; opacity:0.6; }
 
 .app { display:grid; grid-template-columns:220px 1fr; grid-template-rows:52px 1fr; height:100vh; overflow:hidden; }
 
 /* TOPBAR */
-.topbar { grid-column:1/-1; background:var(--sidebar); display:flex; align-items:center; justify-content:space-between; padding:0 24px; border-bottom:1px solid rgba(255,255,255,0.08); }
+.topbar { grid-column:1/-1; background:#3D454B; display:flex; align-items:center; justify-content:space-between; padding:0 24px; border-bottom:1px solid rgba(255,255,255,0.08); }
 .topbar-brand { display:flex; align-items:baseline; gap:12px; }
-.topbar-brand h1 { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:var(--gold-light); letter-spacing:0.12em; text-transform:uppercase; }
+.topbar-brand h1 { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:#8AABC4; letter-spacing:0.12em; text-transform:uppercase; }
 .topbar-brand span { font-family:'JetBrains Mono',monospace; font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.08em; }
 .topbar-right { display:flex; align-items:center; gap:16px; }
 .checkin-indicator { display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:10px; color:rgba(255,255,255,0.5); }
-.checkin-dot { width:7px; height:7px; border-radius:50%; background:var(--gold); animation:breathe 3s ease-in-out infinite; }
+.checkin-dot { width:7px; height:7px; border-radius:50%; background:#6A89A7; animation:breathe 3s ease-in-out infinite; }
 @keyframes breathe { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
 .time-display { font-family:'Cormorant Garamond',serif; font-size:16px; color:rgba(255,255,255,0.7); font-weight:300; }
-.proxy-badge { font-family:'JetBrains Mono',monospace; font-size:9px; padding:2px 7px; border-radius:3px; background:rgba(141,163,153,0.2); color:var(--sage); border:1px solid rgba(141,163,153,0.4); }
+.proxy-badge { font-family:'JetBrains Mono',monospace; font-size:9px; padding:2px 7px; border-radius:3px; background:rgba(141,163,153,0.2); color:#8DA399; border:1px solid rgba(141,163,153,0.4); }
 
 /* SIDEBAR */
-.sidebar { background:var(--sidebar); border-right:1px solid rgba(255,255,255,0.06); padding:20px 0; overflow-y:auto; display:flex; flex-direction:column; }
+.sidebar { background:#3D454B; border-right:1px solid rgba(255,255,255,0.06); padding:20px 0; overflow-y:auto; display:flex; flex-direction:column; }
 .sidebar-section { margin-bottom:24px; }
 .sidebar-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.2); text-transform:uppercase; letter-spacing:0.14em; padding:0 18px; margin-bottom:6px; }
 .nav-item { display:flex; align-items:center; gap:10px; padding:9px 18px; cursor:pointer; transition:all 0.15s; border-left:2px solid transparent; color:rgba(255,255,255,0.45); font-size:13px; font-weight:300; white-space:nowrap; }
 .nav-item:hover { color:rgba(255,255,255,0.8); background:rgba(255,255,255,0.04); }
-.nav-item.active { color:var(--gold-light); border-left-color:var(--gold); background:rgba(106,137,167,0.12); }
+.nav-item.active { color:#8AABC4; border-left-color:#6A89A7; background:rgba(106,137,167,0.12); }
 .nav-icon { font-size:14px; width:18px; text-align:center; flex-shrink:0; }
-.checkin-badge { margin-left:auto; background:var(--gold); color:var(--ink); font-family:'JetBrains Mono',monospace; font-size:8px; font-weight:500; padding:1px 5px; border-radius:3px; text-transform:uppercase; }
+.checkin-badge { margin-left:auto; background:#6A89A7; color:#2F353B; font-family:'JetBrains Mono',monospace; font-size:8px; font-weight:500; padding:1px 5px; border-radius:3px; text-transform:uppercase; }
 .sidebar-divider { height:1px; background:rgba(255,255,255,0.06); margin:8px 18px 16px; }
 .sidebar-goals { padding:0 14px; margin-top:auto; margin-bottom:8px; }
 .goal-mini { margin-bottom:10px; }
 .goal-mini-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.3); margin-bottom:4px; display:flex; justify-content:space-between; }
-.goal-mini-label span { color:var(--gold-light); }
+.goal-mini-label span { color:#8AABC4; }
 .goal-bar { height:3px; background:rgba(255,255,255,0.15); border-radius:2px; overflow:hidden; }
-.goal-bar-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light)); border-radius:2px; transition:width 0.6s ease; }
-.goal-bar-fill.sage { background:linear-gradient(90deg,var(--sage),#6a9a60); }
+.goal-bar-fill { height:100%; background:linear-gradient(90deg,#6A89A7,#8AABC4); border-radius:2px; transition:width 0.6s ease; }
+.goal-bar-fill.sage { background:linear-gradient(90deg,#8DA399,#6a9a60); }
 
 /* MAIN */
-.main { overflow-y:auto; background:var(--warm-white); position:relative; }
+.main { overflow-y:auto; background:#FAF8F5; position:relative; }
 .panel { display:none; }
 .panel.active { display:block; animation:fadeIn 0.25s ease; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
 
 /* CHAT */
 .chat-container { display:flex; flex-direction:column; height:calc(100vh - 52px); }
-.checkin-header { padding:24px 40px 0; border-bottom:1px solid var(--border); }
-.checkin-mode-label { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--gold); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
-.checkin-mode-label::before { content:''; display:block; width:20px; height:1px; background:var(--gold); }
+.checkin-header { padding:24px 40px 0; border-bottom:1px solid rgba(181,168,155,0.5); }
+.checkin-mode-label { font-family:'JetBrains Mono',monospace; font-size:10px; color:#6A89A7; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+.checkin-mode-label::before { content:''; display:block; width:20px; height:1px; background:#6A89A7; }
 .checkin-header h2 { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:300; margin-bottom:6px; line-height:1.1; }
-.checkin-header h2 em { font-style:italic; color:var(--gold); }
-.checkin-meta { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); padding-bottom:18px; display:flex; gap:20px; flex-wrap:wrap; }
+.checkin-header h2 em { font-style:italic; color:#6A89A7; }
+.checkin-meta { font-family:'JetBrains Mono',monospace; font-size:10px; color:#8E9BA6; padding-bottom:18px; display:flex; gap:20px; flex-wrap:wrap; }
 .chat-messages { flex:1; overflow-y:auto; padding:20px 40px; display:flex; flex-direction:column; gap:16px; }
 .msg { display:flex; gap:14px; max-width:820px; }
 .msg.user { flex-direction:row-reverse; margin-left:auto; }
-.msg-avatar { width:32px; height:32px; border-radius:50%; background:var(--gold-dim); border:1px solid rgba(106,137,167,0.25); display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; font-family:'Cormorant Garamond',serif; font-weight:600; color:var(--gold); }
-.msg.user .msg-avatar { background:#4A5560; border-color:#4A5560; color:var(--gold-light); }
-.msg-bubble { background:var(--card-bg); border:1px solid var(--border); border-radius:2px 14px 14px 14px; padding:14px 18px; font-size:14px; line-height:1.65; color:var(--ink); box-shadow:var(--shadow); max-width:660px; }
+.msg-avatar { width:32px; height:32px; border-radius:50%; background:rgba(106,137,167,0.10); border:1px solid rgba(106,137,167,0.25); display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; font-family:'Cormorant Garamond',serif; font-weight:600; color:#6A89A7; }
+.msg.user .msg-avatar { background:#4A5560; border-color:#4A5560; color:#8AABC4; }
+.msg-bubble { background:#EAE7E2; border:1px solid rgba(181,168,155,0.5); border-radius:2px 14px 14px 14px; padding:14px 18px; font-size:14px; line-height:1.65; color:#2F353B; box-shadow:0 2px 16px rgba(47,53,59,0.07); max-width:660px; }
 .msg.user .msg-bubble { background:#4A5560; color:rgba(255,255,255,0.92); border-color:transparent; border-radius:14px 2px 14px 14px; }
 .msg-bubble strong { font-weight:500; }
-.msg-bubble em { font-style:italic; color:var(--gold); }
+.msg-bubble em { font-style:italic; color:#6A89A7; }
 .msg-bubble ul,.msg-bubble ol { padding-left:20px; margin:6px 0; }
 .msg-bubble li { margin-bottom:3px; }
 
-.prompt-card { background:var(--warm-white); border:1px solid rgba(106,137,167,0.3); border-left:3px solid var(--gold); border-radius:0 12px 12px 0; padding:14px 18px; margin:8px 0; }
-.prompt-card .prompt-step { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--gold); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px; }
-.prompt-card .prompt-q { font-family:'Cormorant Garamond',serif; font-size:19px; font-weight:400; font-style:italic; color:var(--ink); line-height:1.3; }
+.prompt-card { background:#FAF8F5; border:1px solid rgba(106,137,167,0.3); border-left:3px solid #6A89A7; border-radius:0 12px 12px 0; padding:14px 18px; margin:8px 0; }
+.prompt-card .prompt-step { font-family:'JetBrains Mono',monospace; font-size:9px; color:#6A89A7; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px; }
+.prompt-card .prompt-q { font-family:'Cormorant Garamond',serif; font-size:19px; font-weight:400; font-style:italic; color:#2F353B; line-height:1.3; }
 
 .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
-.chip { background:transparent; border:1px solid var(--border-strong); color:var(--ink); padding:5px 12px; border-radius:20px; cursor:pointer; font-size:12px; font-family:'Outfit',sans-serif; transition:all 0.15s; }
-.chip:hover { background:var(--ink); color:var(--gold-light); border-color:var(--ink); }
+.chip { background:transparent; border:1px solid rgba(181,168,155,0.75); color:#2F353B; padding:5px 12px; border-radius:20px; cursor:pointer; font-size:12px; font-family:'Outfit',sans-serif; transition:all 0.15s; }
+.chip:hover { background:#2F353B; color:#8AABC4; border-color:#2F353B; }
 
 .filed-card { background:linear-gradient(135deg,rgba(141,163,153,0.10),rgba(141,163,153,0.05)); border:1px solid rgba(141,163,153,0.35); border-radius:10px; padding:16px 20px; }
-.filed-card .filed-title { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--sage); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px; }
+.filed-card .filed-title { font-family:'JetBrains Mono',monospace; font-size:10px; color:#8DA399; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px; }
 .filed-card .filed-row { display:flex; gap:10px; font-size:12px; margin-bottom:6px; }
-.filed-card .filed-key { font-family:'JetBrains Mono',monospace; color:var(--muted); min-width:80px; font-size:10px; }
+.filed-card .filed-key { font-family:'JetBrains Mono',monospace; color:#8E9BA6; min-width:80px; font-size:10px; }
 
 /* ═══════════════════════════════════
    RICH TEXT INPUT AREA
 ═══════════════════════════════════ */
-.chat-input-area { border-top:1px solid var(--border); background:var(--warm-white); padding:12px 40px 16px; }
-.input-toolbar { display:flex; align-items:center; gap:4px; margin-bottom:8px; padding:6px 10px; background:var(--warm-white); border:1px solid var(--border); border-radius:8px 8px 0 0; border-bottom:none; flex-wrap:wrap; }
-.tb-btn { background:transparent; border:none; cursor:pointer; padding:4px 7px; border-radius:4px; font-size:13px; color:var(--muted); transition:all 0.12s; display:flex; align-items:center; justify-content:center; min-width:28px; height:26px; font-family:'JetBrains Mono',monospace; font-weight:500; }
-.tb-btn:hover { background:var(--gold-dim); color:var(--gold); }
-.tb-btn.active { background:var(--gold-dim); color:var(--gold); }
-.tb-sep { width:1px; height:18px; background:var(--border); margin:0 4px; flex-shrink:0; }
-.tb-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-left:4px; }
+.chat-input-area { border-top:1px solid rgba(181,168,155,0.5); background:#FAF8F5; padding:12px 40px 16px; }
+.input-toolbar { display:flex; align-items:center; gap:4px; margin-bottom:8px; padding:6px 10px; background:#FAF8F5; border:1px solid rgba(181,168,155,0.5); border-radius:8px 8px 0 0; border-bottom:none; flex-wrap:wrap; }
+.tb-btn { background:transparent; border:none; cursor:pointer; padding:4px 7px; border-radius:4px; font-size:13px; color:#8E9BA6; transition:all 0.12s; display:flex; align-items:center; justify-content:center; min-width:28px; height:26px; font-family:'JetBrains Mono',monospace; font-weight:500; }
+.tb-btn:hover { background:rgba(106,137,167,0.10); color:#6A89A7; }
+.tb-btn.active { background:rgba(106,137,167,0.10); color:#6A89A7; }
+.tb-sep { width:1px; height:18px; background:rgba(181,168,155,0.5); margin:0 4px; flex-shrink:0; }
+.tb-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:#8E9BA6; text-transform:uppercase; letter-spacing:0.08em; margin-left:4px; }
 
 .rich-input {
   width:100%;
-  background:var(--warm-white);
-  border:1px solid var(--border-strong);
+  background:#FAF8F5;
+  border:1px solid rgba(181,168,155,0.75);
   border-radius:0 0 10px 10px;
   padding:12px 16px;
   font-family:'Outfit',sans-serif;
   font-size:14px;
   font-weight:300;
-  color:var(--ink);
+  color:#2F353B;
   outline:none;
   min-height:52px;
   max-height:200px;
@@ -137,124 +137,124 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
   line-height:1.6;
   transition:border-color 0.15s;
 }
-.rich-input:focus { border-color:var(--gold); }
-.rich-input:empty::before { content:attr(data-placeholder); color:var(--muted); pointer-events:none; }
+.rich-input:focus { border-color:#6A89A7; }
+.rich-input:empty::before { content:attr(data-placeholder); color:#8E9BA6; pointer-events:none; }
 .rich-input ul,.rich-input ol { padding-left:22px; }
 .rich-input li { margin-bottom:2px; }
 .rich-input b,.rich-input strong { font-weight:600; }
 .rich-input i,.rich-input em { font-style:italic; }
 
 .input-row { display:flex; gap:10px; align-items:flex-end; margin-top:8px; }
-.send-btn { width:44px; height:44px; background:var(--gold); border:none; border-radius:10px; cursor:pointer; color:#fff; font-size:17px; display:flex; align-items:center; justify-content:center; transition:all 0.15s; flex-shrink:0; }
-.send-btn:hover { background:var(--gold-light); color:#fff; }
+.send-btn { width:44px; height:44px; background:#6A89A7; border:none; border-radius:10px; cursor:pointer; color:#fff; font-size:17px; display:flex; align-items:center; justify-content:center; transition:all 0.15s; flex-shrink:0; }
+.send-btn:hover { background:#8AABC4; color:#fff; }
 .send-btn:disabled { opacity:0.4; cursor:not-allowed; }
 
 /* ═══════════════════════════════════
    VOICE RECORDING
 ═══════════════════════════════════ */
-.voice-bar { display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; margin-bottom:8px; }
-.voice-bar.recording { border-color:var(--rust); background:rgba(166,141,163,0.05); }
-.voice-bar.transcribing { border-color:var(--gold); background:var(--gold-dim); }
+.voice-bar { display:flex; align-items:center; gap:10px; padding:10px 14px; background:#EAE7E2; border:1px solid rgba(181,168,155,0.5); border-radius:10px; margin-bottom:8px; }
+.voice-bar.recording { border-color:#A68DA3; background:rgba(166,141,163,0.05); }
+.voice-bar.transcribing { border-color:#6A89A7; background:rgba(106,137,167,0.10); }
 
 .voice-btn {
   width:36px; height:36px; border-radius:50%; border:none; cursor:pointer;
   display:flex; align-items:center; justify-content:center;
   font-size:16px; flex-shrink:0; transition:all 0.2s;
-  background:var(--ink); color:var(--gold-light);
+  background:#2F353B; color:#8AABC4;
 }
-.voice-btn.recording { background:var(--recording); color:#fff; animation:recordPulse 1s ease-in-out infinite; }
+.voice-btn.recording { background:#A68DA3; color:#fff; animation:recordPulse 1s ease-in-out infinite; }
 .voice-btn:hover { transform:scale(1.08); }
 @keyframes recordPulse { 0%,100%{box-shadow:0 0 0 0 rgba(166,141,163,0.4)} 50%{box-shadow:0 0 0 8px rgba(166,141,163,0)} }
 
 .voice-waveform { flex:1; height:28px; display:flex; align-items:center; gap:2px; overflow:hidden; }
-.wave-bar { width:3px; background:var(--border-strong); border-radius:2px; transition:height 0.1s; min-height:3px; }
-.wave-bar.active { background:var(--recording); }
+.wave-bar { width:3px; background:rgba(181,168,155,0.75); border-radius:2px; transition:height 0.1s; min-height:3px; }
+.wave-bar.active { background:#A68DA3; }
 
-.voice-time { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); min-width:42px; text-align:right; }
-.voice-status { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); }
-.voice-bar.recording .voice-status { color:var(--recording); }
-.voice-bar.transcribing .voice-status { color:var(--gold); }
+.voice-time { font-family:'JetBrains Mono',monospace; font-size:11px; color:#8E9BA6; min-width:42px; text-align:right; }
+.voice-status { font-family:'JetBrains Mono',monospace; font-size:10px; color:#8E9BA6; }
+.voice-bar.recording .voice-status { color:#A68DA3; }
+.voice-bar.transcribing .voice-status { color:#6A89A7; }
 
-.voice-toggle { background:transparent; border:1px solid var(--border); border-radius:6px; padding:5px 12px; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); cursor:pointer; transition:all 0.15s; display:flex; align-items:center; gap:5px; }
-.voice-toggle:hover { border-color:var(--gold); color:var(--gold); }
-.voice-toggle.active { border-color:var(--rust); color:var(--recording); background:rgba(166,141,163,0.05); }
+.voice-toggle { background:transparent; border:1px solid rgba(181,168,155,0.5); border-radius:6px; padding:5px 12px; font-family:'JetBrains Mono',monospace; font-size:10px; color:#8E9BA6; cursor:pointer; transition:all 0.15s; display:flex; align-items:center; gap:5px; }
+.voice-toggle:hover { border-color:#6A89A7; color:#6A89A7; }
+.voice-toggle.active { border-color:#A68DA3; color:#A68DA3; background:rgba(166,141,163,0.05); }
 
-.transcript-preview { font-size:12px; color:var(--muted); font-style:italic; max-width:400px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; }
+.transcript-preview { font-size:12px; color:#8E9BA6; font-style:italic; max-width:400px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; }
 
 .tool-row { display:flex; gap:8px; margin-bottom:8px; align-items:center; flex-wrap:wrap; }
-.tool-btn { background:transparent; border:1px solid var(--border); border-radius:6px; padding:5px 12px; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); cursor:pointer; transition:all 0.15s; }
-.tool-btn:hover { border-color:var(--gold); color:var(--gold); }
+.tool-btn { background:transparent; border:1px solid rgba(181,168,155,0.5); border-radius:6px; padding:5px 12px; font-family:'JetBrains Mono',monospace; font-size:10px; color:#8E9BA6; cursor:pointer; transition:all 0.15s; }
+.tool-btn:hover { border-color:#6A89A7; color:#6A89A7; }
 
 /* JOURNAL MODE SELECTOR */
 .mode-selector { display:flex; gap:10px; padding:18px 40px 0; }
-.mode-card { flex:1; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:12px 14px; cursor:pointer; transition:all 0.2s; text-align:center; }
-.mode-card:hover { border-color:var(--gold); }
-.mode-card.selected { border-color:var(--gold); background:var(--gold-dim); }
+.mode-card { flex:1; background:#EAE7E2; border:1px solid rgba(181,168,155,0.5); border-radius:10px; padding:12px 14px; cursor:pointer; transition:all 0.2s; text-align:center; }
+.mode-card:hover { border-color:#6A89A7; }
+.mode-card.selected { border-color:#6A89A7; background:rgba(106,137,167,0.10); }
 .mode-card .mode-icon { font-size:20px; margin-bottom:5px; }
-.mode-card .mode-name { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--ink); text-transform:uppercase; letter-spacing:0.06em; }
-.mode-card .mode-desc { font-size:11px; color:var(--muted); margin-top:3px; line-height:1.4; }
+.mode-card .mode-name { font-family:'JetBrains Mono',monospace; font-size:10px; color:#2F353B; text-transform:uppercase; letter-spacing:0.06em; }
+.mode-card .mode-desc { font-size:11px; color:#8E9BA6; margin-top:3px; line-height:1.4; }
 
 /* UPLOAD */
-.upload-zone { border:2px dashed var(--border-strong); border-radius:10px; padding:32px; text-align:center; margin:20px 40px; cursor:pointer; transition:all 0.2s; background:var(--warm-white); }
-.upload-zone:hover,.upload-zone.dragover { border-color:var(--gold); background:var(--gold-dim); }
+.upload-zone { border:2px dashed rgba(181,168,155,0.75); border-radius:10px; padding:32px; text-align:center; margin:20px 40px; cursor:pointer; transition:all 0.2s; background:#FAF8F5; }
+.upload-zone:hover,.upload-zone.dragover { border-color:#6A89A7; background:rgba(106,137,167,0.10); }
 .upload-zone .upload-icon { font-size:32px; margin-bottom:10px; }
-.upload-zone p { font-size:13px; color:var(--muted); line-height:1.6; }
-.upload-zone strong { color:var(--ink); font-weight:400; }
+.upload-zone p { font-size:13px; color:#8E9BA6; line-height:1.6; }
+.upload-zone strong { color:#2F353B; font-weight:400; }
 .upload-zone input { display:none; }
 
 /* GOALS */
 .goals-panel { padding:28px 40px; }
 .goals-panel h2 { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; margin-bottom:4px; }
-.goals-panel h2 em { font-style:italic; color:var(--gold); }
-.goals-subtitle { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:24px; }
-.scoreboard { background:var(--sidebar); border-radius:12px; padding:22px; margin-bottom:22px; }
-.scoreboard h3 { font-family:'Cormorant Garamond',serif; font-size:18px; color:var(--gold-light); font-weight:300; margin-bottom:14px; }
+.goals-panel h2 em { font-style:italic; color:#6A89A7; }
+.goals-subtitle { font-family:'JetBrains Mono',monospace; font-size:10px; color:#8E9BA6; margin-bottom:24px; }
+.scoreboard { background:#3D454B; border-radius:12px; padding:22px; margin-bottom:22px; }
+.scoreboard h3 { font-family:'Cormorant Garamond',serif; font-size:18px; color:#8AABC4; font-weight:300; margin-bottom:14px; }
 .score-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
 .score-item { text-align:center; }
-.score-val { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:300; color:var(--gold-light); line-height:1; margin-bottom:4px; }
+.score-val { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:300; color:#8AABC4; line-height:1; margin-bottom:4px; }
 .score-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:0.08em; }
-.score-trend { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--sage); margin-top:3px; }
-.score-trend.warn { color:var(--rust); }
+.score-trend { font-family:'JetBrains Mono',monospace; font-size:10px; color:#8DA399; margin-top:3px; }
+.score-trend.warn { color:#A68DA3; }
 .goals-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:22px; }
-.goal-card { background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:16px; }
-.goal-category { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--gold); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px; }
+.goal-card { background:#EAE7E2; border:1px solid rgba(181,168,155,0.5); border-radius:10px; padding:16px; }
+.goal-category { font-family:'JetBrains Mono',monospace; font-size:9px; color:#6A89A7; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px; }
 .goal-card-header { display:flex; justify-content:space-between; margin-bottom:10px; }
 .goal-pct { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:300; }
 .goal-title { font-size:13px; font-weight:400; margin-bottom:4px; line-height:1.3; }
-.goal-target { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:8px; }
-.goal-progress { height:4px; background:var(--progress-empty); border-radius:2px; overflow:hidden; margin-bottom:6px; }
-.goal-progress-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--gold),var(--gold-light)); transition:width 0.8s cubic-bezier(0.4,0,0.2,1); }
-.goal-status { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--muted); }
+.goal-target { font-family:'JetBrains Mono',monospace; font-size:10px; color:#8E9BA6; margin-bottom:8px; }
+.goal-progress { height:4px; background:#D4D8DC; border-radius:2px; overflow:hidden; margin-bottom:6px; }
+.goal-progress-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,#6A89A7,#8AABC4); transition:width 0.8s cubic-bezier(0.4,0,0.2,1); }
+.goal-status { font-family:'JetBrains Mono',monospace; font-size:9px; color:#8E9BA6; }
 .goal-status.red { color:#8A6A6A; }
-.goal-status.yellow { color:var(--rust); }
+.goal-status.yellow { color:#A68DA3; }
 
 /* HISTORY */
 .history-panel { padding:28px 40px; }
 .history-panel h2 { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; margin-bottom:20px; }
-.history-panel h2 em { font-style:italic; color:var(--gold); }
-.journal-entry { background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:12px; cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden; }
-.journal-entry::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--gold); }
-.journal-entry:hover { box-shadow:var(--shadow); }
+.history-panel h2 em { font-style:italic; color:#6A89A7; }
+.journal-entry { background:#EAE7E2; border:1px solid rgba(181,168,155,0.5); border-radius:10px; padding:16px; margin-bottom:12px; cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden; }
+.journal-entry::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:#6A89A7; }
+.journal-entry:hover { box-shadow:0 2px 16px rgba(47,53,59,0.07); }
 .entry-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:7px; }
-.entry-type-badge { font-family:'JetBrains Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:0.08em; padding:2px 7px; border-radius:4px; background:var(--gold-dim); color:var(--gold); border:1px solid rgba(106,137,167,0.2); }
-.entry-date { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); }
+.entry-type-badge { font-family:'JetBrains Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:0.08em; padding:2px 7px; border-radius:4px; background:rgba(106,137,167,0.10); color:#6A89A7; border:1px solid rgba(106,137,167,0.2); }
+.entry-date { font-family:'JetBrains Mono',monospace; font-size:10px; color:#8E9BA6; }
 .entry-title { font-size:13px; font-weight:400; margin-bottom:5px; }
-.entry-preview { font-size:12px; color:var(--muted); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.entry-preview { font-size:12px; color:#8E9BA6; line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 .entry-links { display:flex; gap:7px; margin-top:9px; flex-wrap:wrap; }
-.entry-link-chip { font-family:'JetBrains Mono',monospace; font-size:9px; padding:2px 7px; border:1px solid var(--border); border-radius:4px; color:var(--muted); }
+.entry-link-chip { font-family:'JetBrains Mono',monospace; font-size:9px; padding:2px 7px; border:1px solid rgba(181,168,155,0.5); border-radius:4px; color:#8E9BA6; }
 
 /* UTILS */
-.typing-indicator { display:flex; gap:4px; padding:14px 18px; background:var(--card-bg); border:1px solid var(--border); border-radius:2px 14px 14px 14px; width:fit-content; align-items:center; }
-.typing-dot { width:6px; height:6px; border-radius:50%; background:var(--muted); animation:typingBounce 1.2s ease-in-out infinite; }
+.typing-indicator { display:flex; gap:4px; padding:14px 18px; background:#EAE7E2; border:1px solid rgba(181,168,155,0.5); border-radius:2px 14px 14px 14px; width:fit-content; align-items:center; }
+.typing-dot { width:6px; height:6px; border-radius:50%; background:#8E9BA6; animation:typingBounce 1.2s ease-in-out infinite; }
 .typing-dot:nth-child(2){animation-delay:0.2s} .typing-dot:nth-child(3){animation-delay:0.4s}
 @keyframes typingBounce { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-6px);opacity:1} }
 @keyframes spin { to{transform:rotate(360deg)} }
-.spinner { display:inline-block; width:13px; height:13px; border:2px solid rgba(106,137,167,0.3); border-top-color:var(--gold); border-radius:50%; animation:spin 0.7s linear infinite; }
-.btn-primary { background:var(--gold); color:#fff; border:none; border-radius:7px; padding:9px 18px; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:all 0.15s; }
-.btn-primary:hover { background:var(--gold-light); color:#fff; }
-.btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border); border-radius:7px; padding:8px 16px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:all 0.15s; }
-.btn-ghost:hover { border-color:var(--gold); color:var(--gold); }
-::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:2px}
+.spinner { display:inline-block; width:13px; height:13px; border:2px solid rgba(106,137,167,0.3); border-top-color:#6A89A7; border-radius:50%; animation:spin 0.7s linear infinite; }
+.btn-primary { background:#6A89A7; color:#fff; border:none; border-radius:7px; padding:9px 18px; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:all 0.15s; }
+.btn-primary:hover { background:#8AABC4; color:#fff; }
+.btn-ghost { background:transparent; color:#8E9BA6; border:1px solid rgba(181,168,155,0.5); border-radius:7px; padding:8px 16px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:all 0.15s; }
+.btn-ghost:hover { border-color:#6A89A7; color:#6A89A7; }
+::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:rgba(181,168,155,0.75);border-radius:2px}
 
 /* ── Mobile ── */
 @media (max-width: 768px) {
@@ -276,7 +276,7 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
   .checkin-header { flex-shrink: 0; padding: 16px 16px 0; }
   .checkin-header h2 { font-size: 2rem; }
   .chat-messages { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; min-height: 0; padding: 12px; }
-  .chat-input-area { flex-shrink: 0; padding: 8px 12px 12px; padding-bottom: max(12px, env(safe-area-inset-bottom)); background: var(--warm-white); border-top: 1px solid var(--border); }
+  .chat-input-area { flex-shrink: 0; padding: 8px 12px 12px; padding-bottom: max(12px, env(safe-area-inset-bottom)); background: #FAF8F5; border-top: 1px solid rgba(181,168,155,0.5); }
   .msg-bubble { max-width: calc(100vw - 80px); font-size: 13px; }
   .chips { gap: 6px; }
   .chip { font-size: 11px; padding: 5px 10px; }
@@ -509,8 +509,8 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
                 <span class="chip" onclick="startTemplate('weekly-review')">📆 Weekly Review</span>
                 <span class="chip" onclick="startTemplate('free')">✏️ Free Write</span>
               </div>
-              <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
-                <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">⚡ The Stack</div>
+              <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(181,168,155,0.5);">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#8E9BA6;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">⚡ The Stack</div>
                 <div class="chips">
                   <span class="chip" onclick="startTemplate('irritation-stack')">😒 Irritation Stack</span>
 <span class="chip" onclick="startTemplate('anger-stack')">😤 Anger Stack</span>
@@ -581,7 +581,7 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
             <div class="score-item"><div class="score-val" id="score-sp">—</div><div class="score-label">SP Net</div><div class="score-trend warn" id="score-sp-status">—</div></div>
           </div>
         </div>
-        <div class="goals-grid" id="goals-grid"><div style="padding:20px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;">Loading goals…</div></div>
+        <div class="goals-grid" id="goals-grid"><div style="padding:20px;color:#8E9BA6;font-family:'JetBrains Mono',monospace;font-size:11px;">Loading goals…</div></div>
         <div style="display:flex;gap:12px;"><button class="btn-primary" onclick="loadGoals()">↻ Refresh</button><button class="btn-ghost" onclick="switchPanel('assistant');setTimeout(()=>quickSend('assistant','Give me a GYR status summary across all goals'),100)">📊 GYR Summary</button></div>
       </div>
     </div>
@@ -1115,29 +1115,7 @@ const TEMPLATES = {
       {step:"Committed Actions", q:"What immediate actions are you committed to taking?"},
     ]
   },
-    steps:[
-      {step:"Title & Domain", q:"What are you titling this Anger Stack? Which CORE 4 domain — BODY, BEING, BALANCE, or BUSINESS?"},
-      {step:"The Trigger", q:"Who or what is triggering your anger right now?"},
-      {step:"Why Anger", q:"Why has this triggered anger in you in this moment?"},
-      {step:"The Story", q:"What story are you telling yourself about this person or situation?"},
-      {step:"Feelings", q:"Describe the single-word feelings that arise when you tell yourself that story."},
-      {step:"Thoughts & Actions", q:"What specific thoughts and actions does that story produce in you?"},
-      {step:"Evidence", q:"What evidence do you have to support this story as absolutely true?"},
-      {step:"Cold Facts", q:"What are the non-emotional facts of the situation — just the facts?"},
-      {step:"Escalation", q:"If you ignore this trigger now — how does it escalate? Where does it lead?"},
-      {step:"Want for You", q:"Regardless of the trigger and your story — what do you truly want for yourself in and beyond this situation?"},
-      {step:"Want for Them", q:"What do you want for them in and beyond this situation?"},
-      {step:"Want for Both", q:"What do you want for both of you in and beyond this situation?"},
-      {step:"Story Check", q:"If you keep telling yourself the original story — will it ultimately give you what you want?"},
-      {step:"New Story", q:"Letting go of the original story and knowing what you want — what is your new DESIRED STORY?"},
-      {step:"Evidence for New Story", q:"What evidence proves your desired story is accurate right now?"},
-      {step:"Positive Reframe", q:"Stepping back — why has this anger trigger been extremely positive?"},
-      {step:"Life Lesson", q:"What is the singular lesson on life you're taking from this Stack?"},
-      {step:"Revelation", q:"What is the most significant revelation or insight you're leaving this Stack with?"},
-      {step:"Feeling Now", q:"Compared to when you started — what single word describes how you feel now?"},
-      {step:"Committed Actions", q:"What immediate actions are you committed to taking leaving this Stack?"},
-    ]
-  },
+
   'rage-stack': {
     name:"Rage Stack", journalType:"Rage",
     steps:[
@@ -1364,9 +1342,9 @@ function filingStep(chatId, field, val) {
       <div class="prompt-card"><div class="prompt-step">Filing · 2 of 3</div><div class="prompt-q">Which project should this be linked to?</div></div>
       <div style="display:flex;gap:8px;margin-top:10px;align-items:center;">
         <input type="text" id="search-project-${chatId}" placeholder="Search projects…"
-          style="flex:1;padding:8px 12px;background:var(--warm-white);border:1px solid var(--border-strong);border-radius:6px;font-size:13px;color:var(--ink);outline:none;font-family:'Outfit',sans-serif;"
+          style="flex:1;padding:8px 12px;background:#FAF8F5;border:1px solid rgba(181,168,155,0.75);border-radius:6px;font-size:13px;color:#2F353B;outline:none;font-family:'Outfit',sans-serif;"
           oninput="searchSS('${chatId}','project',this.value)"
-          onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border-strong)'">
+          onfocus="this.style.borderColor='#6A89A7'" onblur="this.style.borderColor='rgba(181,168,155,0.75)'">
       </div>
       <div id="search-results-project-${chatId}" style="margin-top:6px;"></div>
       <div id="selected-project-${chatId}" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;min-height:20px;"></div>
@@ -1478,7 +1456,7 @@ function showDuplicateWarning(chatId, existingRecord, proceedFn) {
   // Store proceed function globally so buttons can call it
   pendingFile = { chatId, proceedFn };
 
-  const severityColor = isDupe ? 'var(--rust)' : '#6A89A7';
+  const severityColor = isDupe ? '#A68DA3' : '#6A89A7';
   const severityLabel = isDupe
     ? `⚠ Likely Duplicate — ${simPct}% content match`
     : `ℹ Same Type & Date — content appears different (${simPct}% match)`;
@@ -1492,19 +1470,19 @@ function showDuplicateWarning(chatId, existingRecord, proceedFn) {
         A <strong>${existingRecord.title}</strong> entry already exists from <strong>${existingDate}</strong>.
       </p>
       ${preview ? `
-        <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:12px;font-style:italic;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Existing record preview</div>
+        <div style="background:#FAF8F5;border:1px solid rgba(181,168,155,0.5);border-radius:6px;padding:10px 12px;font-size:11px;color:#8E9BA6;line-height:1.5;margin-bottom:12px;font-style:italic;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#8E9BA6;text-transform:uppercase;margin-bottom:4px;">Existing record preview</div>
           ${preview.replace(/</g,'&lt;').replace(/>/g,'&gt;')}…
         </div>
       ` : ''}
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <button onclick="confirmFileAnyway()" style="background:var(--gold);color:#fff;border:none;border-radius:6px;padding:9px 18px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;">
+        <button onclick="confirmFileAnyway()" style="background:#6A89A7;color:#fff;border:none;border-radius:6px;padding:9px 18px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;">
           File Anyway — New Record
         </button>
-        <button onclick="openExistingRecord('${existingRecord.id}')" style="background:transparent;border:1px solid var(--border-strong);color:var(--ink);border-radius:6px;padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:10px;cursor:pointer;">
+        <button onclick="openExistingRecord('${existingRecord.id}')" style="background:transparent;border:1px solid rgba(181,168,155,0.75);color:#2F353B;border-radius:6px;padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:10px;cursor:pointer;">
           View Existing in SmartSuite →
         </button>
-        <button onclick="cancelPendingFile('${chatId}')" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:10px;cursor:pointer;">
+        <button onclick="cancelPendingFile('${chatId}')" style="background:transparent;border:1px solid rgba(181,168,155,0.5);color:#8E9BA6;border-radius:6px;padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:10px;cursor:pointer;">
           Cancel
         </button>
       </div>
@@ -1819,8 +1797,8 @@ RESPOND WITH ONLY A JSON OBJECT. No markdown, no explanation, no preamble. Start
       // Show the extracted summary to user
       const summaryHtml = `
         <strong>${parsed.title || 'Journal Entry'}</strong>
-        <div style="margin-top:8px;padding:10px 14px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;font-size:12px;line-height:1.6;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Extracted · ${parsed.journal_type || 'Journal'}</div>
+        <div style="margin-top:8px;padding:10px 14px;background:#EAE7E2;border:1px solid rgba(181,168,155,0.5);border-radius:8px;font-size:12px;line-height:1.6;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#6A89A7;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Extracted · ${parsed.journal_type || 'Journal'}</div>
           ${parsed.summary ? `<p style="margin-bottom:8px;">${parsed.summary}</p>` : ''}
           ${parsed.themes?.length ? `<div><strong>Themes:</strong> ${parsed.themes.join(', ')}</div>` : ''}
           ${parsed.action_items?.length ? `<div style="margin-top:6px;"><strong>Actions:</strong><ul style="padding-left:16px;margin:4px 0;">${parsed.action_items.map(a=>`<li>${a}</li>`).join('')}</ul></div>` : ''}
@@ -1853,32 +1831,32 @@ async function showSearchFiling(chatId, parsed) {
     <strong>Let's file this to SmartSuite.</strong> Search to link people, projects, and goals — or skip any.
 
     <div style="margin-top:14px;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Link to People</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#6A89A7;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Link to People</div>
       <div style="display:flex;gap:8px;align-items:center;">
-        <input type="text" id="search-people-${chatId}" placeholder="Search by name…" style="flex:1;padding:8px 12px;background:var(--warm-white);border:1px solid var(--border-strong);border-radius:6px;font-size:13px;color:var(--ink);outline:none;font-family:'Outfit',sans-serif;"
-          oninput="searchSS('${chatId}','people',this.value)" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border-strong)'">
+        <input type="text" id="search-people-${chatId}" placeholder="Search by name…" style="flex:1;padding:8px 12px;background:#FAF8F5;border:1px solid rgba(181,168,155,0.75);border-radius:6px;font-size:13px;color:#2F353B;outline:none;font-family:'Outfit',sans-serif;"
+          oninput="searchSS('${chatId}','people',this.value)" onfocus="this.style.borderColor='#6A89A7'" onblur="this.style.borderColor='rgba(181,168,155,0.75)'">
       </div>
-      ${peopleHints.length ? `<div style="margin-top:6px;font-size:11px;color:var(--muted);">Mentioned: ${peopleHints.map(p=>`<span class="chip" style="font-size:10px;padding:3px 8px;" onclick="addSSLink('${chatId}','people','${p}',null)">${p}</span>`).join('')}</div>` : ''}
+      ${peopleHints.length ? `<div style="margin-top:6px;font-size:11px;color:#8E9BA6;">Mentioned: ${peopleHints.map(p=>`<span class="chip" style="font-size:10px;padding:3px 8px;" onclick="addSSLink('${chatId}','people','${p}',null)">${p}</span>`).join('')}</div>` : ''}
       <div id="search-results-people-${chatId}" style="margin-top:6px;"></div>
       <div id="selected-people-${chatId}" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;min-height:20px;"></div>
     </div>
 
     <div style="margin-top:14px;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Link to Project</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#6A89A7;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Link to Project</div>
       <div style="display:flex;gap:8px;align-items:center;">
-        <input type="text" id="search-project-${chatId}" placeholder="Search projects…" style="flex:1;padding:8px 12px;background:var(--warm-white);border:1px solid var(--border-strong);border-radius:6px;font-size:13px;color:var(--ink);outline:none;font-family:'Outfit',sans-serif;"
-          oninput="searchSS('${chatId}','project',this.value)" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border-strong)'">
+        <input type="text" id="search-project-${chatId}" placeholder="Search projects…" style="flex:1;padding:8px 12px;background:#FAF8F5;border:1px solid rgba(181,168,155,0.75);border-radius:6px;font-size:13px;color:#2F353B;outline:none;font-family:'Outfit',sans-serif;"
+          oninput="searchSS('${chatId}','project',this.value)" onfocus="this.style.borderColor='#6A89A7'" onblur="this.style.borderColor='rgba(181,168,155,0.75)'">
       </div>
-      ${projectHints.length ? `<div style="margin-top:6px;font-size:11px;color:var(--muted);">Mentioned: ${projectHints.map(p=>`<span class="chip" style="font-size:10px;padding:3px 8px;" onclick="searchAndSelect('${chatId}','project','${p}')">${p}</span>`).join('')}</div>` : ''}
+      ${projectHints.length ? `<div style="margin-top:6px;font-size:11px;color:#8E9BA6;">Mentioned: ${projectHints.map(p=>`<span class="chip" style="font-size:10px;padding:3px 8px;" onclick="searchAndSelect('${chatId}','project','${p}')">${p}</span>`).join('')}</div>` : ''}
       <div id="search-results-project-${chatId}" style="margin-top:6px;"></div>
       <div id="selected-project-${chatId}" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;min-height:20px;"></div>
     </div>
 
     <div style="margin-top:14px;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Link to Goal</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#6A89A7;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Link to Goal</div>
       <div style="display:flex;gap:8px;align-items:center;">
-        <input type="text" id="search-goal-${chatId}" placeholder="Search goals…" style="flex:1;padding:8px 12px;background:var(--warm-white);border:1px solid var(--border-strong);border-radius:6px;font-size:13px;color:var(--ink);outline:none;font-family:'Outfit',sans-serif;"
-          oninput="searchSS('${chatId}','goal',this.value)" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border-strong)'">
+        <input type="text" id="search-goal-${chatId}" placeholder="Search goals…" style="flex:1;padding:8px 12px;background:#FAF8F5;border:1px solid rgba(181,168,155,0.75);border-radius:6px;font-size:13px;color:#2F353B;outline:none;font-family:'Outfit',sans-serif;"
+          oninput="searchSS('${chatId}','goal',this.value)" onfocus="this.style.borderColor='#6A89A7'" onblur="this.style.borderColor='rgba(181,168,155,0.75)'">
       </div>
       <div id="search-results-goal-${chatId}" style="margin-top:6px;"></div>
       <div id="selected-goal-${chatId}" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;min-height:20px;"></div>
@@ -1904,7 +1882,7 @@ async function searchSS(chatId, type, query) {
   if (!query.trim() || query.length < 2) { if(resultsEl) resultsEl.innerHTML = ''; return; }
 
   ssSearchTimers[type] = setTimeout(async () => {
-    if(resultsEl) resultsEl.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">Searching…</span>`;
+    if(resultsEl) resultsEl.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8E9BA6;">Searching…</span>`;
 
     const appIds = {
       people: '698a79cb5448033d905cbe70',  // People Profiles table
@@ -1920,20 +1898,20 @@ async function searchSS(chatId, type, query) {
       const items = (data.items || []).map(r => ({ id: r.id, title: r.title || r.sa2519e04c || '—' }));
 
       if (!items.length) {
-        if(resultsEl) resultsEl.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">No results</span>`;
+        if(resultsEl) resultsEl.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8E9BA6;">No results</span>`;
         return;
       }
 
       if(resultsEl) resultsEl.innerHTML = items.map(item => `
         <div onclick="addSSLink('${chatId}','${type}','${item.title.replace(/'/g,"\\'")}','${item.id}')"
-          style="padding:7px 12px;background:var(--card-bg);border:1px solid var(--border);border-radius:6px;cursor:pointer;margin-bottom:4px;font-size:12px;transition:all 0.12s;"
-          onmouseover="this.style.borderColor='var(--gold)';this.style.background='rgba(106,137,167,0.12)'"
-          onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--warm-white)'">
+          style="padding:7px 12px;background:#EAE7E2;border:1px solid rgba(181,168,155,0.5);border-radius:6px;cursor:pointer;margin-bottom:4px;font-size:12px;transition:all 0.12s;"
+          onmouseover="this.style.borderColor='#6A89A7';this.style.background='rgba(106,137,167,0.12)'"
+          onmouseout="this.style.borderColor='rgba(181,168,155,0.5)';this.style.background='#FAF8F5'">
           ${item.title}
         </div>
       `).join('');
     } catch(err) {
-      if(resultsEl) resultsEl.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--rust);">Search error</span>`;
+      if(resultsEl) resultsEl.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#A68DA3;">Search error</span>`;
     }
   }, 350);
 }
@@ -1965,7 +1943,7 @@ function addSSLink(chatId, type, title, id) {
   if (filingCtx.data[`${type}_ids`]?.some(item => item.id === id && id !== null)) return;
 
   const tag = document.createElement('span');
-  tag.style.cssText = 'background:var(--gold-dim);border:1px solid rgba(106,137,167,0.3);border-radius:4px;padding:3px 8px;font-size:11px;font-family:JetBrains Mono,monospace;color:var(--gold);cursor:pointer;display:flex;align-items:center;gap:5px;';
+  tag.style.cssText = 'background:rgba(106,137,167,0.10);border:1px solid rgba(106,137,167,0.3);border-radius:4px;padding:3px 8px;font-size:11px;font-family:JetBrains Mono,monospace;color:#6A89A7;cursor:pointer;display:flex;align-items:center;gap:5px;';
   tag.innerHTML = `${title} <span onclick="removeSSLink(this,'${chatId}','${type}','${id}')" style="opacity:0.5;font-size:10px;">✕</span>`;
   selectedEl.appendChild(tag);
 
