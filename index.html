@@ -1041,7 +1041,16 @@ const TEMPLATES = {
   'warriors-way': {
     name:"Morning Ritual", journalType:"Morning Ritual",
     steps:[
-      {step:"Habit Checklist", q:"First hour check-in — score each (1=low, 5=locked in):\nNo snooze · Morning sunlight · Cold shower · Meditation/Visualization · Morning Journal\n\nBe Great at the Few — score your intention today (1–5):\nWork The System · Allocator Seat · Own The Number · Invest in People · Protect The Body"},
+      {step:"No snooze", q:"Did you get up right away — no snooze? (y/n)"},
+      {step:"Morning sunlight", q:"Did you get outside for morning sunlight? (y/n)"},
+      {step:"Cold shower", q:"Did you take a cold shower? (y/n)"},
+      {step:"Meditation", q:"Did you meditate or visualize this morning? (y/n)"},
+      {step:"Morning Journal", q:"Are you completing your morning journal right now? (y/n)"},
+      {step:"Work The System", q:"Rank your intention today for Work The System (1–5 + any notes):"},
+      {step:"Allocator Seat", q:"Rank your intention today for Allocator Seat (1–5 + any notes):"},
+      {step:"Own The Number", q:"Rank your intention today for Own The Number (1–5 + any notes):"},
+      {step:"Invest in People", q:"Rank your intention today for Invest in People (1–5 + any notes):"},
+      {step:"Protect The Body", q:"Rank your intention today for Protect The Body (1–5 + any notes):"},
       {step:"Settling Prompt", q:"5 centering breaths. What's most alive in me right now? Any unresolved tension, emotions, or friction to work through?"},
       {step:"Affirmations & Principles", q:"Write your non-negotiables. Who are you today? (BODY · BALANCE · BEING · BUSINESS)"},
       {step:"Gratitude × 3", q:"Stay in gain — 3 things: what did you celebrate, learn, or make progress on?\n1.\n2.\n3."},
@@ -1294,9 +1303,12 @@ function startTemplate(templateId) {
   document.getElementById('input-journal').focus();
 }
 
+
+
 function advanceTemplate(richText, plainText) {
   const tmpl = TEMPLATES[currentTemplate];
-  journalData.responses.push({ step: tmpl.steps[templateStep].step, q: tmpl.steps[templateStep].q, response: plainText, responseHtml: richText });
+  const curStep = tmpl.steps[templateStep];
+  journalData.responses.push({ step: curStep.step, q: curStep.q || curStep.step, response: plainText, responseHtml: richText });
   templateStep++;
 
   const msgs = document.getElementById('chat-messages-journal');
